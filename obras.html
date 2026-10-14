@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Obras — {nombre}</title><meta name="description" content="Catálogo de obras originales.">
+<script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="obras">
+<main id="main">
+
+<div class="page-head"><div class="wrap"><p class="eyebrow">Catálogo</p><h1>Obras</h1><p>Piezas únicas y ediciones limitadas. Precios en dólares estadounidenses.</p></div></div>
+<section style="padding-top:48px"><div class="wrap">
+<div class="sec-head" style="margin-bottom:24px;align-items:center"><div class="filters" id="filters" role="group" aria-label="Filtrar por artista" style="margin:0"></div>
+<div style="display:flex;gap:16px;align-items:center"><span class="muted" id="count" aria-live="polite"></span><label style="display:flex;align-items:center;gap:8px">Ordenar<select class="sort" id="sort"><option value="">Recientes</option><option value="asc">Menor precio</option><option value="desc">Mayor precio</option></select></label></div></div>
+<div class="grid" id="catalog"></div></div></section></main>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
