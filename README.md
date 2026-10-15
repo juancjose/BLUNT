@@ -12,7 +12,7 @@ artistas.html     Artistas
 enmarcado.html    Enmarcado y passepartout
 contacto.html     Contacto
 css/styles.css    Estilos (colores en las variables de :root y [data-theme="dark"])
-js/data.js        ← CONFIGURACIÓN, OBRAS Y ARTISTAS
+js/data.js        ← CONFIGURACIÓN, OBRAS Y ARTISTAS (lo único que necesitás editar)
 js/app.js         Lógica (tema, carrito, páginas)
 img/              Imágenes
 ```
