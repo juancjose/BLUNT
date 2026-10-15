@@ -196,3 +196,12 @@ nav.main a:hover::after,nav.main a[aria-current="page"]::after{transform:scaleX(
 .chip{transition:border-color .3s,color .3s,background .3s}
 @media (max-width:760px){nav.main a::after{display:none}}
 @media (prefers-reduced-motion:reduce){.work:hover .ph,.work:hover img,.artist:hover img,.artist-card:hover img,.hero figure:hover img,.btn:hover{transform:none!important}}
+/* Fix móvil: header sólido (sin backdrop-filter) y fondo sin attachment fixed (bugs iOS) */
+@media (max-width:980px),(hover:none){
+ body{background:radial-gradient(900px 500px at 85% -5%,var(--glow),transparent 70%) no-repeat,linear-gradient(180deg,var(--grad-a) 0%,var(--grad-b) 100%);background-attachment:scroll}
+ header.site{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none}
+ [data-theme="dark"] header.site{background:#101010}
+ :root:not([data-theme="dark"]) header.site{background:#faf9f6}
+ .drawer{visibility:hidden;transition:transform .35s ease,visibility 0s .35s}
+ .drawer.open{visibility:visible;transition:transform .35s ease}
+}
