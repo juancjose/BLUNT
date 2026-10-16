@@ -212,3 +212,8 @@ html,body{background:var(--bg)!important}
 body{background-attachment:scroll!important}
 .alt{background:var(--card)}
 @media (max-width:980px),(hover:none){header.site,[data-theme="dark"] header.site,:root:not([data-theme="dark"]) header.site{background:var(--bg)}}
+/* Revelado del logo letra por letra (solo header) */
+@keyframes letraIn{from{opacity:0;transform:translateY(35%)}to{opacity:1;transform:none}}
+header.site .logo-svg{overflow:hidden}
+header.site .logo-svg .l{opacity:0;transform-box:fill-box;animation:letraIn .7s cubic-bezier(.22,.61,.36,1) forwards;animation-delay:calc(.15s + var(--i) * .09s)}
+@media (prefers-reduced-motion:reduce){header.site .logo-svg .l{animation:none;opacity:1;transform:none}}
