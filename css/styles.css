@@ -217,3 +217,4 @@ body{background-attachment:scroll!important}
 header.site .logo-svg{overflow:hidden}
 header.site .logo-svg .l{opacity:0;transform-box:fill-box;animation:letraIn .7s cubic-bezier(.22,.61,.36,1) forwards;animation-delay:calc(.15s + var(--i) * .09s)}
 @media (prefers-reduced-motion:reduce){header.site .logo-svg .l{animation:none;opacity:1;transform:none}}
+.lang-btn{font:500 .66rem Inter,sans-serif;letter-spacing:.08em}
