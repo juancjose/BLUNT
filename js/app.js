@@ -155,5 +155,21 @@
   };
   document.querySelectorAll("[data-wa]").forEach(a => { a.href = "#"; a.onclick = e => { e.preventDefault(); const m = a.dataset.wa.replace(/^Hola! /, ""); window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(t("Hola") + "! " + t(m))}`, "_blank", "noopener"); }; });
   document.querySelectorAll("[data-mail]").forEach(a => { a.href = `mailto:${CONFIG.email}`; a.textContent = CONFIG.email; });
+
+  /* ---------- Revelado al hacer scroll ---------- */
+  (function () {
+    if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const sel = ".sec-head, .page-head .wrap > *, .hero .wrap > *, .benefit, .work, .artist, .artist-card, .split > *, .steps li, .prices, form.contact, .detail > *, footer.site .cols > *";
+    const items = [...document.querySelectorAll(sel)];
+    items.forEach(el => {
+      const sibs = [...el.parentElement.children].filter(c => c.matches(sel));
+      el.style.setProperty("--d", `${Math.min(sibs.indexOf(el), 5) * 70}ms`);
+      el.classList.add("reveal");
+    });
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+    }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    items.forEach(el => io.observe(el));
+  })();
   if (typeof initI18n === "function") initI18n();
 })();
