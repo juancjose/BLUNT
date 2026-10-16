@@ -205,3 +205,10 @@ nav.main a:hover::after,nav.main a[aria-current="page"]::after{transform:scaleX(
  .drawer{visibility:hidden;transition:transform .35s ease,visibility 0s .35s}
  .drawer.open{visibility:visible;transition:transform .35s ease}
 }
+/* Fondos planos (sin degradado) */
+:root{--bg:#fafafa;--card:#f1f1f1;--line:#e3e3e3;--accent-fg:#fafafa;--header-bg:rgba(250,250,250,.9)}
+[data-theme="dark"]{--bg:#0a0a0a;--card:#141414;--line:#262626;--accent-fg:#0a0a0a;--header-bg:rgba(10,10,10,.9)}
+html,body{background:var(--bg)!important}
+body{background-attachment:scroll!important}
+.alt{background:var(--card)}
+@media (max-width:980px),(hover:none){header.site,[data-theme="dark"] header.site,:root:not([data-theme="dark"]) header.site{background:var(--bg)}}
