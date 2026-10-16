@@ -38,16 +38,6 @@ python3 -m http.server
 ```
 Abrí http://localhost:8000
 
-## Personalización
-- **Nombre, WhatsApp y mail:** bloque `CONFIG` en `js/data.js`.
-- **Obras:** array `OBRAS` en `js/data.js` (`id` único, `artista`, `precio`, `medidas`, `tecnica`, `anio`, `img`, `vendida`, `destacada`, `descripcion`).
-- **Artistas:** array `ARTISTAS` (`id`, `nombre`, `disciplina`, `ciudad`, `img`, `bio`).
-- **Colores:** variables de `:root` y `[data-theme="dark"]` en `css/styles.css`.
-- **Logo:** `img/logo.svg`, y embebido en `js/app.js` (constante `LOGO`) para adaptarse al tema.
-
-## Capturas
-<!-- Agregá capturas del sitio, por ejemplo: ![Inicio](docs/inicio.png) -->
-
 ## Autor
 **Juan José Cáceres** — [@juancjose](https://github.com/juancjose)
 
