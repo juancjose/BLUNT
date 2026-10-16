@@ -33,6 +33,7 @@
     <a class="logo" href="index.html" aria-label="${esc(CONFIG.nombre)} — inicio">${LOGO}</a>
     <nav class="main" id="nav" aria-label="Principal"><ul>${links.map(([h, t, k]) => `<li><a href="${h}"${k === page ? ' aria-current="page"' : ""}>${t}</a></li>`).join("")}</ul></nav>
     <div class="tools">
+      <button class="icon-btn lang-btn" id="langBtn" type="button" data-no-i18n>EN</button>
       <button class="icon-btn" id="themeBtn" type="button">${ico.moon}${ico.sun}</button>
       <button class="icon-btn" id="cartBtn" type="button" aria-label="Abrir carrito">${ico.bag}<span class="badge" id="cartCount" hidden>0</span></button>
       <button class="icon-btn menu-btn" id="menuBtn" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav">${ico.menu}</button>
@@ -58,6 +59,7 @@
   document.title = document.title.replace("{nombre}", CONFIG.nombre);
 
   setTheme(root.dataset.theme || "light");
+  if (typeof setLang === "function") $("#langBtn").onclick = () => setLang(LANG === "es" ? "en" : "es");
   $("#themeBtn").onclick = () => setTheme(root.dataset.theme === "dark" ? "light" : "dark", true);
   $("#menuBtn").onclick = e => { const o = $("#nav").classList.toggle("open"); e.currentTarget.setAttribute("aria-expanded", o); };
 
@@ -82,11 +84,11 @@
   }
   function orderText() {
     const items = getCart().map(id => OBRAS.find(o => o.id === id)).filter(Boolean);
-    return `Hola ${CONFIG.nombre}! Me interesan estas obras:\n` + items.map(o => `• ${o.titulo} – ${artista(o.artista).nombre} (${fmt(o.precio)})`).join("\n") + `\nTotal: ${fmt(items.reduce((s, o) => s + o.precio, 0))}\n¿Me pasan info de pago y envío?`;
+    return `${t("Hola")} ${CONFIG.nombre}! ${t("Me interesan estas obras:")}\n` + items.map(o => `• ${t(o.titulo)} – ${artista(o.artista).nombre} (${fmt(o.precio)})`).join("\n") + `\nTotal: ${fmt(items.reduce((s, o) => s + o.precio, 0))}\n${t("¿Me pasan info de pago y envío?")}`;
   }
   $("#cartItems").onclick = e => { const id = e.target.dataset.rm; if (id) saveCart(getCart().filter(x => x !== id)); };
   $("#sendWa").onclick = () => window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(orderText())}`, "_blank", "noopener");
-  $("#sendMail").onclick = () => location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Pedido de obras – " + CONFIG.nombre)}&body=${encodeURIComponent(orderText())}`;
+  $("#sendMail").onclick = () => location.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent(t("Pedido de obras") + " – " + CONFIG.nombre)}&body=${encodeURIComponent(orderText())}`;
   let lastFocus;
   const openCart = () => { lastFocus = document.activeElement; $("#drawer").classList.add("open"); $("#overlay").classList.add("open"); $("#drawer").setAttribute("aria-hidden", "false"); $("#closeCart").focus(); };
   const closeCart = () => { $("#drawer").classList.remove("open"); $("#overlay").classList.remove("open"); $("#drawer").setAttribute("aria-hidden", "true"); lastFocus && lastFocus.focus(); };
@@ -135,7 +137,7 @@
       <div><p class="crumbs"><a href="obras.html">Obras</a> / ${esc(o.titulo)}</p><p class="eyebrow">${esc(a.nombre)}</p><h1 style="font-size:clamp(2.2rem,4vw,3.4rem);margin-top:8px">${esc(o.titulo)}</h1>
       <p class="price">${o.vendida ? "Vendida" : fmt(o.precio)}</p><p class="muted" style="margin-top:20px">${esc(o.descripcion)}</p>
       <dl><dt>Técnica</dt><dd>${esc(o.tecnica)}</dd><dt>Medidas</dt><dd>${esc(o.medidas)}</dd><dt>Año</dt><dd>${o.anio}</dd><dt>Artista</dt><dd>${esc(a.nombre)} · ${esc(a.ciudad)}</dd></dl>
-      <div class="actions">${o.vendida ? `<a class="btn" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent("Hola! Vi que “" + o.titulo + "” está vendida. ¿Tienen obras similares?")}" target="_blank" rel="noopener">Consultar obras similares</a>` : `<button class="btn" type="button" onclick="addToCart('${o.id}')">Agregar a mi selección</button>`}
+      <div class="actions">${o.vendida ? `<a class="btn" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(LANG === "en" ? `Hi! I saw “${t(o.titulo)}” is sold. Do you have similar works?` : `Hola! Vi que “${o.titulo}” está vendida. ¿Tienen obras similares?`)}" target="_blank" rel="noopener">Consultar obras similares</a>` : `<button class="btn" type="button" onclick="addToCart('${o.id}')">Agregar a mi selección</button>`}
       <a class="btn ghost" href="enmarcado.html">Enmarcarla</a></div>
       <p class="muted" style="font-size:.82rem;margin-top:24px">Incluye certificado de autenticidad. Envíos asegurados a todo el país.</p></div>`;
       el("related").innerHTML = OBRAS.filter(x => x.id !== o.id).slice(0, 4).map(card).join("");
@@ -148,9 +150,10 @@
   // Contacto
   if (el("contactForm")) el("contactForm").onsubmit = e => {
     e.preventDefault(); const d = new FormData(e.target);
-    const txt = `Hola! Soy ${d.get("nombre")} (${d.get("email")}).\n${d.get("mensaje")}`;
+    const txt = `${LANG === "en" ? "Hi! I'm" : "Hola! Soy"} ${d.get("nombre")} (${d.get("email")}).\n${d.get("mensaje")}`;
     window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(txt)}`, "_blank", "noopener");
   };
-  document.querySelectorAll("[data-wa]").forEach(a => a.href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(a.dataset.wa)}`);
+  document.querySelectorAll("[data-wa]").forEach(a => { a.href = "#"; a.onclick = e => { e.preventDefault(); const m = a.dataset.wa.replace(/^Hola! /, ""); window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(t("Hola") + "! " + t(m))}`, "_blank", "noopener"); }; });
   document.querySelectorAll("[data-mail]").forEach(a => { a.href = `mailto:${CONFIG.email}`; a.textContent = CONFIG.email; });
+  if (typeof initI18n === "function") initI18n();
 })();
