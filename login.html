@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ingresar — {nombre}</title><meta name="robots" content="noindex">
+<script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="login">
+<main id="main">
+<section class="auth"><div class="wrap auth-wrap">
+<div class="auth-intro"><p class="eyebrow">Artistas</p><h1>Tu espacio en la galería</h1><p class="muted">Ingresá para gestionar tu perfil y tus obras. Las cuentas nuevas quedan pendientes hasta que la galería las aprueba.</p></div>
+<div class="auth-card">
+  <div class="tabs" role="tablist" aria-label="Acceso">
+    <button type="button" role="tab" class="tab" data-tab="in" aria-selected="true">Ingresar</button>
+    <button type="button" role="tab" class="tab" data-tab="up" aria-selected="false">Crear cuenta</button>
+  </div>
+  <form id="fIn" class="stack" data-pane="in">
+    <label>Email<input name="email" type="email" required autocomplete="email"></label>
+    <label>Contraseña<input name="password" type="password" required autocomplete="current-password" minlength="6"></label>
+    <button class="btn" type="submit">Ingresar</button>
+    <button class="text-btn" type="button" data-tab="reset">¿Olvidaste tu contraseña?</button>
+  </form>
+  <form id="fUp" class="stack" data-pane="up" hidden>
+    <label>Nombre artístico<input name="name" required autocomplete="name"></label>
+    <label>Email<input name="email" type="email" required autocomplete="email"></label>
+    <label>Contraseña<input name="password" type="password" required autocomplete="new-password" minlength="8"></label>
+    <button class="btn" type="submit">Crear cuenta</button>
+  </form>
+  <form id="fReset" class="stack" data-pane="reset" hidden>
+    <p class="muted small">Te enviamos un link para crear una contraseña nueva.</p>
+    <label>Email<input name="email" type="email" required autocomplete="email"></label>
+    <button class="btn" type="submit">Enviar link</button>
+    <button class="text-btn" type="button" data-tab="in">Volver a ingresar</button>
+  </form>
+  <form id="fNew" class="stack" data-pane="new" hidden>
+    <p class="muted small">Elegí tu nueva contraseña.</p>
+    <label>Nueva contraseña<input name="password" type="password" required autocomplete="new-password" minlength="8"></label>
+    <button class="btn" type="submit">Guardar contraseña</button>
+  </form>
+  <p class="form-msg" id="msg" role="status" aria-live="polite"></p>
+</div>
+</div></section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase-config.js"></script>
+<script type="module" src="js/login.js"></script>
+</body>
+</html>
