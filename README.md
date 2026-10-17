@@ -12,7 +12,12 @@ artistas.html     Artistas
 enmarcado.html    Enmarcado y passepartout
 contacto.html     Contacto
 css/styles.css    Estilos (colores en las variables de :root y [data-theme="dark"])
-js/data.js        ← CONFIGURACIÓN, OBRAS Y ARTISTAS (lo único que necesitás editar)
+js/data.js        ← CONFIGURACIÓN (nombre, WhatsApp, mail)
+js/db.js          Conexión a Supabase y carga de datos
+js/login.js       Ingreso / registro de artistas
+js/panel.js       Panel de artistas y administración
+login.html        Acceso de artistas
+panel.html        Panel de artistas
 js/app.js         Lógica (tema, carrito, páginas)
 img/              Imágenes
 ```
@@ -26,20 +31,15 @@ email: "hola@blunt.com",
 ```
 El nombre se actualiza solo en el encabezado, el pie y los títulos.
 
-## Cargar obras
-En `js/data.js`, dentro de `OBRAS`, copiá un bloque y modificalo:
-```js
-{ id: "o9", titulo: "Mi obra", artista: "a1", precio: 300, medidas: "50 × 70 cm",
-  tecnica: "Óleo sobre tela", anio: 2026, img: "img/mi-obra.jpg",
-  vendida: false, destacada: true, descripcion: "Texto breve." }
-```
-- `id` tiene que ser único. `artista` es el `id` de un artista.
-- `vendida: true` muestra la etiqueta “Vendida” y desactiva la compra.
-- `destacada: true` la muestra en la portada (se muestran hasta 4).
-- Guardá la imagen en `img/` (ideal: vertical 4:5, ~1000 px de ancho, JPG optimizado).
-
-## Cargar artistas
-En `ARTISTAS`: `id`, `nombre`, `disciplina`, `ciudad`, `img` (cuadrada) y `bio`.
+## Obras y artistas (Supabase)
+Las obras y los artistas ya **no** se editan en archivos: se cargan desde una base de datos Supabase (proyecto `blunt-gallery`).
+- Cada artista crea su cuenta en `login.html` (link “Artistas: ingresar” en el pie) y gestiona su perfil, bio (ES/EN), foto y obras en `panel.html`.
+- Las cuentas nuevas quedan **pendientes**: no se ven en el sitio hasta que un administrador las aprueba desde el panel.
+- El email del administrador (`juanjosecaceres95@hotmail.com`) se convierte en admin automáticamente al registrarse. El admin puede aprobar artistas y editar cualquier perfil u obra.
+- Si no hay datos publicados, el sitio muestra “Próximamente nuevas obras”.
+- Conexión: `js/supabase-config.js` (URL y clave pública *publishable*, segura en el navegador). **Nunca** subas la `service_role` key.
+- Esquema y políticas de seguridad (RLS): `supabase/migrations/`.
+- Las imágenes se reducen en el navegador y se guardan en los buckets `artworks` y `avatars`.
 
 ## Colores y tipografías
 En `css/styles.css`, las variables `--bg`, `--fg`, etc. definen el modo claro y `[data-theme="dark"]` el oscuro. Las tipografías (Archivo expandida + Inter) se cargan desde Google Fonts en la primera línea.
@@ -61,4 +61,4 @@ El logo está en `img/logo.svg` (vectorizado, fondo transparente) y además embe
 ## Idiomas (español / inglés)
 El botón **EN/ES** del encabezado cambia el idioma y la elección queda guardada. El idioma por defecto se define en `CONFIG.idioma` (`"es"` o `"en"`) en `js/data.js`.
 - Los textos de la interfaz se traducen en `js/i18n.js` (diccionario `"Texto en español": "English text"`). Si agregás o cambiás un texto en español, sumá su traducción ahí.
-- Para obras y artistas, completá los campos opcionales `titulo_en`, `tecnica_en`, `descripcion_en`, `disciplina_en` y `bio_en` en `js/data.js`. Si no están, se muestra el texto en español.
+- Para obras y artistas, los textos en inglés se cargan desde el panel (campos “EN”). Si están vacíos, se muestra el texto en español.
