@@ -1,5 +1,5 @@
 /* Lógica común: tema, header/footer, carrito y render de páginas */
-(function () {
+window.startApp = function () {
   const LOGO = `<svg class="logo-svg" viewBox="0 0 1776 228" fill="currentColor" role="img" aria-label="${CONFIG.nombre}"><path class="l" style="--i:0" fill-rule="evenodd" d="M0.0 0H363.0V228H0.0ZM0.0 226.5L0.0 225.1L147.8 224.7L295.5 224.4L302.5 222.8C321.5 218.4 332.8 213.2 343.5 203.7C352.8 195.5 359.9 182.9 361.9 170.7L362.8 165.5L362.9 196.8L363.0 228.0L181.5 228.0L0.0 228.0L0.0 226.5ZM80.5 174.7C80.2 174.0 80.1 165.1 80.2 155.0L80.5 136.5L175.0 136.5L269.5 136.5L273.0 138.4C280.0 142.1 283.1 146.2 284.4 153.2C285.9 161.3 280.9 170.1 272.7 173.6L268.5 175.5L174.7 175.8L81.0 176.1L80.5 174.7ZM361.3 146.8C360.6 143.5 358.7 137.8 356.9 134.2C353.0 126.2 342.8 115.3 335.8 111.5C332.9 110.0 330.4 108.6 330.2 108.5C330.0 108.3 332.3 105.8 335.3 102.9L340.7 97.5L344.3 90.0L348.0 82.5L349.0 75.0C352.2 51.9 341.6 28.5 321.9 15.5C310.7 8.0 291.9 2.3 273.5 0.7C271.3 0.5 290.5 0.3 316.2 0.2L363.0 0.0L363.0 76.5C363.0 118.6 362.9 153.0 362.7 153.0C362.6 153.0 361.9 150.2 361.3 146.8ZM80.0 68.5L80.0 50.0L172.2 50.2L264.5 50.5L268.8 53.0C281.3 60.1 280.7 77.6 267.6 84.8L264.5 86.5L172.2 86.8L80.0 87.1L80.0 68.5Z"/><path class="l" style="--i:1" fill-rule="evenodd" d="M394.0 0H677.0V228H394.0ZM394.0 226.2L394.0 224.5L535.5 224.8L677.0 225.0L677.0 226.5L677.0 228.0L535.5 228.0L394.0 228.0L394.0 226.2ZM468.8 88.4L468.5 -0.0L572.8 -0.0L677.0 0.0L677.0 84.8L677.0 169.6L674.2 169.7C666.9 170.2 609.4 172.1 576.5 173.0C523.8 174.4 473.9 176.0 471.3 176.4L469.0 176.7L468.8 88.4Z"/><path class="l" style="--i:2" fill-rule="evenodd" d="M696.0 0H1035.0V228H696.0ZM696.1 179.8L696.3 131.5L697.1 140.5C701.9 193.1 735.6 223.0 794.5 227.0L805.5 227.7L750.8 227.9L696.0 228.0L696.1 179.8ZM937.0 226.9C994.4 222.4 1026.8 195.2 1033.9 145.5L1034.8 139.5L1034.9 183.8L1035.0 228.0L980.8 227.9L926.5 227.7L937.0 226.9ZM818.3 175.9C790.4 172.7 777.6 163.6 771.2 142.7L769.6 137.5L769.3 68.8L768.9 0.0L865.2 -0.0L961.5 -0.0L960.9 70.2L960.4 140.5L958.7 145.4C952.2 164.3 938.5 173.1 911.0 176.0C899.7 177.2 828.6 177.1 818.3 175.9Z"/><path class="l" style="--i:3" fill-rule="evenodd" d="M1074.0 0H1412.0V228H1074.0ZM1074.1 223.8L1074.3 219.5L1074.7 222.2L1075.1 225.0L1111.6 225.0L1148.0 225.0L1148.2 155.9L1148.5 86.7L1191.0 120.9C1214.4 139.7 1241.6 161.7 1251.5 169.8C1261.4 177.9 1279.9 192.9 1292.7 203.2L1315.9 221.9L1321.1 223.4L1326.4 225.0L1369.2 225.0L1412.0 225.0L1412.0 226.5L1412.0 228.0L1243.0 228.0L1074.0 228.0L1074.1 223.8ZM1327.5 142.3C1295.9 117.6 1253.8 83.4 1210.3 47.1L1158.0 3.5L1153.3 1.8L1148.5 0.1L1241.8 0.0L1335.0 0.0L1335.0 73.5C1335.0 113.9 1334.7 147.0 1334.2 147.0C1333.8 147.0 1330.8 144.9 1327.5 142.3ZM1074.3 20.0C1074.3 16.4 1074.5 15.0 1074.7 16.8C1074.9 18.5 1074.9 21.5 1074.7 23.2C1074.5 25.0 1074.3 23.6 1074.3 20.0Z"/><path class="l" style="--i:4" fill-rule="evenodd" d="M1441.0 0H1776.0V228H1441.0ZM1441.0 139.0L1441.0 50.0L1499.0 50.0L1557.0 50.0L1557.0 137.5L1557.0 225.0L1597.0 225.0L1637.0 225.0L1637.0 137.5L1637.0 50.0L1705.9 50.0L1774.9 50.0L1775.3 48.3C1775.6 47.3 1775.8 87.3 1775.9 137.2L1776.0 228.0L1608.5 228.0L1441.0 228.0L1441.0 139.0Z"/></svg>`;
   const $ = (s, r = document) => r.querySelector(s);
   const fmt = n => `${CONFIG.moneda} ${n.toLocaleString("es-AR")}`;
@@ -45,7 +45,7 @@
       <div><h4>Explorar</h4><ul>${links.slice(1).map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul></div>
       <div><h4>Contacto</h4><ul><li><a href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:${CONFIG.email}">${CONFIG.email}</a></li><li><a href="${CONFIG.instagram}" target="_blank" rel="noopener">Instagram</a></li><li class="muted">${CONFIG.ciudad}</li></ul></div>
     </div>
-    <p class="legal">© ${new Date().getFullYear()} ${esc(CONFIG.nombre)}. Todos los derechos reservados.</p>
+    <p class="legal"><span>© ${new Date().getFullYear()} ${esc(CONFIG.nombre)}. Todos los derechos reservados.</span> <a class="artist-login" href="login.html">Artistas: ingresar</a></p>
   </div></footer>
   <div class="overlay" id="overlay"></div>
   <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="cartTitle" aria-hidden="true">
@@ -103,9 +103,10 @@
     <div class="meta"><div><h3>${esc(o.titulo)}</h3><p class="by">${esc(artista(o.artista).nombre)}</p></div><span class="price">${o.vendida ? '<span class="muted">Vendida</span>' : fmt(o.precio)}</span></div></a></article>`;
 
   const el = id => document.getElementById(id);
-  if (el("featured")) el("featured").innerHTML = OBRAS.filter(o => o.destacada).slice(0, 4).map(card).join("");
-  if (el("artistsStrip")) el("artistsStrip").innerHTML = ARTISTAS.map(a => `<a class="artist" href="obras.html?artista=${a.id}"><img src="${a.img}" alt="" loading="lazy"><h3>${esc(a.nombre)}</h3><p>${esc(a.disciplina)}</p></a>`).join("");
-  if (el("heroImg")) { const o = OBRAS[0]; el("heroImg").innerHTML = `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">`; }
+  const soon = (txt) => `<p class="empty-state">${txt}</p>`;
+  if (el("featured")) el("featured").innerHTML = OBRAS.slice(0, 4).map(card).join("") || soon("Próximamente nuevas obras");
+  if (el("artistsStrip")) el("artistsStrip").innerHTML = (ARTISTAS.map(a => `<a class="artist" href="obras.html?artista=${a.id}"><img src="${a.img}" alt="" loading="lazy"><h3>${esc(a.nombre)}</h3><p>${esc(a.disciplina)}</p></a>`).join("") || soon("Próximamente nuevos artistas"));
+  if (el("heroImg")) { const o = OBRAS.find(x => x.img); el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : `<img src="img/enmarcado.jpg" alt="">`; }
   document.querySelectorAll("[data-brand]").forEach(n => n.textContent = CONFIG.nombre);
 
   // Catálogo
@@ -119,7 +120,7 @@
       let list = OBRAS.filter(o => filtro === "todos" || o.artista === filtro);
       if (sort.value === "asc") list.sort((a, b) => a.precio - b.precio);
       if (sort.value === "desc") list.sort((a, b) => b.precio - a.precio);
-      el("catalog").innerHTML = list.map(card).join("") || '<p class="muted">No hay obras para este filtro.</p>';
+      el("catalog").innerHTML = list.map(card).join("") || (OBRAS.length ? '<p class="muted">No hay obras para este filtro.</p>' : soon("Próximamente nuevas obras"));
       el("count").textContent = `${list.length} ${list.length === 1 ? "obra" : "obras"}`;
     };
     f.onclick = e => { if (e.target.dataset.f) { filtro = e.target.dataset.f; render(); } };
@@ -140,12 +141,14 @@
       <div class="actions">${o.vendida ? `<a class="btn" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(LANG === "en" ? `Hi! I saw “${t(o.titulo)}” is sold. Do you have similar works?` : `Hola! Vi que “${o.titulo}” está vendida. ¿Tienen obras similares?`)}" target="_blank" rel="noopener">Consultar obras similares</a>` : `<button class="btn" type="button" onclick="addToCart('${o.id}')">Agregar a mi selección</button>`}
       <a class="btn ghost" href="enmarcado.html">Enmarcarla</a></div>
       <p class="muted" style="font-size:.82rem;margin-top:24px">Incluye certificado de autenticidad. Envíos asegurados a todo el país.</p></div>`;
-      el("related").innerHTML = OBRAS.filter(x => x.id !== o.id).slice(0, 4).map(card).join("");
+      const rel = OBRAS.filter(x => x.id !== o.id).slice(0, 4);
+      el("related").innerHTML = rel.map(card).join("");
+      if (!rel.length) el("related").closest("section").hidden = true;
     }
   }
 
   // Artistas
-  if (el("artistList")) el("artistList").innerHTML = ARTISTAS.map(a => `<article class="artist-card"><img src="${a.img}" alt="Retrato ilustrativo de ${esc(a.nombre)}" loading="lazy"><p class="eyebrow">${esc(a.disciplina)} · ${esc(a.ciudad)}</p><h3 style="margin-top:6px">${esc(a.nombre)}</h3><p>${esc(a.bio)}</p><a class="link" href="obras.html?artista=${a.id}">Ver obras (${OBRAS.filter(o => o.artista === a.id).length})</a></article>`).join("");
+  if (el("artistList")) el("artistList").innerHTML = ARTISTAS.map(a => `<article class="artist-card"><img src="${a.img}" alt="Retrato de ${esc(a.nombre)}" loading="lazy"><p class="eyebrow">${esc(a.disciplina)} · ${esc(a.ciudad)}</p><h3 style="margin-top:6px">${esc(a.nombre)}</h3><p>${esc(a.bio)}</p><a class="link" href="obras.html?artista=${a.id}">Ver obras (${OBRAS.filter(o => o.artista === a.id).length})</a></article>`).join("") || soon("Próximamente nuevos artistas");
 
   // Contacto
   if (el("contactForm")) el("contactForm").onsubmit = e => {
@@ -172,4 +175,4 @@
     items.forEach(el => io.observe(el));
   })();
   if (typeof initI18n === "function") initI18n();
-})();
+};
