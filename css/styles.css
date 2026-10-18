@@ -310,7 +310,6 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .classic-note-top{margin:0 0 28px;border-top:0;padding-top:0}
 .classic-cta{margin-top:18px;color:var(--muted);font-size:.9rem}
 .hero figure{position:relative}
-.hero-cap{position:absolute;left:0;right:0;bottom:0;padding:10px 12px;font-size:.72rem;letter-spacing:.04em;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.55))}
 .lb{max-width:min(1100px,94vw);width:100%;max-height:94vh;padding:0;border:1px solid var(--line);background:var(--bg)!important;color:var(--fg);margin:auto;overflow:auto}
 .lb::backdrop{background:rgba(0,0,0,.72)}
 .lb[open]{animation:lbIn .35s var(--ease,ease) both}
