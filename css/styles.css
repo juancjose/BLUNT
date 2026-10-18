@@ -342,42 +342,16 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .hero-cap.swap{opacity:0}
 @media (prefers-reduced-motion:reduce){.hero-slide,.hero-cap,.hero-dot{transition:none}}
 
-/* ---------- Probador de enmarcado ---------- */
+/* ---------- Probador de enmarcado (fotos reales) ---------- */
 .framer{display:grid;gap:22px}
-.fr-wall{--wall:#efeeec;--wall-hi:#f8f8f7;--floor:#dedcd8;--floor-line:#cfccc7;--furn1:#d3d1cd;--furn2:#c9c6c1;--furn3:#dcdad6;--furn4:#9f9b95;--leaf:#a9ada4;--pot:#bdb9b3;
-  position:relative;aspect-ratio:3/2;overflow:hidden;border:1px solid var(--line);isolation:isolate;
-  background:radial-gradient(ellipse 85% 70% at 50% 0%,var(--wall-hi),var(--wall) 70%)!important}
-.fr-wall::before{content:"";position:absolute;inset:0;z-index:0;opacity:.35;mix-blend-mode:multiply;pointer-events:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-[data-theme="dark"] .fr-wall{--wall:#1b1b1b;--wall-hi:#262626;--floor:#141414;--floor-line:#2c2c2c;--furn1:#2c2c2c;--furn2:#262626;--furn3:#333;--furn4:#111;--leaf:#3d403b;--pot:#353331}
-[data-theme="dark"] .fr-wall::before{mix-blend-mode:screen;opacity:.12}
-.fr-floor{position:absolute;left:0;right:0;bottom:0;height:15%;z-index:1;background:linear-gradient(var(--floor),color-mix(in srgb,var(--floor) 88%,#000));border-top:1px solid var(--floor-line)}
-.fr-sofa,.fr-plant{position:absolute;z-index:2;transition:opacity .5s,transform .6s var(--ease,ease)}
-.fr-sofa{left:50%;bottom:12.5%;width:64%;transform:translateX(-50%);filter:drop-shadow(0 10px 10px rgba(0,0,0,.12))}
-.fr-sofa .s1{fill:var(--furn1)}.fr-sofa .s2{fill:var(--furn2)}.fr-sofa .s3{fill:var(--furn3)}.fr-sofa .s4{fill:var(--furn4)}
-.fr-plant{right:5%;bottom:13%;width:11%}
-.fr-plant .l{fill:var(--leaf)}.fr-plant .p{fill:var(--pot)}
-.fr-spot{position:absolute;inset:0;z-index:1;opacity:0;transition:opacity .6s;pointer-events:none;
-  background:radial-gradient(ellipse 34% 62% at 50% 4%,rgba(255,255,255,.95),rgba(255,255,255,0) 100%)}
-.fr-spot i{position:absolute;top:0;left:50%;width:7%;height:2.2%;transform:translateX(-50%);background:#2a2a2a;border-radius:0 0 3px 3px}
-[data-theme="dark"] .fr-spot{background:radial-gradient(ellipse 34% 62% at 50% 4%,rgba(255,250,240,.16),rgba(255,255,255,0) 100%)}
-[data-theme="dark"] .fr-spot i{background:#3a3a3a}
-.fr-scene-galeria{--wall:#ececeb;--wall-hi:#f3f3f2}
-[data-theme="dark"] .fr-scene-galeria{--wall:#161616;--wall-hi:#1c1c1c}
-.fr-scene-galeria .fr-spot{opacity:1}
-.fr-scene-galeria .fr-sofa,.fr-scene-galeria .fr-plant{opacity:0;transform:translateX(-50%) translateY(8%)}
-.fr-scene-galeria .fr-plant{transform:translateY(8%)}
-.fr-scene-galeria .fr-floor{height:13%}
-
-/* Marco */
-.fr-frame{--fw:11px;--mat:9%;position:absolute;z-index:3;left:50%;top:10%;width:40%;transform:translateX(-50%);padding:var(--fw);
-  transition:width .55s var(--ease,ease),top .55s var(--ease,ease),padding .4s;
-  box-shadow:0 1px 1px rgba(0,0,0,.18),0 6px 10px -4px rgba(0,0,0,.22),0 22px 32px -16px rgba(0,0,0,.38),0 40px 60px -30px rgba(0,0,0,.25)}
-.fr-frame.fr-portrait{width:24%;top:7%}
-.fr-scene-galeria .fr-frame{width:46%;top:16%;box-shadow:0 1px 1px rgba(0,0,0,.2),0 10px 14px -6px rgba(0,0,0,.28),0 34px 40px -22px rgba(0,0,0,.42)}
-.fr-scene-galeria .fr-frame.fr-portrait{width:27%;top:11%}
-[data-theme="dark"] .fr-frame{box-shadow:0 1px 1px rgba(0,0,0,.5),0 8px 12px -4px rgba(0,0,0,.6),0 26px 36px -16px rgba(0,0,0,.75)}
-.fr-frame::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;transition:box-shadow .4s}
+.fr-scene{container-type:inline-size;position:relative;aspect-ratio:3/2;overflow:hidden;background:#e9e9e9;isolation:isolate}
+.fr-photo{position:absolute;inset:0;width:100%!important;height:100%;object-fit:cover;aspect-ratio:auto!important;opacity:0;transition:opacity .6s ease;transform:none!important}
+.fr-photo.on{opacity:1}
+.fr-scene.fr-moving .fr-frame{opacity:0;transition:opacity .25s}
+.fr-frame{--fw:max(4px,.85cqw);--mat:9%;--bri:1;--sx:0px;position:absolute;z-index:3;left:38%;top:19%;width:26%;transform:translateX(-50%);padding:var(--fw);
+  filter:brightness(var(--bri));transition:opacity .35s,width .5s var(--ease,ease),left .5s var(--ease,ease),top .5s var(--ease,ease);
+  box-shadow:var(--sx) 1px 1px rgba(0,0,0,.2),calc(var(--sx) * 1.4) .45cqw .7cqw -.2cqw rgba(0,0,0,.26),calc(var(--sx) * 2) 1.4cqw 2.2cqw -1cqw rgba(0,0,0,.36)}
+.fr-frame::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:1}
 /* negro mate */
 .fr-negro{background:linear-gradient(135deg,#232323,#121212 45%,#0d0d0d)}
 .fr-negro::before{box-shadow:inset 1px 1px 0 rgba(255,255,255,.13),inset -1px -1px 0 rgba(0,0,0,.7),inset 0 0 0 3px rgba(0,0,0,.25),inset 4px 4px 3px -2px rgba(255,255,255,.05),inset -4px -4px 4px -2px rgba(0,0,0,.5)}
@@ -395,7 +369,6 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .fr-mat-fino{--mat:4%}.fr-mat-medio{--mat:9%}.fr-mat-ancho{--mat:15%}
 .fr-mat{position:relative;background:#f4f2ec;padding:var(--mat);transition:padding .45s var(--ease,ease);
   box-shadow:inset 0 0 0 1px rgba(0,0,0,.25),inset 0 4px 6px -2px rgba(0,0,0,.28),inset 3px 0 5px -3px rgba(0,0,0,.18)}
-[data-theme="dark"] .fr-mat{background:#ebe9e3}
 .fr-art{position:relative;box-shadow:0 0 0 2px #fbfaf7,0 0 0 3px rgba(0,0,0,.10),-1px -1px 0 3px rgba(0,0,0,.06)}
 .fr-art::after{content:"";position:absolute;inset:0;box-shadow:inset 1px 1px 2px rgba(0,0,0,.35);pointer-events:none}
 .framer .fr-art img{display:block;width:100%;height:auto;aspect-ratio:auto!important;object-fit:contain;transition:opacity .25s;transform:none!important}
@@ -419,14 +392,20 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .fr-thumb{width:44px;height:44px;padding:2px;border:1px solid var(--line);background:none;cursor:pointer;transition:border-color .2s}
 .framer .fr-thumb img{width:100%;height:100%;object-fit:cover;display:block;aspect-ratio:auto!important;transform:none!important}
 .fr-note{font-size:.72rem;letter-spacing:.06em;color:var(--muted);margin:4px 0 0!important}
-@media (max-width:760px){.fr-frame{--fw:7px}.fr-mat-fino{--mat:3.5%}.fr-mat-medio{--mat:7%}.fr-mat-ancho{--mat:12%}.fr-lab{width:100%}.fr-thumb{width:40px;height:40px}}
-@media (prefers-reduced-motion:reduce){.fr-frame,.fr-mat,.fr-art img,.fr-sofa,.fr-plant,.fr-spot{transition:none}}
 
+@media (max-width:760px){.fr-mat-fino{--mat:3.5%}.fr-mat-medio{--mat:7%}.fr-mat-ancho{--mat:12%}.fr-lab{width:100%}.fr-thumb{width:40px;height:40px}}
+.fr-scenes{gap:8px}
+.fr-scn{display:grid;gap:5px;justify-items:center;width:76px;padding:0;border:0;background:none;color:var(--muted);font:400 .62rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+.fr-scn img{width:64px!important;height:43px;object-fit:cover;aspect-ratio:auto!important;outline:1px solid var(--line);outline-offset:2px;transition:outline-color .2s;transform:none!important}
+.fr-scn[aria-pressed="true"]{color:var(--fg)}
+.fr-scn[aria-pressed="true"] img{outline-color:var(--fg)}
+.fr-credit{white-space:nowrap}
+.fr-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+@media (prefers-reduced-motion:reduce){.fr-photo,.fr-frame,.fr-mat,.fr-art img{transition:none}}
 /* Hero: Ken Burns suave (solo transform, continuo; no se corta en el fundido) */
 @keyframes kbA{from{transform:scale(1) translate3d(0,0,0)}to{transform:scale(1.08) translate3d(-1.2%,-1%,0)}}
 @keyframes kbB{from{transform:scale(1.02) translate3d(1%,.6%,0)}to{transform:scale(1.08) translate3d(-.6%,-1.2%,0)}}
 .hero figure .hero-slide{will-change:transform,opacity;backface-visibility:hidden;animation:kbA 11s ease-in-out infinite alternate}
 .hero figure .hero-slide:nth-child(even){animation-name:kbB;animation-duration:12s}
 .hero figure .hero-slide:nth-child(3n){animation-delay:-4s}
-.hero figure:hover .hero-slide{animation-play-state:paused}
 @media (prefers-reduced-motion:reduce){.hero figure .hero-slide{animation:none!important;transform:none!important;will-change:auto}}

@@ -136,10 +136,6 @@ window.startApp = function () {
       const stop = () => { clearInterval(timer); timer = null; };
       const start = () => { stop(); if (!reduce && !paused && !document.hidden && slides.length > 1) timer = setInterval(() => go(cur + 1), 5500); };
       dots.forEach(d => d.addEventListener("click", () => { go(+d.dataset.hs); start(); }));
-      fig.addEventListener("mouseenter", () => { paused = true; stop(); });
-      fig.addEventListener("mouseleave", () => { paused = false; start(); });
-      fig.addEventListener("focusin", () => { paused = true; stop(); });
-      fig.addEventListener("focusout", () => { paused = false; start(); });
       document.addEventListener("visibilitychange", start);
       if (slides.length > 1) { if (imgs[0].complete) load(1); else imgs[0].addEventListener("load", () => load(1), { once: true }); }
       start();
@@ -225,31 +221,50 @@ window.startApp = function () {
     lb.addEventListener("keydown", e => { if (e.key === "ArrowLeft") show(cur - 1); if (e.key === "ArrowRight") show(cur + 1); });
   }
 
-  /* ---------- Probador de enmarcado (muestra con clásicos de dominio público) ---------- */
+  /* ---------- Probador de enmarcado (fotos reales + clásicos de dominio público) ---------- */
   document.querySelectorAll("[data-framer]").forEach(box => {
     const pick = ["van-gogh", "hokusai", "monet", "vermeer"].map(id => CL.find(c => c.id === id)).filter(Boolean);
-    if (!pick.length) return;
+    const SC = typeof ESCENAS !== "undefined" ? ESCENAS : [];
+    if (!pick.length || !SC.length) return;
     const frames = [["negro", "Negro"], ["madera", "Madera"], ["blanco", "Blanco"]];
     const mats = [["fino", "Fino"], ["medio", "Medio"], ["ancho", "Ancho"]];
-    const st = { s: "living", f: "madera", m: "medio", a: 0 };
+    const st = { s: 0, f: "negro", m: "medio", a: 0 };
     const grp = (key, label, opts) => `<div class="fr-row"><span class="fr-lab">${label}</span><div class="fr-opts" role="group" aria-label="${label}">${opts.map(([v, t]) => `<button type="button" class="chip fr-opt" data-k="${key}" data-v="${v}" aria-pressed="false">${key === "f" ? `<i class="fr-sw fr-sw-${v}" aria-hidden="true"></i>` : ""}${t}</button>`).join("")}</div></div>`;
-    const sofa = `<svg class="fr-sofa" viewBox="0 0 600 150" aria-hidden="true"><rect x="22" y="22" width="556" height="70" rx="10" class="s2"/><rect x="0" y="62" width="600" height="62" rx="12" class="s1"/><rect x="40" y="58" width="256" height="30" rx="8" class="s3"/><rect x="304" y="58" width="256" height="30" rx="8" class="s3"/><rect x="34" y="124" width="10" height="22" class="s4"/><rect x="556" y="124" width="10" height="22" class="s4"/></svg>`;
-    const plant = `<svg class="fr-plant" viewBox="0 0 120 260" aria-hidden="true"><g class="l"><path d="M60 170C58 120 40 80 14 52c30 14 46 50 50 112z"/><path d="M62 170c2-58 18-104 46-138-12 44-22 92-38 140z"/><path d="M58 172C46 136 26 114 2 104c26 2 46 24 60 66z"/><path d="M63 172c10-40 30-66 55-78-20 22-34 48-47 80z"/><path d="M60 168c0-60 2-110 2-160 6 50 6 100 2 162z"/></g><path class="p" d="M34 172h52l-6 84H40z"/></svg>`;
-    box.innerHTML = `<div class="fr-wall fr-scene-living"><div class="fr-spot" aria-hidden="true"><i></i></div><div class="fr-floor" aria-hidden="true"></div>${sofa}${plant}<div class="fr-frame"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div></div></div>
-      <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>${grp("s", "Ambiente", [["living", "Living"], ["galeria", "Galería"]])}${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
+    box.innerHTML = `<div class="fr-scene"><img class="fr-photo on" alt="" src="${SC[0].img}"><img class="fr-photo" alt="" aria-hidden="true">
+      <div class="fr-frame"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div></div></div>
+      <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>
+      <div class="fr-row"><span class="fr-lab">Ambiente</span><div class="fr-opts fr-scenes" role="group" aria-label="Ambiente">${SC.map((e, i) => `<button type="button" class="fr-scn" data-k="s" data-v="${i}" aria-pressed="false"><img src="${e.thumb}" alt=""><span>${esc(e.nombre)}</span></button>`).join("")}</div></div>
+      ${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
       <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}</div></div>
-      <p class="fr-note">Vista de muestra con una obra clásica de dominio público.</p></div>`;
-    const frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img");
+      <p class="fr-note"><span>Vista de muestra con una obra clásica de dominio público.</span> <span class="fr-credit"></span></p></div>`;
+    const scene = box.querySelector(".fr-scene"), photos = [...box.querySelectorAll(".fr-photo")], frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img"), credit = box.querySelector(".fr-credit");
+    let shown = 0, curScene = 0, portrait = false;
+    const place = () => {
+      const e = SC[st.s];
+      frame.style.left = e.x + "%"; frame.style.top = e.y + "%"; frame.style.width = (portrait ? e.pw : e.w) + "%";
+      frame.style.setProperty("--bri", e.bri); frame.style.setProperty("--sx", e.sx + "px");
+    };
+    const setScene = () => {
+      const e = SC[st.s];
+      credit.innerHTML = `<span>Foto</span>: <a href="${e.url}" target="_blank" rel="noopener">${esc(e.autor)} / ${e.sitio}</a>`;
+      if (curScene === st.s) return; curScene = st.s;
+      const next = photos[1 - shown];
+      next.onload = () => { photos[shown].classList.remove("on"); next.classList.add("on"); shown = 1 - shown; place(); };
+      scene.classList.add("fr-moving"); setTimeout(() => scene.classList.remove("fr-moving"), 700);
+      next.src = e.img;
+    };
     const render = () => {
       const c = pick[st.a];
-      frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}${frame.classList.contains("fr-portrait") ? " fr-portrait" : ""}`; box.querySelector(".fr-wall").className = `fr-wall fr-scene-${st.s}`;
+      frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}`;
       if (img.getAttribute("src") !== c.img) { img.classList.add("fr-swap"); setTimeout(() => { img.src = c.img; img.alt = `${tr(c.titulo)}${LANG === "en" ? ", by " : ", de "}${c.artista}`; }, 220); }
-      img.onload = () => { frame.classList.toggle("fr-portrait", img.naturalHeight > img.naturalWidth); img.classList.remove("fr-swap"); };
+      img.onload = () => { portrait = img.naturalHeight > img.naturalWidth; place(); img.classList.remove("fr-swap"); };
+      setScene(); if (curScene === st.s) place();
       box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === b.dataset.v)));
     };
-    box.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; st[b.dataset.k] = b.dataset.k === "a" ? +b.dataset.v : b.dataset.v; render(); });
+    box.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; st[b.dataset.k] = (b.dataset.k === "a" || b.dataset.k === "s") ? +b.dataset.v : b.dataset.v; render(); });
     render();
   });
+
   /* ---------- Revelado al hacer scroll ---------- */
   (function () {
     if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
