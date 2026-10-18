@@ -20,7 +20,7 @@ window.startApp = function () {
 
   /* ---------- Header / Footer ---------- */
   const page = document.body.dataset.page;
-  const links = [["index.html", "Inicio", "inicio"], ["obras.html", "Obras", "obras"], ["artistas.html", "Artistas", "artistas"], ["enmarcado.html", "Enmarcado", "enmarcado"], ["contacto.html", "Contacto", "contacto"]];
+  const links = [["index.html", "Inicio", "inicio"], ["obras.html", "Obras", "obras"], ["clasicos.html", "Clásicos", "clasicos"], ["artistas.html", "Artistas", "artistas"], ["enmarcado.html", "Enmarcado", "enmarcado"], ["contacto.html", "Contacto", "contacto"]];
   const ico = {
     moon: '<svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
     sun: '<svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
@@ -106,7 +106,8 @@ window.startApp = function () {
   const soon = (txt) => `<p class="empty-state">${txt}</p>`;
   if (el("featured")) el("featured").innerHTML = OBRAS.slice(0, 4).map(card).join("") || soon("Próximamente nuevas obras");
   if (el("artistsStrip")) el("artistsStrip").innerHTML = (ARTISTAS.map(a => `<a class="artist" href="obras.html?artista=${a.id}"><img src="${a.img}" alt="" loading="lazy"><h3>${esc(a.nombre)}</h3><p>${esc(a.disciplina)}</p></a>`).join("") || soon("Próximamente nuevos artistas"));
-  if (el("heroImg")) { const o = OBRAS.find(x => x.img); el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : `<img src="img/enmarcado.svg" alt="">`; }
+  if (el("heroImg")) { const o = OBRAS.find(x => x.img); const hc = typeof CLASICOS !== "undefined" && (CLASICOS.find(c => c.id === "vermeer") || CLASICOS[0]);
+    el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : hc ? `<img src="${hc.img}" alt="${esc(hc.titulo)}, de ${esc(hc.artista)}"><figcaption class="hero-cap"><span>${esc(hc.titulo)}</span> · ${esc(hc.artista)}, ${esc(hc.anio)} · <span>Dominio público</span></figcaption>` : `<img src="img/enmarcado.svg" alt="">`; }
   document.querySelectorAll("[data-brand]").forEach(n => n.textContent = CONFIG.nombre);
 
   // Catálogo
@@ -120,7 +121,7 @@ window.startApp = function () {
       let list = OBRAS.filter(o => filtro === "todos" || o.artista === filtro);
       if (sort.value === "asc") list.sort((a, b) => a.precio - b.precio);
       if (sort.value === "desc") list.sort((a, b) => b.precio - a.precio);
-      el("catalog").innerHTML = list.map(card).join("") || (OBRAS.length ? '<p class="muted">No hay obras para este filtro.</p>' : soon("Próximamente nuevas obras"));
+      el("catalog").innerHTML = list.map(card).join("") || (OBRAS.length ? '<p class="muted">No hay obras para este filtro.</p>' : soon("Próximamente nuevas obras") + (typeof CLASICOS !== "undefined" ? '<p class="classic-cta"><span>Mientras tanto, conocé nuestra selección de clásicos.</span> <a class="link" href="clasicos.html">Clásicos</a></p>' : ""));
       el("count").textContent = `${list.length} ${list.length === 1 ? "obra" : "obras"}`;
     };
     f.onclick = e => { if (e.target.dataset.f) { filtro = e.target.dataset.f; render(); } };
@@ -159,6 +160,33 @@ window.startApp = function () {
   document.querySelectorAll("[data-wa]").forEach(a => { a.href = "#"; a.onclick = e => { e.preventDefault(); const m = a.dataset.wa.replace(/^Hola! /, ""); window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(t("Hola") + "! " + t(m))}`, "_blank", "noopener"); }; });
   document.querySelectorAll("[data-mail]").forEach(a => { a.href = `mailto:${CONFIG.email}`; a.textContent = CONFIG.email; });
 
+
+  /* ---------- Clásicos (dominio público, no a la venta) ---------- */
+  const CL = typeof CLASICOS !== "undefined" ? CLASICOS : [];
+  const clCard = (c, i) => `<article class="work classic"><button type="button" class="classic-btn" data-cl="${i}" aria-label="${esc(c.titulo)}, ${esc(c.artista)}">
+    <div class="ph"><img src="${c.img}" alt="${esc(c.titulo)}, de ${esc(c.artista)}" loading="lazy"></div>
+    <div class="meta"><div><h3>${esc(c.titulo)}</h3><p class="by">${esc(c.artista)} · ${esc(c.anio)}</p></div></div></button></article>`;
+  if (el("classicsHome")) {
+    el("classicsHome").innerHTML = CL.slice(0, 4).map(clCard).join("");
+    if (!OBRAS.length && el("featured")) el("featured").closest("section").hidden = true;
+    if (!ARTISTAS.length && el("artistsStrip")) el("artistsStrip").closest("section").hidden = true;
+  }
+  if (el("classicsGrid")) el("classicsGrid").innerHTML = CL.map(clCard).join("");
+  if (CL.length && (el("classicsHome") || el("classicsGrid"))) {
+    document.body.insertAdjacentHTML("beforeend", `<dialog class="lb" id="lb" aria-labelledby="lbTitle">
+      <button class="icon-btn lb-close" type="button" id="lbClose" aria-label="Cerrar">✕</button>
+      <figure><img id="lbImg" alt=""><figcaption><p class="eyebrow" id="lbArtist"></p><h3 id="lbTitle"></h3><p class="muted small" id="lbMeta"></p>
+      <p class="small muted lb-credit"><span>Dominio público · Wikimedia Commons</span> · <a id="lbSrc" target="_blank" rel="noopener">Ver fuente</a></p></figcaption></figure>
+      <button class="icon-btn lb-nav lb-prev" type="button" id="lbPrev" aria-label="Anterior">‹</button><button class="icon-btn lb-nav lb-next" type="button" id="lbNext" aria-label="Siguiente">›</button></dialog>`);
+    const lb = el("lb"); let cur = 0;
+    const show = i => { cur = (i + CL.length) % CL.length; const c = CL[cur];
+      el("lbImg").src = c.img; el("lbImg").alt = `${c.titulo}, de ${c.artista}`; el("lbArtist").textContent = c.artista;
+      el("lbTitle").textContent = c.titulo; el("lbMeta").textContent = `${c.anio} · ${c.museo}`; el("lbSrc").href = c.fuente; };
+    document.addEventListener("click", e => { const b = e.target.closest("[data-cl]"); if (b) { show(+b.dataset.cl); lb.showModal(); } });
+    el("lbClose").onclick = () => lb.close(); el("lbPrev").onclick = () => show(cur - 1); el("lbNext").onclick = () => show(cur + 1);
+    lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
+    lb.addEventListener("keydown", e => { if (e.key === "ArrowLeft") show(cur - 1); if (e.key === "ArrowRight") show(cur + 1); });
+  }
   /* ---------- Revelado al hacer scroll ---------- */
   (function () {
     if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
