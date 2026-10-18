@@ -240,32 +240,39 @@ window.startApp = function () {
     const scene = box.querySelector(".fr-scene"), photos = [...box.querySelectorAll(".fr-photo")], frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img"), art = box.querySelector(".fr-art"), credit = box.querySelector(".fr-credit");
     const MOLD = { negro: 20, blanco: 20, madera: 28 }, MAT = { fino: 50, medio: 90, ancho: 140 }; // mm
     let shown = 0, curScene = 0, ratio = 0.8;
-    // Coloca el marco sobre el plano de la pared: 1px del marco = 1 mm; homografía de la escena -> matrix3d
+    // Coloca el marco sobre el plano de la pared. Medidas en mm × u (px de pantalla por mm), así el marco se
+    // rasteriza a su tamaño real en pantalla (no a 1px = 1mm, que generaba capas enormes); homografía -> matrix3d.
+    const mul = (A, B) => A.map(r => [0, 1, 2].map(j => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
     const place = () => {
       const e = SC[curScene], Wmm = Math.round((ratio > 1 ? e.pw : e.w) * 1000);
-      const inner = Wmm - 2 * (MOLD[st.f] + MAT[st.m]);
-      art.style.width = inner + "px"; art.style.height = Math.round(inner * ratio) + "px";
-      frame.style.width = Wmm + "px";
-      frame.style.setProperty("--mold", MOLD[st.f] + "px"); frame.style.setProperty("--matw", MAT[st.m] + "px");
       const k = scene.clientWidth / 1600, H = e.H;
       const T = [[0.001, 0, -Wmm / 2000], [0, 0.001, 0], [0, 0, 1]];
-      const mul = (A, B) => A.map(r => [0, 1, 2].map(j => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
       let M = mul(mul([[k, 0, 0], [0, k, 0], [0, 0, 1]], H), T); const z = M[2][2]; M = M.map(r => r.map(v => v / z));
-      frame.style.transform = `matrix3d(${M[0][0]},${M[1][0]},0,${M[2][0]},${M[0][1]},${M[1][1]},0,${M[2][1]},0,0,1,0,${M[0][2]},${M[1][2]},0,${M[2][2]})`;
-      const pxPerMm = Math.hypot(M[0][0], M[1][0]);
-      frame.style.setProperty("--blur", Math.min(4, 0.35 / pxPerMm).toFixed(2) + "px");
+      const u = Math.max(0.05, Math.hypot(M[0][0], M[1][0]));
+      M = M.map(r => [r[0] / u, r[1] / u, r[2]]);
+      const inner = Wmm - 2 * (MOLD[st.f] + MAT[st.m]);
+      frame.style.setProperty("--u", u.toFixed(4));
+      art.style.width = (inner * u).toFixed(2) + "px"; art.style.height = (inner * ratio * u).toFixed(2) + "px";
+      frame.style.width = (Wmm * u).toFixed(2) + "px";
+      frame.style.setProperty("--mold", (MOLD[st.f] * u).toFixed(2) + "px"); frame.style.setProperty("--matw", (MAT[st.m] * u).toFixed(2) + "px");
+      // Si la perspectiva cambia la escala menos de 0,5% a lo ancho del marco, se usa matrix() 2D (más liviano)
+      const flat = (Math.abs(M[2][0]) + Math.abs(M[2][1])) * Wmm * u < 0.005;
+      frame.style.transform = flat ? `matrix(${M[0][0]},${M[1][0]},${M[0][1]},${M[1][1]},${M[0][2]},${M[1][2]})`
+        : `matrix3d(${M[0][0]},${M[1][0]},0,${M[2][0]},${M[0][1]},${M[1][1]},0,${M[2][1]},0,0,1,0,${M[0][2]},${M[1][2]},0,${M[2][2]})`;
       frame.style.setProperty("--grade", e.ajuste); frame.style.setProperty("--luz", e.luz);
       frame.style.setProperty("--shx", e.sombra[0]); frame.style.setProperty("--shy", e.sombra[1]);
-      frame.style.setProperty("--sdx", e.lado[0] + "px"); frame.style.setProperty("--sdy", e.lado[1] + "px");
+      frame.style.setProperty("--sdx", (e.lado[0] * u).toFixed(2) + "px"); frame.style.setProperty("--sdy", (e.lado[1] * u).toFixed(2) + "px");
     };
+    let placeQ = 0; const placeSoon = () => { if (!placeQ) placeQ = requestAnimationFrame(() => { placeQ = 0; place(); }); };
     const setScene = () => {
       const e = SC[st.s];
       credit.innerHTML = `<span>Foto</span>: <a href="${e.url}" target="_blank" rel="noopener">${esc(e.autor)} / ${e.sitio}</a>`;
-      if (curScene === st.s) return;
+      if (curScene === st.s) { scene.classList.remove("fr-moving"); return; }
       const next = photos[1 - shown], target = st.s;
       scene.classList.add("fr-moving");
-      next.onload = () => { photos[shown].classList.remove("on"); next.classList.add("on"); shown = 1 - shown; curScene = target; place(); setTimeout(() => scene.classList.remove("fr-moving"), 60); };
-      next.src = e.img;
+      const swap = () => { if (st.s !== target) return; photos[shown].classList.remove("on"); next.classList.add("on"); shown = 1 - shown; curScene = target; place(); setTimeout(() => scene.classList.remove("fr-moving"), 60); };
+      next.onload = null; next.src = e.img;
+      (next.decode ? next.decode() : Promise.reject()).then(swap, () => { if (next.complete) swap(); else next.onload = swap; });
     };
     const render = () => {
       const c = pick[st.a];
@@ -275,7 +282,7 @@ window.startApp = function () {
       setScene(); place();
       box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === b.dataset.v)));
     };
-    if (window.ResizeObserver) new ResizeObserver(() => place()).observe(scene);
+    if (window.ResizeObserver) new ResizeObserver(placeSoon).observe(scene);
     box.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; st[b.dataset.k] = (b.dataset.k === "a" || b.dataset.k === "s") ? +b.dataset.v : b.dataset.v; render(); });
     render();
   });
