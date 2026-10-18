@@ -231,16 +231,18 @@ window.startApp = function () {
     if (!pick.length) return;
     const frames = [["negro", "Negro"], ["madera", "Madera"], ["blanco", "Blanco"]];
     const mats = [["fino", "Fino"], ["medio", "Medio"], ["ancho", "Ancho"]];
-    const st = { f: "negro", m: "medio", a: 0 };
+    const st = { s: "living", f: "madera", m: "medio", a: 0 };
     const grp = (key, label, opts) => `<div class="fr-row"><span class="fr-lab">${label}</span><div class="fr-opts" role="group" aria-label="${label}">${opts.map(([v, t]) => `<button type="button" class="chip fr-opt" data-k="${key}" data-v="${v}" aria-pressed="false">${key === "f" ? `<i class="fr-sw fr-sw-${v}" aria-hidden="true"></i>` : ""}${t}</button>`).join("")}</div></div>`;
-    box.innerHTML = `<div class="fr-wall"><div class="fr-frame"><div class="fr-mat"><img alt=""></div></div></div>
-      <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
+    const sofa = `<svg class="fr-sofa" viewBox="0 0 600 150" aria-hidden="true"><rect x="22" y="22" width="556" height="70" rx="10" class="s2"/><rect x="0" y="62" width="600" height="62" rx="12" class="s1"/><rect x="40" y="58" width="256" height="30" rx="8" class="s3"/><rect x="304" y="58" width="256" height="30" rx="8" class="s3"/><rect x="34" y="124" width="10" height="22" class="s4"/><rect x="556" y="124" width="10" height="22" class="s4"/></svg>`;
+    const plant = `<svg class="fr-plant" viewBox="0 0 120 260" aria-hidden="true"><g class="l"><path d="M60 170C58 120 40 80 14 52c30 14 46 50 50 112z"/><path d="M62 170c2-58 18-104 46-138-12 44-22 92-38 140z"/><path d="M58 172C46 136 26 114 2 104c26 2 46 24 60 66z"/><path d="M63 172c10-40 30-66 55-78-20 22-34 48-47 80z"/><path d="M60 168c0-60 2-110 2-160 6 50 6 100 2 162z"/></g><path class="p" d="M34 172h52l-6 84H40z"/></svg>`;
+    box.innerHTML = `<div class="fr-wall fr-scene-living"><div class="fr-spot" aria-hidden="true"><i></i></div><div class="fr-floor" aria-hidden="true"></div>${sofa}${plant}<div class="fr-frame"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div></div></div>
+      <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>${grp("s", "Ambiente", [["living", "Living"], ["galeria", "Galería"]])}${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
       <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}</div></div>
       <p class="fr-note">Vista de muestra con una obra clásica de dominio público.</p></div>`;
-    const frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-mat img");
+    const frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img");
     const render = () => {
       const c = pick[st.a];
-      frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}`;
+      frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}${frame.classList.contains("fr-portrait") ? " fr-portrait" : ""}`; box.querySelector(".fr-wall").className = `fr-wall fr-scene-${st.s}`;
       if (img.getAttribute("src") !== c.img) { img.classList.add("fr-swap"); setTimeout(() => { img.src = c.img; img.alt = `${tr(c.titulo)}${LANG === "en" ? ", by " : ", de "}${c.artista}`; }, 220); }
       img.onload = () => { frame.classList.toggle("fr-portrait", img.naturalHeight > img.naturalWidth); img.classList.remove("fr-swap"); };
       box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === b.dataset.v)));
