@@ -328,3 +328,16 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .hero figure.has-cap img{aspect-ratio:4/5;width:100%;height:auto;object-fit:cover;display:block}
 .hero-cap{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);line-height:1.6}
 .hero-cap-t{display:block;color:var(--fg);letter-spacing:.12em;margin-bottom:2px}
+
+/* Hero slideshow */
+.hero-slides{position:relative;aspect-ratio:4/5;overflow:hidden}
+.hero figure .hero-slide,.hero figure.has-cap .hero-slide{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:cover;opacity:0;transition:opacity 1.1s var(--ease,ease)}
+.hero figure .hero-slide.on{opacity:1}
+.hero figure:not(.has-cap){aspect-ratio:auto;overflow:visible}
+.hero-dots{display:flex;gap:6px;margin-top:12px}
+.hero-dot{flex:0 0 auto;width:18px;height:14px;padding:6px 0;border:0;background:var(--line);background-clip:content-box;cursor:pointer;transition:background-color .4s,width .4s var(--ease,ease)}
+.hero-dot.on{background-color:var(--fg);width:30px}
+.hero-dots+.hero-cap{margin-top:8px}
+.hero-cap{transition:opacity .35s}
+.hero-cap.swap{opacity:0}
+@media (prefers-reduced-motion:reduce){.hero-slide,.hero-cap,.hero-dot{transition:none}}

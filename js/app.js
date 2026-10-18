@@ -106,8 +106,45 @@ window.startApp = function () {
   const soon = (txt) => `<p class="empty-state">${txt}</p>`;
   if (el("featured")) el("featured").innerHTML = OBRAS.slice(0, 4).map(card).join("") || soon("Próximamente nuevas obras");
   if (el("artistsStrip")) el("artistsStrip").innerHTML = (ARTISTAS.map(a => `<a class="artist" href="obras.html?artista=${a.id}"><img src="${a.img}" alt="" loading="lazy"><h3>${esc(a.nombre)}</h3><p>${esc(a.disciplina)}</p></a>`).join("") || soon("Próximamente nuevos artistas"));
-  if (el("heroImg")) { const o = OBRAS.find(x => x.img); const hc = typeof CLASICOS !== "undefined" && (CLASICOS.find(c => c.id === "vermeer") || CLASICOS[0]);
-    el("heroImg").classList.toggle("has-cap", !o && !!hc); el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : hc ? `<img src="${hc.img}" alt="${esc(hc.titulo)}, de ${esc(hc.artista)}"><figcaption class="hero-cap"><span class="hero-cap-t">${esc(hc.titulo)}</span><span>${esc(hc.artista)}, ${esc(hc.anio)}</span> · <span>Dominio público</span></figcaption>` : `<img src="img/enmarcado.svg" alt="">`; }
+  /* ---------- Hero: slideshow (obras reales si hay; si no, clásicos de dominio público) ---------- */
+  if (el("heroImg")) {
+    const fig = el("heroImg");
+    const real = OBRAS.filter(x => x.img).slice(0, 8).map(o => ({ img: o.img, alt: `${o.titulo}, de ${artista(o.artista).nombre}` }));
+    let CLh = typeof CLASICOS !== "undefined" ? CLASICOS.slice() : [];
+    const vi = CLh.findIndex(c => c.id === "vermeer"); if (vi > 0) CLh = CLh.slice(vi).concat(CLh.slice(0, vi));
+    const slides = real.length ? real : CLh.map(c => ({ img: c.img, alt: `${c.titulo}, de ${c.artista}`, c }));
+    const withCap = !real.length && slides.length > 0;
+    fig.classList.toggle("has-cap", withCap);
+    if (!slides.length) fig.innerHTML = `<img src="img/enmarcado.svg" alt="">`;
+    else {
+      const capHTML = c => `<span class="hero-cap-t">${esc(c.titulo)}</span><span>${esc(c.artista)}, ${esc(c.anio)}</span> · <span>Dominio público</span>`;
+      fig.innerHTML = `<div class="hero-slides">${slides.map((s, k) => `<img class="hero-slide${k ? "" : " on"}" ${k ? `data-src="${s.img}"` : `src="${s.img}"`} alt="${esc(s.alt)}"${k ? ' aria-hidden="true"' : ""}>`).join("")}</div>` +
+        (slides.length > 1 ? `<div class="hero-dots" role="group" aria-label="Diapositivas">${slides.map((s, k) => `<button type="button" class="hero-dot${k ? "" : " on"}" data-hs="${k}" aria-label="${k + 1} / ${slides.length}"></button>`).join("")}</div>` : "") +
+        (withCap ? `<figcaption class="hero-cap" aria-live="polite">${capHTML(slides[0].c)}</figcaption>` : "");
+      const imgs = [...fig.querySelectorAll(".hero-slide")], dots = [...fig.querySelectorAll(".hero-dot")], cap = fig.querySelector(".hero-cap");
+      const load = k => { const im = imgs[k]; if (im && im.dataset.src) { im.src = im.dataset.src; delete im.dataset.src; } };
+      let cur = 0, timer = null, paused = false;
+      const go = k => {
+        k = (k + slides.length) % slides.length; if (k === cur) return; load(k);
+        imgs[cur].classList.remove("on"); imgs[cur].setAttribute("aria-hidden", "true");
+        imgs[k].classList.add("on"); imgs[k].removeAttribute("aria-hidden");
+        dots.forEach((d, j) => d.classList.toggle("on", j === k));
+        if (cap) { cap.classList.add("swap"); setTimeout(() => { cap.innerHTML = capHTML(slides[k].c); cap.classList.remove("swap"); }, 350); }
+        cur = k; load(k + 1 < slides.length ? k + 1 : 0);
+      };
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const stop = () => { clearInterval(timer); timer = null; };
+      const start = () => { stop(); if (!reduce && !paused && !document.hidden && slides.length > 1) timer = setInterval(() => go(cur + 1), 5500); };
+      dots.forEach(d => d.addEventListener("click", () => { go(+d.dataset.hs); start(); }));
+      fig.addEventListener("mouseenter", () => { paused = true; stop(); });
+      fig.addEventListener("mouseleave", () => { paused = false; start(); });
+      fig.addEventListener("focusin", () => { paused = true; stop(); });
+      fig.addEventListener("focusout", () => { paused = false; start(); });
+      document.addEventListener("visibilitychange", start);
+      if (slides.length > 1) { if (imgs[0].complete) load(1); else imgs[0].addEventListener("load", () => load(1), { once: true }); }
+      start();
+    }
+  }
   document.querySelectorAll("[data-brand]").forEach(n => n.textContent = CONFIG.nombre);
 
   // Catálogo
