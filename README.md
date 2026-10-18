@@ -62,3 +62,11 @@ El logo está en `img/logo.svg` (vectorizado, fondo transparente) y además embe
 El botón **EN/ES** del encabezado cambia el idioma y la elección queda guardada. El idioma por defecto se define en `CONFIG.idioma` (`"es"` o `"en"`) en `js/data.js`.
 - Los textos de la interfaz se traducen en `js/i18n.js` (diccionario `"Texto en español": "English text"`). Si agregás o cambiás un texto en español, sumá su traducción ahí.
 - Para obras y artistas, los textos en inglés se cargan desde el panel (campos “EN”). Si están vacíos, se muestra el texto en español.
+
+## Clásicos (dominio público)
+
+`clasicos.html` y la sección "Clásicos del arte" de la home muestran 8 obras de dominio público
+(Wikimedia Commons) como muestra. **No están a la venta**: no tienen precio ni botón de carrito.
+Los datos están en `js/clasicos.js` y las imágenes en `img/clasicos/` (JPEG optimizado embebido en
+un `.svg` para poder subirlo como texto). En la home, cuando todavía no hay obras/artistas cargados
+en Supabase, se ocultan esas secciones vacías y se muestra la de clásicos.

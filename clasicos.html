@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clásicos — {nombre}</title><meta name="description" content="Muestra de obras clásicas de dominio público. No están a la venta.">
+<script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="clasicos">
+<main id="main">
+
+<div class="page-head"><div class="wrap"><p class="eyebrow">Dominio público</p><h1>Clásicos</h1><p>Una selección de obras maestras de dominio público. Tocá una imagen para verla en grande.</p></div></div>
+<section style="padding-top:48px"><div class="wrap">
+<p class="classic-note classic-note-top">Muestra de obras clásicas de dominio público. No están a la venta.</p>
+<div class="grid" id="classicsGrid"></div></div></section></main>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/clasicos.js"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/vendor/supabase.min.js"></script>
+<script type="module" src="js/public.js"></script>
+</body>
+</html>

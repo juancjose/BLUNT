@@ -59,6 +59,15 @@ const I18N_EN = {
   "Te reenviamos el email de confirmación.": "We resent the confirmation email.", "Ingresando…": "Signing in…", "Creando cuenta…": "Creating account…",
   "El link expiró o ya fue usado. Pedí uno nuevo.": "The link expired or was already used. Request a new one.",
   "Necesitás tener JavaScript activado para ingresar.": "You need JavaScript enabled to sign in.",
+
+  // Clásicos
+  "Clásicos": "Classics", "Clásicos del arte": "Art classics", "Dominio público": "Public domain",
+  "Muestra de obras clásicas de dominio público. No están a la venta.": "A showcase of public-domain classic works. Not for sale.",
+  "Dominio público · Wikimedia Commons": "Public domain · Wikimedia Commons", "Ver fuente": "View source",
+  "Anterior": "Previous", "Siguiente": "Next", "Ver todos": "View all",
+  "Grandes obras de la historia del arte, para inspirarte mientras sumamos artistas a la galería.": "Masterpieces from art history to inspire you while we welcome new artists to the gallery.",
+  "Una selección de obras maestras de dominio público. Tocá una imagen para verla en grande.": "A selection of public-domain masterpieces. Tap an image to view it larger.",
+  "Mientras tanto, conocé nuestra selección de clásicos.": "Meanwhile, explore our selection of classics.",
   // Navegación y header
   "Saltar al contenido": "Skip to content", "Inicio": "Home", "Obras": "Works", "Artistas": "Artists",
   "Enmarcado": "Framing", "Contacto": "Contact", "Principal": "Main", "Abrir carrito": "Open cart",
