@@ -288,3 +288,13 @@ textarea{resize:vertical;line-height:1.6}
 :root:not([data-theme="dark"]){--bg:#f3ede3;--fg:#1a1714;--muted:#6f655a;--line:#ddd3c4;--card:#ebe3d6;--accent:#1a1714;--accent-fg:#f3ede3;--header-bg:rgba(243,237,227,.92);--shadow:0 18px 40px -22px rgba(60,45,30,.35)}
 :root:not([data-theme="dark"]) .work .ph,:root:not([data-theme="dark"]) .pw-img{background:#e6dccd}
 :root:not([data-theme="dark"]) .sold{background:var(--bg)}
+/* Un solo tono: mismo fondo en todo el sitio */
+:root{--card:var(--bg)}
+:root:not([data-theme="dark"]){--bg:#f3ede3;--card:#f3ede3;--header-bg:#f3ede3}
+[data-theme="dark"]{--bg:#0a0a0a;--card:#0a0a0a;--header-bg:#0a0a0a}
+html,body,header.site,footer.site,.alt,.drawer,.dlg,.auth-card,.overlay+.drawer{background:var(--bg)!important}
+header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.alt{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.alt+section,.alt+footer{border-top:0}
+.work .ph,.pw-img,.hero figure,.detail .ph,.avatar-edit img,.work-img-edit img,:root:not([data-theme="dark"]) .work .ph,:root:not([data-theme="dark"]) .pw-img{background:transparent!important}
+.work .ph,.pw-img{outline:1px solid var(--line);outline-offset:-1px}
