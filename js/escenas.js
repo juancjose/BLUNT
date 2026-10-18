@@ -51,17 +51,17 @@ var ESCENAS = [
  {
   "id": "dormitorio",
   "nombre": "Dormitorio",
-  "img": "img/escenas/dormitorio.svg",
+  "img": "img/escenas/dormitorio.svg?v=2",
   "H": [
    [
-    384,
+    290,
     0,
-    667.2
+    795
    ],
    [
     0,
-    384,
-    170.72
+    290,
+    192.4
    ],
    [
     0,
@@ -69,22 +69,22 @@ var ESCENAS = [
     1
    ]
   ],
-  "w": 1.08,
-  "pw": 0.67,
+  "w": 1.25,
+  "pw": 0.85,
   "sombra": [
-   -0.6,
+   -0.5,
    1
   ],
   "lado": [
    0,
    3
   ],
-  "ajuste": "brightness(.84) contrast(.9) saturate(.82) sepia(.06)",
-  "luz": "linear-gradient(100deg,rgba(80,90,80,.10),rgba(255,255,255,.04))",
-  "autor": "Aljona Ovtšinnikova",
+  "ajuste": "brightness(.93) contrast(.9) saturate(.84) sepia(.07)",
+  "luz": "linear-gradient(90deg,rgba(0,0,0,.06),rgba(255,245,230,.07))",
+  "autor": "Max Vakhtbovych",
   "sitio": "Pexels",
-  "url": "https://www.pexels.com/photo/minimalist-white-bedroom-interior-design-28536695/",
-  "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCABQAHgDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAgMABAYFAQf/xAA7EAACAQMCAwUFBQUJAAAAAAABAgMABBEFIRJBYQYxUXGxEyIzgcEHI0KRoRQWNGJyJDJSU2OC0dLh/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGBEBAQEBAQAAAAAAAAAAAAAAAAERIQL/2gAMAwEAAhEDEQA/AHCvGk4RmoKCRSVrAE30akBs5JxtXSRCEUnmM1npo3DhsHCnJrSIQbWE+KCg8FGKGiAqghRV4BRYoitc3Qtxk0Vhdpe8bIpAXG551X1G3klXCDNHoltJawSiVeE7Y60F+EYi+f0FDJu8Q/nHoaOP4Q8zQt8eIdSf0qiPzqtLVhzVeU7VBUbdjUqd7fOpRSlowM0C0xaCCMHlVhNhilrTVoGCjAoFpgFAQFEBXgFGKI84QeVQjEbeRoqGTaNvKiCj2iHmfWgP8SnRWPpRJ8Nfn60vP9oPSP6/+VVRzVWY092qnM+xqBanLqOtShibMy1KKFaYtJU05TQNWmrSlNMU0DRTFqv7QL3mmRzIfxD86CwBRAUsSpyNHxjr+VEFQSn7tqLOe6kTvgEUQYb7tfKlcX30nRQPWvOP3F8hSQ+Xlx4gfpRRSPVGeSnSs2O6ufOzZop1u+ZvIVKrW8mJGyeVSqHIXPSnKPFzS4wVUCjzg4xUFiNM8z+dWI40OzFh86REQEyTg0bTLFNjPLNBz+0DSWCpIrERPtxHkfCqekXy3dvlXDFDwtg860d1Fb6ppdxaTYZJIzjocZB/OvmXZHWbWwuLr9tciKTDAqCfeHLbzqEfSLfiIB8auog25k1l17a6WvwluG8PuSKB+28K/DtLh/8AaB6mrwytkqqpGKXfQkwNLEqkqPeB5iszY9r7i7IWLSruY/6ahvQ0+TtdNbOFk0q5jz/mkJV2GF3usRWihMhpDsqiqkWpXRjaTGMnJCbkVxNcW5mkOq2kHHAjcUsUW7RDHfjw68qoW/ay3XvWQDxK1lqNDNq43L3BxjOzHale0M0Bm4XCg/j2J64rn/vFpdyVMpRXXcFlx9K8vNdsBaExyrMxIAVD3U6ZHTtZgOLzqVyrK/imQmNwd9wdiKlVl3Je0+mLvGZZTj8EZ+uKozdqZG/h7L5yv9BXCUs3w0d/6VNPS0vZP7lo/mxArPWuL37w6oygAQJ1AJ+tLk1nVZDvdKvQRj61ItH1GQ7pEg6sTVtOzcz/ABLgD+hf+adOK0WrX65D3khBGCAAPQVxJYEtroHGIycZxWvg7NQowZ5JJCP8Rrorotu6hfYBvMVcNYlr23iUe8p23ANXtI0651Z1uTiO0VtywyXxyA8OtaC50m3gYItsEY/yYrvdnIkjzGE79txypIlpVrewaba8NuqCbGASNh1p0M1nqRMc0ayceAyyqMSdehrs3FhYIjzNaxk8JJIXvrLzxRJcH2XuqAAehrTLpW2gWdldCeD2sZPECvtCQBnYEVnO0/2drf8AHfaMqQ3fe8I2SX/qf0PStRaO97ZmLJM0Y9053YeFUTqN3bSYSVtuR3obXx25tprOYw3Vm0Eykgq6laUZWAwAo8hX2me5tNZtmstWsUuYW7lGxU+IPI1mtc+zWWzt3vdGjN5Aq8TQuo9sg9GHlv0qY3PTD6NIxvHZmzwptUr2yyl3cZUqQwXBGMY6VKJev//Z"
+  "url": "https://www.pexels.com/photo/interior-with-bed-and-closet-at-home-6980703/",
+  "thumb": "data:image/jpeg;base64,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"
  },
  {
   "id": "galeria",
