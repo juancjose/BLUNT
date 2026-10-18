@@ -224,6 +224,30 @@ window.startApp = function () {
     lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
     lb.addEventListener("keydown", e => { if (e.key === "ArrowLeft") show(cur - 1); if (e.key === "ArrowRight") show(cur + 1); });
   }
+
+  /* ---------- Probador de enmarcado (muestra con clásicos de dominio público) ---------- */
+  document.querySelectorAll("[data-framer]").forEach(box => {
+    const pick = ["van-gogh", "hokusai", "monet", "vermeer"].map(id => CL.find(c => c.id === id)).filter(Boolean);
+    if (!pick.length) return;
+    const frames = [["negro", "Negro"], ["madera", "Madera"], ["blanco", "Blanco"]];
+    const mats = [["fino", "Fino"], ["medio", "Medio"], ["ancho", "Ancho"]];
+    const st = { f: "negro", m: "medio", a: 0 };
+    const grp = (key, label, opts) => `<div class="fr-row"><span class="fr-lab">${label}</span><div class="fr-opts" role="group" aria-label="${label}">${opts.map(([v, t]) => `<button type="button" class="chip fr-opt" data-k="${key}" data-v="${v}" aria-pressed="false">${key === "f" ? `<i class="fr-sw fr-sw-${v}" aria-hidden="true"></i>` : ""}${t}</button>`).join("")}</div></div>`;
+    box.innerHTML = `<div class="fr-wall"><div class="fr-frame"><div class="fr-mat"><img alt=""></div></div></div>
+      <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
+      <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}</div></div>
+      <p class="fr-note">Vista de muestra con una obra clásica de dominio público.</p></div>`;
+    const frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-mat img");
+    const render = () => {
+      const c = pick[st.a];
+      frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}`;
+      if (img.getAttribute("src") !== c.img) { img.classList.add("fr-swap"); setTimeout(() => { img.src = c.img; img.alt = `${tr(c.titulo)}${LANG === "en" ? ", by " : ", de "}${c.artista}`; }, 220); }
+      img.onload = () => { frame.classList.toggle("fr-portrait", img.naturalHeight > img.naturalWidth); img.classList.remove("fr-swap"); };
+      box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === b.dataset.v)));
+    };
+    box.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; st[b.dataset.k] = b.dataset.k === "a" ? +b.dataset.v : b.dataset.v; render(); });
+    render();
+  });
   /* ---------- Revelado al hacer scroll ---------- */
   (function () {
     if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
