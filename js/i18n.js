@@ -44,6 +44,21 @@ const I18N_EN = {
   "Perfil guardado.": "Profile saved.", "No se pudo guardar el perfil.": "Couldn't save the profile.", "Subiendo foto…": "Uploading photo…",
   "Foto actualizada.": "Photo updated.", "No se pudo subir la foto.": "Couldn't upload the photo.", "Subiendo imagen…": "Uploading image…",
   "Guardando…": "Saving…", "No se pudo guardar la obra.": "Couldn't save the work.", "Artista ": "Artist",
+
+  // Mensajes de acceso
+  "Email o contraseña incorrectos. ¿Todavía no tenés cuenta? Primero creala.": "Incorrect email or password. Don't have an account yet? Create one first.",
+  "Tenés que confirmar tu email antes de ingresar. Revisá tu casilla (y la carpeta de spam).": "You need to confirm your email before signing in. Check your inbox (and spam folder).",
+  "Reenviar email": "Resend email", "Ese email ya tiene una cuenta. Ingresá con tu contraseña.": "That email already has an account. Sign in with your password.",
+  "Ese email no es válido. Revisalo.": "That email isn't valid. Please check it.",
+  "No pudimos enviar el email de confirmación a esa dirección. Escribinos para habilitarla.": "We couldn't send the confirmation email to that address. Contact us to enable it.",
+  "Se alcanzó el límite de emails por hora. Esperá un rato y volvé a intentar.": "The hourly email limit was reached. Please wait a while and try again.",
+  "Los registros nuevos están desactivados por el momento.": "New sign-ups are currently disabled.",
+  "La nueva contraseña tiene que ser distinta de la anterior.": "The new password must be different from the old one.",
+  "Hubo un error al crear tu cuenta. Escribinos y lo resolvemos.": "There was an error creating your account. Contact us and we'll fix it.",
+  "No hay conexión con el servidor. Revisá tu conexión e intentá de nuevo.": "Can't reach the server. Check your connection and try again.",
+  "Te reenviamos el email de confirmación.": "We resent the confirmation email.", "Ingresando…": "Signing in…", "Creando cuenta…": "Creating account…",
+  "El link expiró o ya fue usado. Pedí uno nuevo.": "The link expired or was already used. Request a new one.",
+  "Necesitás tener JavaScript activado para ingresar.": "You need JavaScript enabled to sign in.",
   // Navegación y header
   "Saltar al contenido": "Skip to content", "Inicio": "Home", "Obras": "Works", "Artistas": "Artists",
   "Enmarcado": "Framing", "Contacto": "Contact", "Principal": "Main", "Abrir carrito": "Open cart",
@@ -115,6 +130,7 @@ const I18N_EN = {
 
 /* Patrones para textos compuestos */
 const I18N_PATTERNS = [
+  [/^Cuenta creada\. Te enviamos un email a (.+): abrí el link para confirmarla y después ingresá\.$/, (m, e) => `Account created. We sent an email to ${e}: open the link to confirm it, then sign in.`],
   [/^(\d+) obras?$/, (m, n) => `${n} ${n === "1" ? "work" : "works"}`],
   [/^Ver obras \((\d+)\)$/, (m, n) => `View works (${n})`],
   [/^Hasta (.+)$/, (m, x) => `Up to ${x}`],
