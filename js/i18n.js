@@ -61,7 +61,7 @@ const I18N_EN = {
   "Necesitás tener JavaScript activado para ingresar.": "You need JavaScript enabled to sign in.",
 
   // Clásicos
-  "Probador de enmarcado": "Framing preview", "Ambiente": "Setting", "Living": "Living room", "Galería": "Gallery", "Dormitorio": "Bedroom", "Foto": "Photo", "Comedor": "Dining room", "Marco": "Frame", "Negro": "Black", "Madera": "Wood", "Blanco": "White",
+  "Probador de enmarcado": "Framing preview", "Ambiente": "Setting", "Living": "Living room", "Galería": "Gallery", "Dormitorio": "Bedroom", "Estudio": "Study", "Foto": "Photo", "Comedor": "Dining room", "Marco": "Frame", "Negro": "Black", "Madera": "Wood", "Blanco": "White",
   "Fino": "Thin", "Medio": "Medium", "Ancho": "Wide",
   "Vista de muestra con una obra clásica de dominio público.": "Sample preview using a public-domain classic.",
   "Clásicos": "Classics", "Clásicos del arte": "Art classics", "Dominio público": "Public domain",
@@ -69,7 +69,7 @@ const I18N_EN = {
   "Dominio público · Wikimedia Commons": "Public domain · Wikimedia Commons", "Ver fuente": "View source",
   "Anterior": "Previous", "Siguiente": "Next", "Ver todos": "View all",
   "Grandes obras de la historia del arte, para inspirarte mientras sumamos artistas a la galería.": "Masterpieces from art history to inspire you while we welcome new artists to the gallery.",
-  "Una selección de obras maestras de dominio público. Tocá una imagen para verla en grande.": "A selection of public-domain masterpieces. Tap an image to view it larger.",
+  "Grandes maestros de la historia del arte, en exhibición.": "Great masters of art history, on display.", "Artistas clásicos": "Classic artists",
   "Mientras tanto, conocé nuestra selección de clásicos.": "Meanwhile, explore our selection of classics.",
   // Navegación y header
   "Saltar al contenido": "Skip to content", "Inicio": "Home", "Obras": "Works", "Artistas": "Artists",

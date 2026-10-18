@@ -81,4 +81,5 @@ Para cada foto se midió el plano de la pared (líneas de piso/techo, esquinas, 
 |---|---|---|
 | Living | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/gray-couch-beside-white-wall-7195873/) |
 | Dormitorio | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/interior-with-bed-and-closet-at-home-6980703/) |
+| Estudio | Cup of Couple | [Pexels](https://www.pexels.com/photo/workplace-with-computer-and-notepad-6177557/) |
 | Galería | Julia Taubitz (Kunsthalle Düsseldorf) | [Unsplash](https://unsplash.com/photos/empty-white-wall-with-concrete-and-glass-above-ZCDWq4ffnng) |
