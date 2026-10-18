@@ -231,36 +231,51 @@ window.startApp = function () {
     const st = { s: 0, f: "negro", m: "medio", a: 0 };
     const grp = (key, label, opts) => `<div class="fr-row"><span class="fr-lab">${label}</span><div class="fr-opts" role="group" aria-label="${label}">${opts.map(([v, t]) => `<button type="button" class="chip fr-opt" data-k="${key}" data-v="${v}" aria-pressed="false">${key === "f" ? `<i class="fr-sw fr-sw-${v}" aria-hidden="true"></i>` : ""}${t}</button>`).join("")}</div></div>`;
     box.innerHTML = `<div class="fr-scene"><img class="fr-photo on" alt="" src="${SC[0].img}"><img class="fr-photo" alt="" aria-hidden="true">
-      <div class="fr-frame"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div></div></div>
+      <div class="fr-frame"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div><div class="fr-luz" aria-hidden="true"></div></div></div>
       <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>
       <div class="fr-row"><span class="fr-lab">Ambiente</span><div class="fr-opts fr-scenes" role="group" aria-label="Ambiente">${SC.map((e, i) => `<button type="button" class="fr-scn" data-k="s" data-v="${i}" aria-pressed="false"><img src="${e.thumb}" alt=""><span>${esc(e.nombre)}</span></button>`).join("")}</div></div>
       ${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
       <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}</div></div>
       <p class="fr-note"><span>Vista de muestra con una obra clásica de dominio público.</span> <span class="fr-credit"></span></p></div>`;
-    const scene = box.querySelector(".fr-scene"), photos = [...box.querySelectorAll(".fr-photo")], frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img"), credit = box.querySelector(".fr-credit");
-    let shown = 0, curScene = 0, portrait = false;
+    const scene = box.querySelector(".fr-scene"), photos = [...box.querySelectorAll(".fr-photo")], frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img"), art = box.querySelector(".fr-art"), credit = box.querySelector(".fr-credit");
+    const MOLD = { negro: 20, blanco: 20, madera: 28 }, MAT = { fino: 50, medio: 90, ancho: 140 }; // mm
+    let shown = 0, curScene = 0, ratio = 0.8;
+    // Coloca el marco sobre el plano de la pared: 1px del marco = 1 mm; homografía de la escena -> matrix3d
     const place = () => {
-      const e = SC[st.s];
-      frame.style.left = e.x + "%"; frame.style.top = e.y + "%"; frame.style.width = (portrait ? e.pw : e.w) + "%";
-      frame.style.setProperty("--bri", e.bri); frame.style.setProperty("--sx", e.sx + "px");
+      const e = SC[curScene], Wmm = Math.round((ratio > 1 ? e.pw : e.w) * 1000);
+      const inner = Wmm - 2 * (MOLD[st.f] + MAT[st.m]);
+      art.style.width = inner + "px"; art.style.height = Math.round(inner * ratio) + "px";
+      frame.style.width = Wmm + "px";
+      frame.style.setProperty("--mold", MOLD[st.f] + "px"); frame.style.setProperty("--matw", MAT[st.m] + "px");
+      const k = scene.clientWidth / 1600, H = e.H;
+      const T = [[0.001, 0, -Wmm / 2000], [0, 0.001, 0], [0, 0, 1]];
+      const mul = (A, B) => A.map(r => [0, 1, 2].map(j => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
+      let M = mul(mul([[k, 0, 0], [0, k, 0], [0, 0, 1]], H), T); const z = M[2][2]; M = M.map(r => r.map(v => v / z));
+      frame.style.transform = `matrix3d(${M[0][0]},${M[1][0]},0,${M[2][0]},${M[0][1]},${M[1][1]},0,${M[2][1]},0,0,1,0,${M[0][2]},${M[1][2]},0,${M[2][2]})`;
+      const pxPerMm = Math.hypot(M[0][0], M[1][0]);
+      frame.style.setProperty("--blur", Math.min(4, 0.35 / pxPerMm).toFixed(2) + "px");
+      frame.style.setProperty("--grade", e.ajuste); frame.style.setProperty("--luz", e.luz);
+      frame.style.setProperty("--shx", e.sombra[0]); frame.style.setProperty("--shy", e.sombra[1]);
+      frame.style.setProperty("--sdx", e.lado[0] + "px"); frame.style.setProperty("--sdy", e.lado[1] + "px");
     };
     const setScene = () => {
       const e = SC[st.s];
       credit.innerHTML = `<span>Foto</span>: <a href="${e.url}" target="_blank" rel="noopener">${esc(e.autor)} / ${e.sitio}</a>`;
-      if (curScene === st.s) return; curScene = st.s;
-      const next = photos[1 - shown];
-      next.onload = () => { photos[shown].classList.remove("on"); next.classList.add("on"); shown = 1 - shown; place(); };
-      scene.classList.add("fr-moving"); setTimeout(() => scene.classList.remove("fr-moving"), 700);
+      if (curScene === st.s) return;
+      const next = photos[1 - shown], target = st.s;
+      scene.classList.add("fr-moving");
+      next.onload = () => { photos[shown].classList.remove("on"); next.classList.add("on"); shown = 1 - shown; curScene = target; place(); setTimeout(() => scene.classList.remove("fr-moving"), 60); };
       next.src = e.img;
     };
     const render = () => {
       const c = pick[st.a];
       frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}`;
       if (img.getAttribute("src") !== c.img) { img.classList.add("fr-swap"); setTimeout(() => { img.src = c.img; img.alt = `${tr(c.titulo)}${LANG === "en" ? ", by " : ", de "}${c.artista}`; }, 220); }
-      img.onload = () => { portrait = img.naturalHeight > img.naturalWidth; place(); img.classList.remove("fr-swap"); };
-      setScene(); if (curScene === st.s) place();
+      img.onload = () => { ratio = img.naturalHeight / img.naturalWidth; place(); img.classList.remove("fr-swap"); };
+      setScene(); place();
       box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === b.dataset.v)));
     };
+    if (window.ResizeObserver) new ResizeObserver(() => place()).observe(scene);
     box.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; st[b.dataset.k] = (b.dataset.k === "a" || b.dataset.k === "s") ? +b.dataset.v : b.dataset.v; render(); });
     render();
   });

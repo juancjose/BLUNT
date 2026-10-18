@@ -1,21 +1,48 @@
 /* =========================================================
    ESCENAS del probador de enmarcado — fotos reales con licencia libre
-   (Pexels License / Unsplash License: uso comercial permitido, sin atribución obligatoria;
-   igual las acreditamos). x/y/w/pw = posición del marco en % de la foto:
-   x = centro horizontal, y = borde superior, w = ancho para obras horizontales, pw = ancho para verticales.
-   bri = brillo del marco para igualar la luz de la foto; sx = desplazamiento horizontal de la sombra (px).
+   (Pexels License / Unsplash License: uso comercial permitido; igual se acreditan).
+   H = homografía 3x3 que lleva coordenadas del plano de la pared, en METROS
+       (origen = centro del borde superior del cuadro; x a la derecha, y hacia abajo),
+       a píxeles de la foto (base 1600×1067). Se midió sobre la foto: líneas de piso/techo,
+       esquinas y puntos de fuga (galería) o escala con objetos conocidos (apliques, muebles).
+   w / pw = ancho exterior del marco en metros (obra horizontal / vertical).
+   sombra = dirección de la luz [x, y]; lado = canto visible del marco en mm [x, y].
+   ajuste / luz = corrección de color e iluminación para igualar la foto.
    ========================================================= */
 var ESCENAS = [
  {
   "id": "living",
   "nombre": "Living",
   "img": "img/escenas/living.svg",
-  "x": 40,
-  "y": 24,
-  "w": 24,
-  "pw": 15,
-  "bri": 1,
-  "sx": 0,
+  "H": [
+   [
+    181,
+    0,
+    755.2
+   ],
+   [
+    0,
+    181,
+    341.44
+   ],
+   [
+    0,
+    0,
+    1
+   ]
+  ],
+  "w": 1.2,
+  "pw": 0.8,
+  "sombra": [
+   0,
+   1
+  ],
+  "lado": [
+   0,
+   5
+  ],
+  "ajuste": "brightness(1.03) contrast(.94) saturate(.9)",
+  "luz": "linear-gradient(180deg,rgba(255,255,255,.10),rgba(0,0,0,.06))",
   "autor": "Max Vakhtbovych",
   "sitio": "Pexels",
   "url": "https://www.pexels.com/photo/gray-couch-beside-white-wall-7195873/",
@@ -25,42 +52,73 @@ var ESCENAS = [
   "id": "dormitorio",
   "nombre": "Dormitorio",
   "img": "img/escenas/dormitorio.svg",
-  "x": 41.7,
-  "y": 16,
-  "w": 26,
-  "pw": 16,
-  "bri": 0.86,
-  "sx": 0,
+  "H": [
+   [
+    384,
+    0,
+    667.2
+   ],
+   [
+    0,
+    384,
+    170.72
+   ],
+   [
+    0,
+    0,
+    1
+   ]
+  ],
+  "w": 1.08,
+  "pw": 0.67,
+  "sombra": [
+   -0.6,
+   1
+  ],
+  "lado": [
+   0,
+   3
+  ],
+  "ajuste": "brightness(.84) contrast(.9) saturate(.82) sepia(.06)",
+  "luz": "linear-gradient(100deg,rgba(80,90,80,.10),rgba(255,255,255,.04))",
   "autor": "Aljona Ovtšinnikova",
   "sitio": "Pexels",
   "url": "https://www.pexels.com/photo/minimalist-white-bedroom-interior-design-28536695/",
   "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCABQAHgDASIAAhEBAxEB/8QAGwAAAgMBAQEAAAAAAAAAAAAAAgMABAYFAQf/xAA7EAACAQMCAwUFBQUJAAAAAAABAgMABBEFIRJBYQYxUXGxEyIzgcEHI0KRoRQWNGJyJDJSU2OC0dLh/8QAFgEBAQEAAAAAAAAAAAAAAAAAAAEC/8QAGBEBAQEBAQAAAAAAAAAAAAAAAAERIQL/2gAMAwEAAhEDEQA/AHCvGk4RmoKCRSVrAE30akBs5JxtXSRCEUnmM1npo3DhsHCnJrSIQbWE+KCg8FGKGiAqghRV4BRYoitc3Qtxk0Vhdpe8bIpAXG551X1G3klXCDNHoltJawSiVeE7Y60F+EYi+f0FDJu8Q/nHoaOP4Q8zQt8eIdSf0qiPzqtLVhzVeU7VBUbdjUqd7fOpRSlowM0C0xaCCMHlVhNhilrTVoGCjAoFpgFAQFEBXgFGKI84QeVQjEbeRoqGTaNvKiCj2iHmfWgP8SnRWPpRJ8Nfn60vP9oPSP6/+VVRzVWY092qnM+xqBanLqOtShibMy1KKFaYtJU05TQNWmrSlNMU0DRTFqv7QL3mmRzIfxD86CwBRAUsSpyNHxjr+VEFQSn7tqLOe6kTvgEUQYb7tfKlcX30nRQPWvOP3F8hSQ+Xlx4gfpRRSPVGeSnSs2O6ufOzZop1u+ZvIVKrW8mJGyeVSqHIXPSnKPFzS4wVUCjzg4xUFiNM8z+dWI40OzFh86REQEyTg0bTLFNjPLNBz+0DSWCpIrERPtxHkfCqekXy3dvlXDFDwtg860d1Fb6ppdxaTYZJIzjocZB/OvmXZHWbWwuLr9tciKTDAqCfeHLbzqEfSLfiIB8auog25k1l17a6WvwluG8PuSKB+28K/DtLh/8AaB6mrwytkqqpGKXfQkwNLEqkqPeB5iszY9r7i7IWLSruY/6ahvQ0+TtdNbOFk0q5jz/mkJV2GF3usRWihMhpDsqiqkWpXRjaTGMnJCbkVxNcW5mkOq2kHHAjcUsUW7RDHfjw68qoW/ay3XvWQDxK1lqNDNq43L3BxjOzHale0M0Bm4XCg/j2J64rn/vFpdyVMpRXXcFlx9K8vNdsBaExyrMxIAVD3U6ZHTtZgOLzqVyrK/imQmNwd9wdiKlVl3Je0+mLvGZZTj8EZ+uKozdqZG/h7L5yv9BXCUs3w0d/6VNPS0vZP7lo/mxArPWuL37w6oygAQJ1AJ+tLk1nVZDvdKvQRj61ItH1GQ7pEg6sTVtOzcz/ABLgD+hf+adOK0WrX65D3khBGCAAPQVxJYEtroHGIycZxWvg7NQowZ5JJCP8Rrorotu6hfYBvMVcNYlr23iUe8p23ANXtI0651Z1uTiO0VtywyXxyA8OtaC50m3gYItsEY/yYrvdnIkjzGE79txypIlpVrewaba8NuqCbGASNh1p0M1nqRMc0ayceAyyqMSdehrs3FhYIjzNaxk8JJIXvrLzxRJcH2XuqAAehrTLpW2gWdldCeD2sZPECvtCQBnYEVnO0/2drf8AHfaMqQ3fe8I2SX/qf0PStRaO97ZmLJM0Y9053YeFUTqN3bSYSVtuR3obXx25tprOYw3Vm0Eykgq6laUZWAwAo8hX2me5tNZtmstWsUuYW7lGxU+IPI1mtc+zWWzt3vdGjN5Aq8TQuo9sg9GHlv0qY3PTD6NIxvHZmzwptUr2yyl3cZUqQwXBGMY6VKJev//Z"
  },
  {
-  "id": "comedor",
-  "nombre": "Comedor",
-  "img": "img/escenas/comedor.svg",
-  "x": 28,
-  "y": 11,
-  "w": 30,
-  "pw": 19,
-  "bri": 0.95,
-  "sx": -6,
-  "autor": "Anna Tarazevich",
-  "sitio": "Pexels",
-  "url": "https://www.pexels.com/photo/white-table-and-chair-on-white-corner-wall-5598428/",
-  "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCABQAHgDASIAAhEBAxEB/8QAGwAAAQUBAQAAAAAAAAAAAAAABAACAwUGAQf/xAA0EAABBAEDAgQEAwgDAAAAAAABAAIDEQQFEiExQQYiYXETFFGxIyWRBxYyYnKBocFCY+H/xAAXAQEBAQEAAAAAAAAAAAAAAAABAAID/8QAHREBAQEAAQUBAAAAAAAAAAAAAAERAgMSEzFBIf/aAAwDAQACEQMRAD8A0LVI0KNqlakntTwmBPCickkuIJycEwFPbyUFNH1RkMTndAUPC0A2VYRSUFiukd+Uf13UmHHyeSx1gdbC7mZvyuHNP1+Gwu4F9Flz+0WBgoPHH/WVzthytZHh7xckp9gAhszDcwEsduCG0LXxrGPJOAQ1rtt7avhGz5FhMynKo5wWk2kn5fmJISXSOdANUrVC0qZpXRzPCeEwJ4QXUlxJSOAUjOFFu4XQ9Fagtj6UzZaHVBB66ZaB5WK3BjpPiMLS0ua4UfZeU6hp5xdRmx6B2PLR5u3b/C3Jkc021xHsaUb55CbLyT9Ss3pb9XkwZoGO7T9Ggi2Hc4b3UO5/8pHPnsKl+M89XuPuVLFPXltXj7Yp1O6ipX2khnvtJbkZtRRm1OwIeHqjI2cLbDoCeAnBieGqSPamO4RIYT2UGRHI1m5o3V2HVBQOcuMcbUfxNy6HUpCA6zQTJi8MNC/ZDnJbFM0vNNPBP0RZNgEEEHoQjNO4Ac4DrwVE53K7q2UImNYK3Hm+4AQUM5kBtajFowO4UJmrKDb7Bc38IR8n5gB/KFcvSlW5fwkhxJwkslGcwYrmvdy0EWPRaGMsLQ4VRFgrHZr7bVq50DPZNp2yV7Q6A7SXGuOy0IsMvWMLBcGTTxteejLG4/2Qr/EDXSNbCGuujyeT7DqlmZehPafnH4kn9TQ4qldl+FcWYSQ4skh7MZu2foTSLK1sXkep5RkLA0SOvgNbde9f7VljSTyRXkRCN99Ab4WYd4wjiZsxdPDG9tzqH6BQHxNqmRfwjFH/AEsv7qkF5NbPiRzW4Da/6jv7qtnBgdtfV+/VVePNm6hI5pyH03+Iuca/QI9mlR15p5CT12gBSCZ0w2cFD5udNhzymCQtquOo6DsrKXRYZAPx5RRB5AKq9c0rJiiyMtj2yR8ucBwWhF9JFlzyZkTch+0F7Q0AenVNxXlocD6KGd/woceEnzNZZHqlBJy61pgd8WkE+X8xv+UJmZnMw8d08gcWN67G2VRP8T4XzJla2QigK4VVGvbMCEllh4nlkZux9NmkbV7qNfZJDWrTLjy2EufjyAV9LVU+ezRC2eSA2Pe4gBvUnssZqMzJ82SWIUwnj19VUDI2Nk04OrkSH7ISuWn1/wBo3C82lu9JD9kFu8wH0cmpNXHCKwD+Jz34Q4IoKTGdsfd9DakfNqWTpeeXwEc1ua4WHK50/wAUtyJmwyYxa518tdx0VHr7A2WNw/51/hRaWAM+N30DvsVfVrR/vnilpLMOa7qnOAVZleKsnNDmujZBjtPmYzzF3uT2VPtFFxNcqB723K1rgdwsUjT+rXNmEwgymE7ZGp0MtAlA40om0hzO8JDh7LsUpLCbSyNdP1WR1hwzNYGPC1o2kRgNFeY9VopZhHE59E7QTQFkqp0fRtQdn/NZGK+Pq4GTiyUJoYmshxmQM/gY0NA9ElKMOUt80kbf72ks61j/2Q=="
- },
- {
   "id": "galeria",
   "nombre": "Galería",
   "img": "img/escenas/galeria.svg",
-  "x": 57,
-  "y": 32,
-  "w": 18,
-  "pw": 11.5,
-  "bri": 0.97,
-  "sx": 0,
+  "H": [
+   [
+    90.089475,
+    1.470685,
+    957.613016
+   ],
+   [
+    13.071005,
+    102.215192,
+    431.326912
+   ],
+   [
+    0.027621,
+    0.000451,
+    1.0
+   ]
+  ],
+  "w": 1.8,
+  "pw": 1.2,
+  "sombra": [
+   0,
+   1
+  ],
+  "lado": [
+   -7,
+   2
+  ],
+  "ajuste": "brightness(.99) contrast(.93) saturate(.9)",
+  "luz": "linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.07))",
   "autor": "Julia Taubitz",
   "sitio": "Unsplash",
   "url": "https://unsplash.com/photos/empty-art-gallery-with-concrete-floor-and-skylights-A-uqAGlvbj4",

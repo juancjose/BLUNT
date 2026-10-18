@@ -75,11 +75,10 @@ en Supabase, se ocultan esas secciones vacías y se muestra la de clásicos.
 
 Las escenas del probador (`js/escenas.js`, imágenes en `img/escenas/`) son fotos reales con licencia libre
 (Pexels License / Unsplash License: uso comercial permitido, sin atribución obligatoria; igual se acreditan en el sitio).
-Para cada foto se define dónde va el marco (`x`, `y`, `w`, `pw` en % de la foto) y el brillo/sombra.
+Para cada foto se midió el plano de la pared (líneas de piso/techo, esquinas, puntos de fuga o escala con objetos conocidos) y se guardó una homografía `H` (metros de pared → píxeles de la foto); el marco se dibuja en milímetros y se proyecta con `matrix3d`, con sombra de contacto, sombra suave según la luz y ajuste de color por escena.
 
 | Escena | Autor | Fuente |
 |---|---|---|
 | Living | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/gray-couch-beside-white-wall-7195873/) |
 | Dormitorio | Aljona Ovtšinnikova | [Pexels](https://www.pexels.com/photo/minimalist-white-bedroom-interior-design-28536695/) |
-| Comedor | Anna Tarazevich | [Pexels](https://www.pexels.com/photo/white-table-and-chair-on-white-corner-wall-5598428/) |
 | Galería | Julia Taubitz (Kunsthalle Düsseldorf) | [Unsplash](https://unsplash.com/photos/empty-art-gallery-with-concrete-floor-and-skylights-A-uqAGlvbj4) |
