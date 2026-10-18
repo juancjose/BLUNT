@@ -61,6 +61,9 @@ const I18N_EN = {
   "Necesitás tener JavaScript activado para ingresar.": "You need JavaScript enabled to sign in.",
 
   // Clásicos
+  "Probador de enmarcado": "Framing preview", "Marco": "Frame", "Negro": "Black", "Madera": "Wood", "Blanco": "White",
+  "Fino": "Thin", "Medio": "Medium", "Ancho": "Wide",
+  "Vista de muestra con una obra clásica de dominio público.": "Sample preview using a public-domain classic.",
   "Clásicos": "Classics", "Clásicos del arte": "Art classics", "Dominio público": "Public domain",
   "Muestra de obras clásicas de dominio público. No están a la venta.": "A showcase of public-domain classic works. Not for sale.",
   "Dominio público · Wikimedia Commons": "Public domain · Wikimedia Commons", "Ver fuente": "View source",
