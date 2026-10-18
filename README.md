@@ -70,3 +70,16 @@ El botón **EN/ES** del encabezado cambia el idioma y la elección queda guardad
 Los datos están en `js/clasicos.js` y las imágenes en `img/clasicos/` (JPEG optimizado embebido en
 un `.svg` para poder subirlo como texto). En la home, cuando todavía no hay obras/artistas cargados
 en Supabase, se ocultan esas secciones vacías y se muestra la de clásicos.
+
+## Probador de enmarcado: fotos de ambientes
+
+Las escenas del probador (`js/escenas.js`, imágenes en `img/escenas/`) son fotos reales con licencia libre
+(Pexels License / Unsplash License: uso comercial permitido, sin atribución obligatoria; igual se acreditan en el sitio).
+Para cada foto se define dónde va el marco (`x`, `y`, `w`, `pw` en % de la foto) y el brillo/sombra.
+
+| Escena | Autor | Fuente |
+|---|---|---|
+| Living | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/gray-couch-beside-white-wall-7195873/) |
+| Dormitorio | Aljona Ovtšinnikova | [Pexels](https://www.pexels.com/photo/minimalist-white-bedroom-interior-design-28536695/) |
+| Comedor | Anna Tarazevich | [Pexels](https://www.pexels.com/photo/white-table-and-chair-on-white-corner-wall-5598428/) |
+| Galería | Julia Taubitz (Kunsthalle Düsseldorf) | [Unsplash](https://unsplash.com/photos/empty-art-gallery-with-concrete-floor-and-skylights-A-uqAGlvbj4) |
