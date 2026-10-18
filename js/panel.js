@@ -6,8 +6,9 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 const say = (el, txt, ok) => { el.textContent = txt; el.classList.toggle("ok", !!ok); if (txt && ok) setTimeout(() => { if (el.textContent === txt) el.textContent = ""; }, 3500); };
 const slugify = s => (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
+(async () => {
 const { data: { session } } = await sb.auth.getSession();
-if (!session) { location.replace("login.html"); await new Promise(() => {}); }
+if (!session) { location.replace("login.html"); return; }
 const me = session.user;
 $("#pWho").textContent = me.email;
 $("#logout").onclick = async () => { await sb.auth.signOut(); location.href = "login.html"; };
@@ -164,3 +165,4 @@ if (isAdmin) {
 }
 await loadArtist();
 await loadWorks();
+})();
