@@ -323,3 +323,8 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .lb-prev{left:10px}.lb-next{right:10px}
 @media (max-width:760px){.lb figure{grid-template-columns:1fr;padding:52px 18px 72px;gap:18px}.lb img{max-height:58vh}.lb-nav{top:auto;bottom:10px;transform:none}}
 @media (prefers-reduced-motion:reduce){.lb[open]{animation:none}.work.classic:hover .ph,.work.classic:hover img{transform:none}}
+
+.hero figure.has-cap{aspect-ratio:auto;overflow:visible;background:transparent}
+.hero figure.has-cap img{aspect-ratio:4/5;width:100%;height:auto;object-fit:cover;display:block}
+.hero-cap{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);line-height:1.6}
+.hero-cap-t{display:block;color:var(--fg);letter-spacing:.12em;margin-bottom:2px}

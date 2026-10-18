@@ -107,7 +107,7 @@ window.startApp = function () {
   if (el("featured")) el("featured").innerHTML = OBRAS.slice(0, 4).map(card).join("") || soon("Próximamente nuevas obras");
   if (el("artistsStrip")) el("artistsStrip").innerHTML = (ARTISTAS.map(a => `<a class="artist" href="obras.html?artista=${a.id}"><img src="${a.img}" alt="" loading="lazy"><h3>${esc(a.nombre)}</h3><p>${esc(a.disciplina)}</p></a>`).join("") || soon("Próximamente nuevos artistas"));
   if (el("heroImg")) { const o = OBRAS.find(x => x.img); const hc = typeof CLASICOS !== "undefined" && (CLASICOS.find(c => c.id === "vermeer") || CLASICOS[0]);
-    el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : hc ? `<img src="${hc.img}" alt="${esc(hc.titulo)}, de ${esc(hc.artista)}">` : `<img src="img/enmarcado.svg" alt="">`; }
+    el("heroImg").classList.toggle("has-cap", !o && !!hc); el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : hc ? `<img src="${hc.img}" alt="${esc(hc.titulo)}, de ${esc(hc.artista)}"><figcaption class="hero-cap"><span class="hero-cap-t">${esc(hc.titulo)}</span><span>${esc(hc.artista)}, ${esc(hc.anio)}</span> · <span>Dominio público</span></figcaption>` : `<img src="img/enmarcado.svg" alt="">`; }
   document.querySelectorAll("[data-brand]").forEach(n => n.textContent = CONFIG.nombre);
 
   // Catálogo
