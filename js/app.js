@@ -106,7 +106,7 @@ window.startApp = function () {
   const soon = (txt) => `<p class="empty-state">${txt}</p>`;
   if (el("featured")) el("featured").innerHTML = OBRAS.slice(0, 4).map(card).join("") || soon("Próximamente nuevas obras");
   if (el("artistsStrip")) el("artistsStrip").innerHTML = (ARTISTAS.map(a => `<a class="artist" href="obras.html?artista=${a.id}"><img src="${a.img}" alt="" loading="lazy"><h3>${esc(a.nombre)}</h3><p>${esc(a.disciplina)}</p></a>`).join("") || soon("Próximamente nuevos artistas"));
-  if (el("heroImg")) { const o = OBRAS.find(x => x.img); el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : `<img src="img/enmarcado.jpg" alt="">`; }
+  if (el("heroImg")) { const o = OBRAS.find(x => x.img); el("heroImg").innerHTML = o ? `<img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(artista(o.artista).nombre)}">` : `<img src="img/enmarcado.svg" alt="">`; }
   document.querySelectorAll("[data-brand]").forEach(n => n.textContent = CONFIG.nombre);
 
   // Catálogo
