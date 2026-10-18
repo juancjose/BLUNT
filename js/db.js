@@ -1,5 +1,7 @@
 /* Cliente Supabase compartido + carga de obras y artistas publicados */
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+/* supabase-js se carga localmente desde js/vendor/supabase.min.js (sin depender de un CDN) */
+if (!window.supabase || !window.supabase.createClient) throw new Error("supabase-js no se cargó");
+const { createClient } = window.supabase;
 
 export const sb = createClient(window.SUPABASE_URL, window.SUPABASE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
