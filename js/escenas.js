@@ -89,39 +89,39 @@ var ESCENAS = [
  {
   "id": "galeria",
   "nombre": "Galería",
-  "img": "img/escenas/galeria.svg",
+  "img": "img/escenas/galeria.svg?v=2",
   "H": [
    [
-    90.089475,
-    1.470685,
-    957.613016
+    230.303125,
+    0.0,
+    800.0
    ],
    [
-    13.071005,
-    102.215192,
-    431.326912
+    0.949664,
+    228.821125,
+    269.993134
    ],
    [
-    0.027621,
-    0.000451,
+    0.001852,
+    0.0,
     1.0
    ]
   ],
-  "w": 1.8,
-  "pw": 1.2,
+  "w": 2.0,
+  "pw": 1.4,
   "sombra": [
    0,
    1
   ],
   "lado": [
-   -7,
-   2
+   0,
+   3
   ],
-  "ajuste": "brightness(.99) contrast(.93) saturate(.9)",
-  "luz": "linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.07))",
+  "ajuste": "brightness(.98) contrast(.92) saturate(.86)",
+  "luz": "linear-gradient(180deg,rgba(255,255,255,.09),rgba(0,0,0,.06))",
   "autor": "Julia Taubitz",
   "sitio": "Unsplash",
-  "url": "https://unsplash.com/photos/empty-art-gallery-with-concrete-floor-and-skylights-A-uqAGlvbj4",
-  "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCABQAHgDASIAAhEBAxEB/8QAGgAAAQUBAAAAAAAAAAAAAAAAAwACBAUGAf/EAD0QAAEDAgMFBAcFBwUAAAAAAAEAAgMEEQUSIQYTMVFxFDJBYSJCkaGxwdEkQ1KB4RUjM0RygoM0YpKisv/EABYBAQEBAAAAAAAAAAAAAAAAAAEAAv/EABoRAQEBAQEBAQAAAAAAAAAAAAABERICMVH/2gAMAwEAAhEDEQA/ANrFi7jo3GaaW/hPC2/uR9+6bvUuGVAPHI4sJVM7aSEi1TOBz7XhsjfeWKM7aLBHvLI4KKsk/DSU8jn/APUaLGtYvJMPoJf4mCPbfxgma73KPJgeDO1y19L/AFREgexVkOIvrId7QbL4m5hJAl7SYGaGx7xPiD4I5jxtrsxxiioI/wALpTUvHuaFW/qwduDwMNqHaBsZtwkJYjMw3aCEZqesgqB/te26pd1iNdRxuxHaWsikc0F8FPStaGnlmuVEiwXKM9PimJRkk+l2m99eRBCNixppJMeiA7VhYmbzy5vqhGoiDc1Rg80IPrMBAVOBtDRsD6XaCRwDgC2eFpsL6m4I4KRHLtFUuElRVYXXW+7lnkhPs1CtWLiDEIG/wK6pg8nOuPejdrxLEJNxBXtLQLue1oDrfkqxuI4nLTyQu2VY8McWE0tXG/UcgbGyLQ49T4ZannwTFaV7gXn7LnuBYE+iToLhSWtPs9TNIfUF07+N3m/uUmoo4TA6JsbQCLWAVeNtMBuGy13ZyfCoifH/AOgptPjGFVesGI0kt/Bs7SfijCr6HCIqeTfFgz+AtwVo1tk9xBN22IPiEloGkpJEJKTHft3E426V9R+b7/FCpsbxCZ8t6yUFz7uyOy3NgL6eQCt3bJ0rhbtVRbkSD8kOLY+lhkLu1VB1vxA+SLKdimdU3gIc6/U8/wBVze3Gh4i60rNmsOFswldbnIfkpLMDwxg/0jXf1En5rPNOsvvHEAHQEW1TqcjcjK4XudL+ZWujoKKLuUkLf7ApbaandGM1PEesYTPIvpjXvJhk1HdsmaObc6/ktk7DKB3eooD/AIwhnBsMP8jEOgstcjpjBfO62nKyfv5Y5WOY9zXAEXa4grWuwLDD/KgX/C9w+aE7Z3DT93IOkpVzVrMPxGsc6IOqZH5Hhzc5zWNiPHyJQ6mRlWGGqpqSYseHDPTM1PI2Go1Wlfszh5Fs04/yfohP2XpCCBUTi/m36I5q2M7R09IcYoXQUkNK9k1/s+ZgfodCL2t48PBbdjszQqmn2cipquOojqZHGN1w17RY+xWwGVMln1U4pLhOiSUGHLj3aoQcmyP1CaIM1yeHKOxyIDogjBykRG8QKhgqVEf3QVBRLpXTbpXWg7dcJXLrhKkRKaSkb8kxxsNdOqkcExxshiqha/KZWB1uGYLhla/VrmkeRWaYcXJIZvyKSizJxWvd96wdIwgyYjiAcD2o9Cxtvgq8Sa6uPtXJH3t9UWpbRYzXN4yRO6x/QqQ3H6kDVkB/tcPms+2S3rFPEo8XLOlo27QvB1pmHo8j5KXFtEN2LUpvc+vp8FlN8OR9ilU843VrJlqxoTtDIe7TsHUkobscqzwEbejL/NU+/I5FN7R526LWhbOxesd9/l6MaEN1dWOGtVL/AMrfBVwm8A8+1LetHijViW6eY96Z56vKC/0u9r11QXTt8kJ0zfNGnEkRx+LW+xDcxg4ZQo4msfRIC46YniQgiuLhwkcOjikorng8XApKSAJjawC46dvAnXldQGm/AHqSujMTe5HRLKa2UHhZFbIPxEKvAuCb353Kc2YtHe4eSCsQc1hmujxENbpe6q2VDj+qkMmu21wpLHfkNIcGkefFDMrL6O/JQDJrcOsmGe/EWPMBIWZeyw9JxQ3SAd2Sx81WGQk94obpHjgbqSxdO8cDcIRqpRexaeShCSR3q6Lu8A1tcoKZHUPe/wBIKQHi2oVfHICeKkiUW+iiK8gjRwA80kBzmnx9qSk//9k="
+  "url": "https://unsplash.com/photos/empty-white-wall-with-concrete-and-glass-above-ZCDWq4ffnng",
+  "thumb": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCABWAIADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDdYSBeLW5z/wBe7/4U6J3VcG2us/8AXu/+Fd5ilqeUfMeeSrM9wXFvc4KgAmB/U+1OQzeXhrS4z/1wb/CvQqKOULnn+ZeMWtzx/wBMG/wpCsxPFvcf9+G/wr0HFFHKFzz6OKUyzF7a4wxGCIG54HtTzvX/AJdbnHtbt/hXfUUuQdzz8SODzb3I+sDf4U1ixJPkzHHQeQ3+FehUmKOQLnnMIkRCGgnGWJ/1Lnv9KYVl3cW859/Ifj9K9JxSYo5BXPNWSUsD9ln9f9S3+FMlSXYdtpOT6eQ3P6V6ZijFHKFzy6OCcRqGhmGF6GJv8KayS52/Z7gj/rk3+Feo4FIQPSjlC5JS0lFWIWlpKKAFopKKAFoopKAFpKKKACiikoAKbS0hoASkNLTSaAH5pc03NGaAH5ozTc0ZoAdmikzRmgB2aM03NGaAFzRmkzSZoAXNGaTNJmgBSaaTQTTSaAFzTSaM00mgB+aXNNpc0wHZpc03NGRSAdmjNJmjIoAXNGaTNGR60ALmkzSZ96M0AKTSZpCfekzQAuaaTRkUhIoAM00mgmmk0AcINc1QcDUJz9WH+FOXXNUPXUJvzH+FYyMT1p/mH04qLlGudb1I/wDMQn/Bh/hSDWNSP/MRuv8Av5/9asrzCacG9c0XCxqHVdSPXUrsfSX/AOtSf2tqQ5/tK6/GX/61Z3mCk8ylcLGl/bGpH/mI3P8A38/+tR/a2o/9BG6/7+1m+YeuaDKMc0XHY0Dquo/9BG8/7+mj+1NQ/wCgjef9/TWb5o9KTzcUXCxonVdR/wCgjd/9/TTP7V1DP/ISvP8Av8ao+b/kU0yUXFYvnU7/ADn+0rz/AL/tSHVNQ/6CN3/3+as4yEdDSGY96LhY0Tq+of8AQRuv+/ppjatqB/5iV1/3+NZ7Pmoy/wBadwH7z0pQ3eiikMcJMGl8049KKKQAHJ7/AKUu7vRRQAhfikJ4oooAaW5wKTJz1oooAXcaQv2oooAjLUwvRRQAm+ms2aKKAP/Z"
  }
 ];

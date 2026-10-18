@@ -81,4 +81,4 @@ Para cada foto se midió el plano de la pared (líneas de piso/techo, esquinas, 
 |---|---|---|
 | Living | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/gray-couch-beside-white-wall-7195873/) |
 | Dormitorio | Aljona Ovtšinnikova | [Pexels](https://www.pexels.com/photo/minimalist-white-bedroom-interior-design-28536695/) |
-| Galería | Julia Taubitz (Kunsthalle Düsseldorf) | [Unsplash](https://unsplash.com/photos/empty-art-gallery-with-concrete-floor-and-skylights-A-uqAGlvbj4) |
+| Galería | Julia Taubitz (Kunsthalle Düsseldorf) | [Unsplash](https://unsplash.com/photos/empty-white-wall-with-concrete-and-glass-above-ZCDWq4ffnng) |
