@@ -298,3 +298,5 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .alt+section,.alt+footer{border-top:0}
 .work .ph,.pw-img,.hero figure,.detail .ph,.avatar-edit img,.work-img-edit img,:root:not([data-theme="dark"]) .work .ph,:root:not([data-theme="dark"]) .pw-img{background:transparent!important}
 .work .ph,.pw-img{outline:1px solid var(--line);outline-offset:-1px}
+/* Modo claro: blanco neutro, un solo tono */
+:root:not([data-theme="dark"]){--bg:#ffffff;--card:#ffffff;--header-bg:#ffffff;--fg:#111111;--muted:#6b6b6b;--line:#e6e6e6;--accent:#111111;--accent-fg:#ffffff;--shadow:0 18px 40px -22px rgba(0,0,0,.28)}
