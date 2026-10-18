@@ -8,7 +8,8 @@ Sitio estático (HTML, CSS y JavaScript puro, sin instalación ni compilación).
 index.html        Inicio
 obras.html        Catálogo (filtro por artista y orden por precio)
 obra.html?id=o1   Detalle de una obra
-artistas.html     Artistas
+artistas.html     Artistas (reales + Maestros argentinos de dominio público)
+artista.html?id=  Página de un maestro argentino (retrato, bio y obras)
 enmarcado.html    Enmarcado y passepartout
 contacto.html     Contacto
 css/styles.css    Estilos (colores en las variables de :root y [data-theme="dark"])
@@ -19,6 +20,7 @@ js/panel.js       Panel de artistas y administración
 login.html        Acceso de artistas
 panel.html        Panel de artistas
 js/app.js         Lógica (tema, carrito, páginas)
+js/maestros.js    Maestros argentinos (dominio público, datos estáticos)
 img/              Imágenes
 ```
 
@@ -70,6 +72,41 @@ El botón **EN/ES** del encabezado cambia el idioma y la elección queda guardad
 Los datos están en `js/clasicos.js` y las imágenes en `img/clasicos/` (JPEG optimizado embebido en
 un `.svg` para poder subirlo como texto). En la home, cuando todavía no hay obras/artistas cargados
 en Supabase, se ocultan esas secciones vacías y se muestra la de clásicos.
+
+## Maestros argentinos (dominio público)
+
+`artistas.html` muestra, debajo de los artistas reales (Supabase), una sección **Maestros argentinos** con seis pintores fallecidos hace más de 70 años, cuya obra es de dominio público en la Argentina: Cándido López, Prilidiano Pueyrredón, Eduardo Sívori, Martín Malharro, Fernando Fader y Ernesto de la Cárcova. Cada uno tiene su página en `artista.html?id=...` con retrato, biografía (ES/EN) y obras que se amplían en un visor.
+
+- Son **datos estáticos** en `js/maestros.js` (imágenes en `img/maestros/`): no se guardan en Supabase, no aparecen en el catálogo de obras a la venta, no tienen precio ni botones de compra y se marcan como *Muestra · Dominio público · No a la venta*.
+- Los artistas que se registran desde el panel siguen funcionando igual; si `artista.html` recibe el id de un artista real, redirige a sus obras.
+- Imágenes de Wikimedia Commons, todas marcadas como dominio público (PD-Art / PD-old / PD-AR-Photo), redimensionadas a ≤1400 px y comprimidas.
+
+| Artista | Obra | Museo | Fuente |
+|---|---|---|---|
+| Cándido López | Autorretrato, c. 1857 (retrato) | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:C%C3%A1ndido_Lopez_-_Autorretrato_-_Google_Art_Project.jpg) |
+| Cándido López | *Desembarco del Ejército Argentino frente a las trincheras de Curuzú*, 1891 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:C%C3%A1ndido_Lopez_-_Desembarco_del_Ej%C3%A9rcito_Argentino_frente_a_las_trincheras_de_Curuz%C3%BA_-_Google_Art_Project.jpg) |
+| Cándido López | *Después de la batalla de Curupaytí*, 1893 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:C%C3%A1ndido_Lopez_-_Despu%C3%A9s_de_la_Batalla_de_Curupayt%C3%AD_-_Google_Art_Project.jpg) |
+| Cándido López | *Trinchera de Curupaytí*, 1893 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:C%C3%A1ndido_Lopez_-_Trinchera_de_Curupayt%C3%AD_-_Google_Art_Project_(497159).jpg) |
+| Prilidiano Pueyrredón | Autorretrato, c. 1861 (retrato) | — | [Commons](https://commons.wikimedia.org/wiki/File:Prilidiano_Pueyrred%C3%B3n-Autorretrato.jpg) |
+| Prilidiano Pueyrredón | *Retrato de Manuelita Rosas*, 1851 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Prilidiano_Pueyrredon_-_Retrato_de_Manuelita_Rosas_-_Google_Art_Project.jpg) |
+| Prilidiano Pueyrredón | *Un alto en el campo*, 1861 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Prilidiano_Pueyrredon_-_Un_alto_en_el_campo_-_Google_Art_Project.jpg) |
+| Prilidiano Pueyrredón | *Lavanderas en el bajo de Belgrano*, 1865 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Prilidiano_Pueyrredon_-_Lavanderas_en_el_bajo_de_Belgrano_-_Google_Art_Project.jpg) |
+| Eduardo Sívori | Autorretrato, 1900 (retrato) | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Autorretrato,_Eduardo_S%C3%ADvori.jpg) |
+| Eduardo Sívori | *El despertar de la criada*, 1887 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Eduardo_Sivori_-_El_despertar_de_la_criada_-_Google_Art_Project.jpg) |
+| Eduardo Sívori | *Pampa o chacra La Porteña (Moreno)*, 1899 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Pampa_o_Chacra_La_Porte%C3%B1a,_Moreno_-_Eduardo_S%C3%ADvori.jpg) |
+| Eduardo Sívori | *A la querencia*, 1903 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:A_la_querencia_-_Eduardo_S%C3%ADvori.jpg) |
+| Martín Malharro | Fotografía publicada en 1925 (retrato) | — | [Commons](https://commons.wikimedia.org/wiki/File:Mart%C3%ADn_Malharro.png) |
+| Martín Malharro | *Las parvas (La pampa de hoy)*, 1911 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Mart%C3%ADn_Malharro_-_Las_parvas_(la_pampa_de_hoy)_-_Google_Art_Project.jpg) |
+| Martín Malharro | *Nocturno*, c. 1910 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Mart%C3%ADn_Malharro_-_Nocturno_-_Google_Art_Project.jpg) |
+| Martín Malharro | *En plena naturaleza*, 1901 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Mart%C3%ADn_Malharro_-_En_plena_naturaleza_-_Google_Art_Project.jpg) |
+| Fernando Fader | Autorretrato, 1925 (retrato) | Museo Castagnino, Rosario | [Commons](https://commons.wikimedia.org/wiki/File:Fernando_Fader_-_Autorretrato,_1925.jpg) |
+| Fernando Fader | *Los mantones de Manila*, 1914 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Fernando_Fader_-_Los_mantones_de_Manila_-_Google_Art_Project.jpg) |
+| Fernando Fader | *Al solcito*, 1922 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Fernando_Fader_-_Al_solcito_-_Google_Art_Project.jpg) |
+| Fernando Fader | *La mazamorra*, 1927 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:La_mazamorra_by_Fernando_Fader,_1927.jpg) |
+| Ernesto de la Cárcova | Fotografía, antes de 1927 (retrato) | — | [Commons](https://commons.wikimedia.org/wiki/File:Ernesto_de_la_C%C3%A1rcova.jpg) |
+| Ernesto de la Cárcova | *Sin pan y sin trabajo*, 1894 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Ernesto_de_la_C%C3%A1rcova_-_Sin_pan_y_sin_trabajo,_1894.jpg) |
+| Ernesto de la Cárcova | *Retrato de la esposa del autor*, 1914 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Ernesto_DE_LA_Carcova_-_Retrato_de_la_esposa_del_autor_-_Google_Art_Project.jpg) |
+| Ernesto de la Cárcova | *Naturaleza en silencio*, 1926 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Ernesto_de_la_C%C3%81Rcova_-_Naturaleza_en_silencio_-_Google_Art_Project.jpg) |
 
 ## Probador de enmarcado: fotos de ambientes
 

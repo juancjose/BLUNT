@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Artista — {nombre}</title><meta name="description" content="Maestros argentinos: muestra de obras de dominio público. No están a la venta.">
+<script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-page="artistas">
+<main id="main">
+
+<div class="wrap"><div class="detail maestro-detail" id="maestro"></div></div>
+<section class="alt"><div class="wrap"><div class="sec-head"><div><p class="pd-tag">Muestra · Dominio público · No a la venta</p><h2>Obras</h2></div></div><div class="grid maestro-works" id="maestroWorks"></div>
+<p class="classic-note">Imágenes: Wikimedia Commons, dominio público. Hacé clic en una obra para verla en grande.</p></div></section>
+<section><div class="wrap"><div class="sec-head"><h2>Otros maestros argentinos</h2></div><div class="maestro-others" id="maestroOthers"></div></div></section></main>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/maestros.js"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/vendor/supabase.min.js"></script>
+<script type="module" src="js/public.js"></script>
+</body>
+</html>
