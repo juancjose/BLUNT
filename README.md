@@ -82,3 +82,5 @@ Para cada foto se midió el plano de la pared (líneas de piso/techo, esquinas, 
 | Living | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/gray-couch-beside-white-wall-7195873/) |
 | Dormitorio | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/interior-with-bed-and-closet-at-home-6980703/) |
 | Galería | Julia Taubitz (Kunsthalle Düsseldorf) | [Unsplash](https://unsplash.com/photos/empty-white-wall-with-concrete-and-glass-above-ZCDWq4ffnng) |
+| Sala gris | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/comfortable-couch-in-light-room-6958125/) |
+| Sala cálida | Josh Sorenson | [Pexels](https://www.pexels.com/photo/cozy-living-room-with-sofa-and-lamp-36363112/) |
