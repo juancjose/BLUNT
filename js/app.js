@@ -205,20 +205,64 @@ window.startApp = function () {
     if (!ARTISTAS.length && el("artistsStrip")) el("artistsStrip").closest("section").hidden = true;
   }
   if (el("classicsGrid")) el("classicsGrid").innerHTML = CL.map(clCard).join("");
-  if (CL.length && (el("classicsHome") || el("classicsGrid"))) {
-    document.body.insertAdjacentHTML("beforeend", `<dialog class="lb" id="lb" aria-labelledby="lbTitle">
+  /* Lightbox reutilizable para obras de dominio público (clásicos y maestros argentinos) */
+  let lbList = [], lbCur = 0;
+  const lbShow = i => { lbCur = (i + lbList.length) % lbList.length; const c = lbList[lbCur];
+    el("lbImg").src = c.img; el("lbImg").alt = `${c.titulo}, de ${c.artista}`; el("lbArtist").textContent = c.artista;
+    el("lbTitle").textContent = c.titulo; el("lbMeta").textContent = [c.anio, c.museo].filter(Boolean).join(" · "); el("lbSrc").href = c.fuente;
+    const many = lbList.length > 1; el("lbPrev").hidden = el("lbNext").hidden = !many; };
+  const lbOpen = (list, i) => {
+    if (!el("lb")) {
+      document.body.insertAdjacentHTML("beforeend", `<dialog class="lb" id="lb" aria-labelledby="lbTitle">
       <button class="icon-btn lb-close" type="button" id="lbClose" aria-label="Cerrar">✕</button>
       <figure><img id="lbImg" alt=""><figcaption><p class="eyebrow" id="lbArtist"></p><h3 id="lbTitle"></h3><p class="muted small" id="lbMeta"></p>
       <p class="small muted lb-credit"><span>Dominio público · Wikimedia Commons</span> · <a id="lbSrc" target="_blank" rel="noopener">Ver fuente</a></p></figcaption></figure>
       <button class="icon-btn lb-nav lb-prev" type="button" id="lbPrev" aria-label="Anterior">‹</button><button class="icon-btn lb-nav lb-next" type="button" id="lbNext" aria-label="Siguiente">›</button></dialog>`);
-    const lb = el("lb"); let cur = 0;
-    const show = i => { cur = (i + CL.length) % CL.length; const c = CL[cur];
-      el("lbImg").src = c.img; el("lbImg").alt = `${c.titulo}, de ${c.artista}`; el("lbArtist").textContent = c.artista;
-      el("lbTitle").textContent = c.titulo; el("lbMeta").textContent = `${c.anio} · ${c.museo}`; el("lbSrc").href = c.fuente; };
-    document.addEventListener("click", e => { const b = e.target.closest("[data-cl]"); if (b) { show(+b.dataset.cl); lb.showModal(); } });
-    el("lbClose").onclick = () => lb.close(); el("lbPrev").onclick = () => show(cur - 1); el("lbNext").onclick = () => show(cur + 1);
-    lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
-    lb.addEventListener("keydown", e => { if (e.key === "ArrowLeft") show(cur - 1); if (e.key === "ArrowRight") show(cur + 1); });
+      const lb = el("lb");
+      el("lbClose").onclick = () => lb.close(); el("lbPrev").onclick = () => lbShow(lbCur - 1); el("lbNext").onclick = () => lbShow(lbCur + 1);
+      lb.addEventListener("click", e => { if (e.target === lb) lb.close(); });
+      lb.addEventListener("keydown", e => { if (e.key === "ArrowLeft") lbShow(lbCur - 1); if (e.key === "ArrowRight") lbShow(lbCur + 1); });
+    }
+    lbList = list; lbShow(i); el("lb").showModal();
+  };
+  if (CL.length && (el("classicsHome") || el("classicsGrid")))
+    document.addEventListener("click", e => { const b = e.target.closest("[data-cl]"); if (b) lbOpen(CL, +b.dataset.cl); });
+
+  /* ---------- Maestros argentinos (dominio público, no a la venta; datos estáticos en js/maestros.js) ---------- */
+  const MA = typeof MAESTROS !== "undefined" ? MAESTROS : [];
+  const PD_TAG = "Muestra · Dominio público · No a la venta";
+  if (el("maestrosList")) {
+    el("maestrosList").innerHTML = MA.map(m => `<article class="artist-card maestro-card"><a class="maestro-link" href="artista.html?id=${m.id}">
+      <img src="${m.retrato.img}" alt="Retrato de ${esc(m.nombre)}" loading="lazy" decoding="async" width="${m.retrato.w}" height="${m.retrato.h}"></a>
+      <p class="eyebrow">${esc(m.vida)} · <span>${esc(m.movimiento)}</span></p><h3 style="margin-top:6px"><a href="artista.html?id=${m.id}">${esc(m.nombre)}</a></h3>
+      <p>${esc(m.resumen)}</p><a class="link" href="artista.html?id=${m.id}">Ver obras (${m.obras.length})</a></article>`).join("");
+  }
+  if (el("maestro")) {
+    const id = new URLSearchParams(location.search).get("id"), m = MA.find(x => x.id === id);
+    if (!m) {
+      const real = ARTISTAS.find(x => x.id === id || x.slug === id);
+      if (real) location.replace(`obras.html?artista=${real.id}`);
+      el("maestro").innerHTML = '<div><h1>Artista no encontrado</h1><p class="muted" style="margin:16px 0 32px">Puede que el enlace sea incorrecto.</p><a class="btn" href="artistas.html">Ver artistas</a></div>';
+      el("maestroWorks").closest("section").hidden = true;
+    } else {
+      document.title = `${m.nombre} — ${CONFIG.nombre}`;
+      const works = m.obras.map(o => ({ ...o, artista: m.nombre }));
+      const r = m.retrato;
+      el("maestro").innerHTML = `<figure class="ph maestro-portrait"><img src="${r.img}" alt="Retrato de ${esc(m.nombre)}" width="${r.w}" height="${r.h}" decoding="async">
+        <figcaption class="small muted"><span>${esc(r.tipo)}</span>${r.anio ? `, ${esc(r.anio)}` : ""}${r.museo ? ` · <span>${esc(r.museo)}</span>` : ""} · <a href="${r.fuente}" target="_blank" rel="noopener">Wikimedia Commons</a></figcaption></figure>
+        <div><p class="crumbs"><a href="artistas.html">Artistas</a> / ${esc(m.nombre)}</p><p class="pd-tag">${PD_TAG}</p>
+        <h1 style="font-size:clamp(2.2rem,4vw,3.4rem);margin-top:10px">${esc(m.nombre)}</h1>
+        <p class="eyebrow" style="margin-top:12px">${esc(m.lugar)}</p>
+        <div class="maestro-bio">${m.bio.map(p => `<p>${esc(p)}</p>`).join("")}</div>
+        <dl><dt>Vida</dt><dd>${esc(m.vida)}</dd><dt>Movimiento</dt><dd><span>${esc(m.movimiento)}</span></dd><dt>Obras</dt><dd>${m.obras.length}</dd></dl>
+        <p class="muted small">Obra en dominio público, exhibida como muestra. No está a la venta.</p></div>`;
+      el("maestroWorks").innerHTML = works.map((o, i) => `<article class="work classic"><button type="button" class="classic-btn" data-mw="${i}" aria-label="${esc(o.titulo)}, ${esc(m.nombre)}">
+        <div class="ph"><img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(m.nombre)}" loading="lazy" decoding="async" width="${o.w}" height="${o.h}"></div>
+        <div class="meta"><div><h3>${esc(o.titulo)}</h3><p class="by">${esc(o.anio)}${o.museo ? ` · <span>${esc(o.museo)}</span>` : ""}</p></div></div></button></article>`).join("");
+      document.addEventListener("click", e => { const b = e.target.closest("[data-mw]"); if (b) lbOpen(works, +b.dataset.mw); });
+      const others = MA.filter(x => x.id !== m.id);
+      if (el("maestroOthers")) el("maestroOthers").innerHTML = others.map(x => `<a class="maestro-chip" href="artista.html?id=${x.id}"><img src="${x.retrato.img}" alt="" loading="lazy" decoding="async"><span>${esc(x.nombre)}</span></a>`).join("");
+    }
   }
 
   /* ---------- Probador de enmarcado (fotos reales + clásicos de dominio público) ---------- */

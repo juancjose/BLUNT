@@ -7,6 +7,14 @@
    los campos *_en de js/data.js.
    ========================================================= */
 const I18N_EN = {
+  // Maestros argentinos (dominio público)
+  "Maestros argentinos": "Argentine masters", "Muestra · Dominio público · No a la venta": "Showcase · Public domain · Not for sale",
+  "Seis grandes de la pintura argentina de los siglos XIX y XX, cuya obra ya es de dominio público.": "Six great Argentine painters of the 19th and 20th centuries whose work is now in the public domain.",
+  "Otros maestros argentinos": "Other Argentine masters", "Vida": "Life", "Movimiento": "Movement",
+  "Imágenes: Wikimedia Commons, dominio público. Hacé clic en una obra para verla en grande.": "Images: Wikimedia Commons, public domain. Click a work to view it larger.",
+  "Obra en dominio público, exhibida como muestra. No está a la venta.": "Public-domain work shown as a showcase. Not for sale.",
+  "Artista no encontrado": "Artist not found", "Puede que el enlace sea incorrecto.": "The link may be incorrect.", "Ver artistas": "View artists",
+  "Maestros argentinos: muestra de obras de dominio público. No están a la venta.": "Argentine masters: a showcase of public-domain works. Not for sale.",
 
   // Estados vacíos y acceso de artistas
   "Próximamente nuevas obras": "New works coming soon", "Próximamente nuevos artistas": "New artists coming soon",
