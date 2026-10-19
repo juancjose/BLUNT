@@ -69,7 +69,7 @@ const I18N_EN = {
   "Necesitás tener JavaScript activado para ingresar.": "You need JavaScript enabled to sign in.",
 
   // Clásicos
-  "Probador de enmarcado": "Framing preview", "Ambiente": "Setting", "Living": "Living room", "Galería": "Gallery", "Dormitorio": "Bedroom", "Sala gris": "Grey room", "Sala cálida": "Warm room", "Foto": "Photo", "Comedor": "Dining room", "Marco": "Frame", "Negro": "Black", "Madera": "Wood", "Blanco": "White",
+  "Probador de enmarcado": "Framing preview", "Ambiente": "Setting", "Living": "Living room", "Galería": "Gallery", "Dormitorio": "Bedroom", "Sala cálida": "Warm room", "Foto": "Photo", "Comedor": "Dining room", "Marco": "Frame", "Negro": "Black", "Madera": "Wood", "Blanco": "White",
   "Fino": "Thin", "Medio": "Medium", "Ancho": "Wide",
   "Vista de muestra con una obra clásica de dominio público.": "Sample preview using a public-domain classic.",
   "Clásicos": "Classics", "Clásicos del arte": "Art classics", "Dominio público": "Public domain",
