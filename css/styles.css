@@ -400,6 +400,14 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .fr-scn[aria-pressed="true"] img{outline-color:var(--fg)}
 .fr-credit{white-space:nowrap}
 .fr-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+
+.fr-mat-sin .fr-mat{padding:0;background:transparent;box-shadow:none}
+.fr-mat-sin .fr-art{box-shadow:none}
+.fr-mat-sin .fr-art::after{box-shadow:inset calc(1px * var(--u)) calc(1px * var(--u)) calc(2px * var(--u)) rgba(0,0,0,.25)}
+.fr-upload{display:inline-flex;align-items:center;justify-content:center;font-size:1.25rem;line-height:1;color:var(--muted);border-style:dashed}
+.fr-upload:hover,.fr-upload[aria-pressed="true"]{color:var(--fg);border-color:var(--fg)}
+.fr-thumb.fr-custom{position:relative}
+.fr-clear{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--fg);font-size:.7rem;line-height:1;cursor:pointer;padding:0}
 @media (prefers-reduced-motion:reduce){.fr-photo,.fr-frame,.fr-mat,.fr-art img{transition:none}}
 /* Hero: Ken Burns suave (solo transform, continuo; no se corta en el fundido) */
 @keyframes kbA{from{transform:scale(1) translate3d(0,0,0)}to{transform:scale(1.08) translate3d(-1.2%,-1%,0)}}

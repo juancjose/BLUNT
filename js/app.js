@@ -235,7 +235,7 @@ window.startApp = function () {
     el("maestrosList").innerHTML = MA.map(m => `<article class="artist-card maestro-card"><a class="maestro-link" href="artista.html?id=${m.id}">
       <img src="${m.retrato.img}" alt="Retrato de ${esc(m.nombre)}" loading="lazy" decoding="async" width="${m.retrato.w}" height="${m.retrato.h}"></a>
       <p class="eyebrow">${esc(m.vida)} · <span>${esc(m.movimiento)}</span></p><h3 style="margin-top:6px"><a href="artista.html?id=${m.id}">${esc(m.nombre)}</a></h3>
-      <p>${esc(m.resumen)}</p><a class="link" href="artista.html?id=${m.id}">Ver obras (${m.obras.length})</a></article>`).join("");
+      <p>${esc(m.resumen)}</p><a class="link" href="artista.html?id=${m.id}">Obras</a></article>`).join("");
   }
   if (el("maestro")) {
     const id = new URLSearchParams(location.search).get("id"), m = MA.find(x => x.id === id);
@@ -254,7 +254,7 @@ window.startApp = function () {
         <h1 style="font-size:clamp(2.2rem,4vw,3.4rem);margin-top:10px">${esc(m.nombre)}</h1>
         <p class="eyebrow" style="margin-top:12px">${esc(m.lugar)}</p>
         <div class="maestro-bio">${m.bio.map(p => `<p>${esc(p)}</p>`).join("")}</div>
-        <dl><dt>Vida</dt><dd>${esc(m.vida)}</dd><dt>Movimiento</dt><dd><span>${esc(m.movimiento)}</span></dd><dt>Obras</dt><dd>${m.obras.length}</dd></dl>
+        <dl><dt>Años</dt><dd>${esc(m.vida)}</dd><dt>Movimiento</dt><dd><span>${esc(m.movimiento)}</span></dd><dt>Obras</dt><dd>${m.obras.length}</dd></dl>
         <p class="muted small">Obra en dominio público, exhibida como muestra. No está a la venta.</p></div>`;
       el("maestroWorks").innerHTML = works.map((o, i) => `<article class="work classic"><button type="button" class="classic-btn" data-mw="${i}" aria-label="${esc(o.titulo)}, ${esc(m.nombre)}">
         <div class="ph"><img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(m.nombre)}" loading="lazy" decoding="async" width="${o.w}" height="${o.h}"></div>
@@ -265,27 +265,27 @@ window.startApp = function () {
     }
   }
 
-  /* ---------- Probador de enmarcado (fotos reales + clásicos de dominio público) ---------- */
+  /* ---------- Probador de enmarcado (fotos reales + clásicos de dominio público + foto propia) ---------- */
   document.querySelectorAll("[data-framer]").forEach(box => {
     const pick = ["van-gogh", "hokusai", "monet", "vermeer"].map(id => CL.find(c => c.id === id)).filter(Boolean);
     const SC = typeof ESCENAS !== "undefined" ? ESCENAS : [];
     if (!pick.length || !SC.length) return;
     const frames = [["negro", "Negro"], ["madera", "Madera"], ["blanco", "Blanco"]];
-    const mats = [["fino", "Fino"], ["medio", "Medio"], ["ancho", "Ancho"]];
+    const mats = [["sin", "Sin"], ["fino", "Fino"], ["medio", "Medio"], ["ancho", "Ancho"]];
     const st = { s: 0, f: "negro", m: "medio", a: 0 };
+    let customUrl = "", customThumb = null;
     const grp = (key, label, opts) => `<div class="fr-row"><span class="fr-lab">${label}</span><div class="fr-opts" role="group" aria-label="${label}">${opts.map(([v, t]) => `<button type="button" class="chip fr-opt" data-k="${key}" data-v="${v}" aria-pressed="false">${key === "f" ? `<i class="fr-sw fr-sw-${v}" aria-hidden="true"></i>` : ""}${t}</button>`).join("")}</div></div>`;
     box.innerHTML = `<div class="fr-scene"><img class="fr-photo on" alt="" src="${SC[0].img}"><img class="fr-photo" alt="" aria-hidden="true">
       <div class="fr-frame"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div><div class="fr-luz" aria-hidden="true"></div></div></div>
       <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>
       <div class="fr-row"><span class="fr-lab">Ambiente</span><div class="fr-opts fr-scenes" role="group" aria-label="Ambiente">${SC.map((e, i) => `<button type="button" class="fr-scn" data-k="s" data-v="${i}" aria-pressed="false"><img src="${e.thumb}" alt=""><span>${esc(e.nombre)}</span></button>`).join("")}</div></div>
       ${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
-      <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}</div></div>
-      <p class="fr-note"><span>Vista de muestra con una obra clásica de dominio público.</span> <span class="fr-credit"></span></p></div>`;
+      <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}<button type="button" class="fr-thumb fr-upload" data-upload aria-label="Cargar tu foto" title="Cargar tu foto">+</button><input type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-file></div></div>
+      <p class="fr-note"><span>Vista de muestra. También podés cargar tu propia foto.</span> <span class="fr-credit"></span></p></div>`;
     const scene = box.querySelector(".fr-scene"), photos = [...box.querySelectorAll(".fr-photo")], frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img"), art = box.querySelector(".fr-art"), credit = box.querySelector(".fr-credit");
-    const MOLD = { negro: 20, blanco: 20, madera: 28 }, MAT = { fino: 50, medio: 90, ancho: 140 }; // mm
+    const thumbs = box.querySelector(".fr-thumbs"), fileIn = box.querySelector("[data-file]");
+    const MOLD = { negro: 20, blanco: 20, madera: 28 }, MAT = { sin: 0, fino: 50, medio: 90, ancho: 140 }; // mm
     let shown = 0, curScene = 0, ratio = 0.8;
-    // Coloca el marco sobre el plano de la pared. Medidas en mm × u (px de pantalla por mm), así el marco se
-    // rasteriza a su tamaño real en pantalla (no a 1px = 1mm, que generaba capas enormes); homografía -> matrix3d.
     const mul = (A, B) => A.map(r => [0, 1, 2].map(j => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
     const place = () => {
       const e = SC[curScene], Wmm = Math.round((ratio > 1 ? e.pw : e.w) * 1000);
@@ -299,7 +299,6 @@ window.startApp = function () {
       art.style.width = (inner * u).toFixed(2) + "px"; art.style.height = (inner * ratio * u).toFixed(2) + "px";
       frame.style.width = (Wmm * u).toFixed(2) + "px";
       frame.style.setProperty("--mold", (MOLD[st.f] * u).toFixed(2) + "px"); frame.style.setProperty("--matw", (MAT[st.m] * u).toFixed(2) + "px");
-      // Si la perspectiva cambia la escala menos de 0,5% a lo ancho del marco, se usa matrix() 2D (más liviano)
       const flat = (Math.abs(M[2][0]) + Math.abs(M[2][1])) * Wmm * u < 0.005;
       frame.style.transform = flat ? `matrix(${M[0][0]},${M[1][0]},${M[0][1]},${M[1][1]},${M[0][2]},${M[1][2]})`
         : `matrix3d(${M[0][0]},${M[1][0]},0,${M[2][0]},${M[0][1]},${M[1][1]},0,${M[2][1]},0,0,1,0,${M[0][2]},${M[1][2]},0,${M[2][2]})`;
@@ -318,16 +317,59 @@ window.startApp = function () {
       next.onload = null; next.src = e.img;
       (next.decode ? next.decode() : Promise.reject()).then(swap, () => { if (next.complete) swap(); else next.onload = swap; });
     };
+    const currentArt = () => st.a === "custom" && customUrl
+      ? { img: customUrl, titulo: "Tu foto", artista: "" }
+      : pick[st.a];
+    const syncCustomThumb = () => {
+      if (customThumb) { customThumb.remove(); customThumb = null; }
+      if (!customUrl) return;
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "fr-thumb fr-custom"; b.dataset.k = "a"; b.dataset.v = "custom";
+      b.setAttribute("aria-label", "Tu foto"); b.setAttribute("aria-pressed", "false");
+      b.innerHTML = `<img src="${customUrl}" alt=""><span class="fr-clear" data-clear title="Quitar foto" aria-label="Quitar foto">×</span>`;
+      thumbs.insertBefore(b, thumbs.querySelector("[data-upload]"));
+      customThumb = b;
+    };
+    const clearCustom = () => {
+      if (customUrl) { try { URL.revokeObjectURL(customUrl); } catch (_) {} }
+      customUrl = ""; syncCustomThumb();
+      if (st.a === "custom") st.a = 0;
+      fileIn.value = ""; render();
+    };
     const render = () => {
-      const c = pick[st.a];
+      const c = currentArt();
+      if (!c) return;
       frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}`;
-      if (img.getAttribute("src") !== c.img) { img.classList.add("fr-swap"); setTimeout(() => { img.src = c.img; img.alt = `${tr(c.titulo)}${LANG === "en" ? ", by " : ", de "}${c.artista}`; }, 220); }
-      img.onload = () => { ratio = img.naturalHeight / img.naturalWidth; place(); img.classList.remove("fr-swap"); };
+      const src = c.img;
+      if (img.getAttribute("src") !== src) {
+        img.classList.add("fr-swap");
+        setTimeout(() => {
+          img.src = src;
+          img.alt = c.artista ? `${typeof tr === "function" ? tr(c.titulo) : c.titulo}${LANG === "en" ? ", by " : ", de "}${c.artista}` : (typeof tr === "function" ? tr(c.titulo) : c.titulo);
+        }, 220);
+      }
+      img.onload = () => { ratio = img.naturalHeight / img.naturalWidth || 0.8; place(); img.classList.remove("fr-swap"); };
+      if (img.complete && img.naturalWidth) { ratio = img.naturalHeight / img.naturalWidth || 0.8; }
       setScene(); place();
-      box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === b.dataset.v)));
+      box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === String(b.dataset.v))));
     };
     if (window.ResizeObserver) new ResizeObserver(placeSoon).observe(scene);
-    box.addEventListener("click", e => { const b = e.target.closest("[data-k]"); if (!b) return; st[b.dataset.k] = (b.dataset.k === "a" || b.dataset.k === "s") ? +b.dataset.v : b.dataset.v; render(); });
+    box.addEventListener("click", e => {
+      if (e.target.closest("[data-clear]")) { e.preventDefault(); e.stopPropagation(); clearCustom(); return; }
+      if (e.target.closest("[data-upload]")) { fileIn.click(); return; }
+      const b = e.target.closest("[data-k]"); if (!b) return;
+      const k = b.dataset.k, v = b.dataset.v;
+      st[k] = (k === "s" || (k === "a" && v !== "custom")) ? +v : v;
+      render();
+    });
+    fileIn.addEventListener("change", () => {
+      const f = fileIn.files && fileIn.files[0]; if (!f) return;
+      if (!/^image\//.test(f.type)) return;
+      if (f.size > 8 * 1024 * 1024) { alert("Esa imagen es demasiado pesada (máx. 8 MB)."); fileIn.value = ""; return; }
+      if (customUrl) { try { URL.revokeObjectURL(customUrl); } catch (_) {} }
+      customUrl = URL.createObjectURL(f);
+      st.a = "custom"; syncCustomThumb(); render();
+    });
     render();
   });
 

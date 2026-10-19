@@ -10,7 +10,7 @@ const I18N_EN = {
   // Maestros argentinos (dominio público)
   "Maestros argentinos": "Argentine masters", "Muestra · Dominio público · No a la venta": "Showcase · Public domain · Not for sale",
   "Seis grandes de la pintura argentina de los siglos XIX y XX, cuya obra ya es de dominio público.": "Six great Argentine painters of the 19th and 20th centuries whose work is now in the public domain.",
-  "Otros maestros argentinos": "Other Argentine masters", "Vida": "Life", "Movimiento": "Movement",
+  "Otros maestros argentinos": "Other Argentine masters", "Años": "Lived", "Movimiento": "Movement",
   "Imágenes: Wikimedia Commons, dominio público. Hacé clic en una obra para verla en grande.": "Images: Wikimedia Commons, public domain. Click a work to view it larger.",
   "Obra en dominio público, exhibida como muestra. No está a la venta.": "Public-domain work shown as a showcase. Not for sale.",
   "Artista no encontrado": "Artist not found", "Puede que el enlace sea incorrecto.": "The link may be incorrect.", "Ver artistas": "View artists",
@@ -133,6 +133,10 @@ const I18N_EN = {
   "Formato": "Size", "Passepartout": "Mat", "Marco + passepartout": "Frame + mat",
   "Valores orientativos. Grandes formatos y vidrio museo, a consultar.": "Guide prices. Large formats and museum glass on request.",
   "Obra enmarcada con passepartout y marco": "Artwork with mat and frame",
+  "Sin": "None", "Tu foto": "Your photo", "Cargar tu foto": "Upload your photo",
+  "Quitar foto": "Remove photo", "Elegí una imagen (JPG o PNG, hasta 8 MB).": "Choose an image (JPG or PNG, up to 8 MB).",
+  "Esa imagen es demasiado pesada (máx. 8 MB).": "That image is too large (max 8 MB).",
+  "Vista de muestra. También podés cargar tu propia foto.": "Sample view. You can also upload your own photo.",
   // Contacto
   "Hablemos": "Let's talk", "Respondemos consultas sobre obras, enmarcado, envíos y formas de pago.": "We answer questions about works, framing, shipping and payment.",
   "Escribinos": "Write to us", "Completá el formulario y se abre WhatsApp con tu mensaje listo para enviar.": "Fill in the form and WhatsApp opens with your message ready to send.",
