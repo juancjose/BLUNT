@@ -370,15 +370,20 @@ window.startApp = function () {
       thumbs.insertBefore(b, thumbs.querySelector("[data-art-upload]"));
       customArtThumb = b;
     };
+    const spaceUploadBtn = () => box.querySelector("[data-space-upload]");
     const syncSpaceBtn = () => {
+      const up = spaceUploadBtn();
       if (customSpaceBtn) { customSpaceBtn.remove(); customSpaceBtn = null; }
+      if (up) up.hidden = false;
       if (!customSpace) return;
+      if (up) up.hidden = true;
       const b = document.createElement("button");
       b.type = "button"; b.className = "fr-scn fr-scn-custom"; b.dataset.k = "s"; b.dataset.v = "custom";
       b.setAttribute("aria-pressed", "false");
+      b.setAttribute("aria-label", "Tu espacio");
       b.innerHTML = `<img src="${customSpace}" alt=""><span>Tu espacio</span><span class="fr-clear fr-clear-scn" data-clear-space title="Quitar espacio" aria-label="Quitar espacio">×</span>`;
-      const up = scenes.querySelector("[data-space-upload]");
-      if (up) scenes.insertBefore(b, up); else scenes.appendChild(b);
+      if (up && up.parentNode) up.parentNode.insertBefore(b, up);
+      else scenes.appendChild(b);
       customSpaceBtn = b;
     };
     const clearArt = () => {
