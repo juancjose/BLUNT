@@ -279,7 +279,7 @@ window.startApp = function () {
     box.innerHTML = `<div class="fr-scene"><img class="fr-photo on" alt="" src="${SC[0].img}"><img class="fr-photo" alt="" aria-hidden="true">
       <div class="fr-frame" tabindex="0" aria-grabbed="false"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div><div class="fr-luz" aria-hidden="true"></div></div></div>
       <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>
-      <div class="fr-row"><span class="fr-lab">Ambiente</span><div class="fr-amb"><div class="fr-opts fr-scenes" role="group" aria-label="Ambiente">${SC.map((e, i) => `<button type="button" class="fr-scn" data-k="s" data-v="${i}" aria-pressed="false"><img src="${e.thumb}" alt=""><span>${esc(e.nombre)}</span></button>`).join("")}</div><button type="button" class="fr-scn fr-scn-upload" data-space-upload aria-label="Cargar tu espacio" title="Cargar tu espacio"><span class="fr-scn-plus" aria-hidden="true">+</span><span>Tu espacio</span></button><input type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-space-file></div></div>
+      <div class="fr-row"><span class="fr-lab">Ambiente</span><div class="fr-opts fr-scenes" role="group" aria-label="Ambiente">${SC.map((e, i) => `<button type="button" class="fr-scn" data-k="s" data-v="${i}" aria-pressed="false"><img src="${e.thumb}" alt=""><span>${esc(e.nombre)}</span></button>`).join("")}<button type="button" class="fr-scn fr-scn-upload" data-space-upload aria-label="Cargar tu espacio" title="Cargar tu espacio"><span class="fr-scn-plus" aria-hidden="true">+</span><span>Tu espacio</span></button></div><input type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-space-file></div>
       ${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
       <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}<button type="button" class="fr-thumb fr-upload" data-art-upload aria-label="Cargar tu foto" title="Cargar tu foto">+</button><input type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-art-file></div></div>
       <p class="fr-note"><span class="fr-hint">Vista de muestra. También podés cargar tu obra o tu espacio.</span> <span class="fr-credit"></span></p></div>`;
@@ -377,7 +377,8 @@ window.startApp = function () {
       b.type = "button"; b.className = "fr-scn fr-scn-custom"; b.dataset.k = "s"; b.dataset.v = "custom";
       b.setAttribute("aria-pressed", "false");
       b.innerHTML = `<img src="${customSpace}" alt=""><span>Tu espacio</span><span class="fr-clear fr-clear-scn" data-clear-space title="Quitar espacio" aria-label="Quitar espacio">×</span>`;
-      scenes.appendChild(b);
+      const up = scenes.querySelector("[data-space-upload]");
+      if (up) scenes.insertBefore(b, up); else scenes.appendChild(b);
       customSpaceBtn = b;
     };
     const clearArt = () => {
