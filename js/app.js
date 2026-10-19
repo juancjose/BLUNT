@@ -265,7 +265,7 @@ window.startApp = function () {
     }
   }
 
-  /* ---------- Probador de enmarcado (fotos reales + clásicos de dominio público + foto propia) ---------- */
+  /* ---------- Probador de enmarcado (ambientes + obra/espacio propios; arrastre en tu espacio) ---------- */
   document.querySelectorAll("[data-framer]").forEach(box => {
     const pick = ["van-gogh", "hokusai", "monet", "vermeer"].map(id => CL.find(c => c.id === id)).filter(Boolean);
     const SC = typeof ESCENAS !== "undefined" ? ESCENAS : [];
@@ -273,33 +273,61 @@ window.startApp = function () {
     const frames = [["negro", "Negro"], ["madera", "Madera"], ["blanco", "Blanco"]];
     const mats = [["sin", "Sin"], ["fino", "Fino"], ["medio", "Medio"], ["ancho", "Ancho"]];
     const st = { s: 0, f: "negro", m: "medio", a: 0 };
-    let customUrl = "", customThumb = null;
+    let customArt = "", customArtThumb = null, customSpace = "", customSpaceBtn = null;
+    let pos = { x: 0.5, y: 0.42 }, drag = null;
     const grp = (key, label, opts) => `<div class="fr-row"><span class="fr-lab">${label}</span><div class="fr-opts" role="group" aria-label="${label}">${opts.map(([v, t]) => `<button type="button" class="chip fr-opt" data-k="${key}" data-v="${v}" aria-pressed="false">${key === "f" ? `<i class="fr-sw fr-sw-${v}" aria-hidden="true"></i>` : ""}${t}</button>`).join("")}</div></div>`;
     box.innerHTML = `<div class="fr-scene"><img class="fr-photo on" alt="" src="${SC[0].img}"><img class="fr-photo" alt="" aria-hidden="true">
-      <div class="fr-frame"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div><div class="fr-luz" aria-hidden="true"></div></div></div>
+      <div class="fr-frame" tabindex="0" aria-grabbed="false"><div class="fr-mat"><div class="fr-art"><img alt=""></div></div><div class="fr-glass" aria-hidden="true"></div><div class="fr-luz" aria-hidden="true"></div></div></div>
       <div class="fr-controls"><p class="eyebrow fr-title">Probador de enmarcado</p>
-      <div class="fr-row"><span class="fr-lab">Ambiente</span><div class="fr-opts fr-scenes" role="group" aria-label="Ambiente">${SC.map((e, i) => `<button type="button" class="fr-scn" data-k="s" data-v="${i}" aria-pressed="false"><img src="${e.thumb}" alt=""><span>${esc(e.nombre)}</span></button>`).join("")}</div></div>
+      <div class="fr-row"><span class="fr-lab">Ambiente</span><div class="fr-opts fr-scenes" role="group" aria-label="Ambiente">${SC.map((e, i) => `<button type="button" class="fr-scn" data-k="s" data-v="${i}" aria-pressed="false"><img src="${e.thumb}" alt=""><span>${esc(e.nombre)}</span></button>`).join("")}<button type="button" class="fr-scn fr-scn-upload" data-space-upload aria-label="Cargar tu espacio" title="Cargar tu espacio"><span class="fr-scn-plus" aria-hidden="true">+</span><span>Tu espacio</span></button><input type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-space-file></div></div>
       ${grp("f", "Marco", frames)}${grp("m", "Passepartout", mats)}
-      <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}<button type="button" class="fr-thumb fr-upload" data-upload aria-label="Cargar tu foto" title="Cargar tu foto">+</button><input type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-file></div></div>
-      <p class="fr-note"><span>Vista de muestra. También podés cargar tu propia foto.</span> <span class="fr-credit"></span></p></div>`;
-    const scene = box.querySelector(".fr-scene"), photos = [...box.querySelectorAll(".fr-photo")], frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img"), art = box.querySelector(".fr-art"), credit = box.querySelector(".fr-credit");
-    const thumbs = box.querySelector(".fr-thumbs"), fileIn = box.querySelector("[data-file]");
-    const MOLD = { negro: 20, blanco: 20, madera: 28 }, MAT = { sin: 0, fino: 50, medio: 90, ancho: 140 }; // mm
+      <div class="fr-row"><span class="fr-lab">Obra</span><div class="fr-opts fr-thumbs" role="group" aria-label="Obra">${pick.map((c, i) => `<button type="button" class="fr-thumb" data-k="a" data-v="${i}" aria-pressed="false" aria-label="${esc(c.titulo)}, de ${esc(c.artista)}"><img src="${c.img}" alt="" loading="lazy"></button>`).join("")}<button type="button" class="fr-thumb fr-upload" data-art-upload aria-label="Cargar tu foto" title="Cargar tu foto">+</button><input type="file" accept="image/jpeg,image/png,image/webp,image/*" hidden data-art-file></div></div>
+      <p class="fr-note"><span class="fr-hint">Vista de muestra. También podés cargar tu obra o tu espacio.</span> <span class="fr-credit"></span></p></div>`;
+    const scene = box.querySelector(".fr-scene"), photos = [...box.querySelectorAll(".fr-photo")], frame = box.querySelector(".fr-frame"), img = box.querySelector(".fr-art img"), art = box.querySelector(".fr-art"), credit = box.querySelector(".fr-credit"), hint = box.querySelector(".fr-hint");
+    const thumbs = box.querySelector(".fr-thumbs"), scenes = box.querySelector(".fr-scenes");
+    const artFile = box.querySelector("[data-art-file]"), spaceFile = box.querySelector("[data-space-file]");
+    const MOLD = { negro: 20, blanco: 20, madera: 28 }, MAT = { sin: 0, fino: 50, medio: 90, ancho: 140 };
     let shown = 0, curScene = 0, ratio = 0.8;
+    const isCustom = () => st.s === "custom" && customSpace;
     const mul = (A, B) => A.map(r => [0, 1, 2].map(j => r[0] * B[0][j] + r[1] * B[1][j] + r[2] * B[2][j]));
     const place = () => {
-      const e = SC[curScene], Wmm = Math.round((ratio > 1 ? e.pw : e.w) * 1000);
+      const Wmm = Math.round((ratio > 1 ? 0.85 : 1.2) * 1000);
+      if (isCustom()) {
+        const sw = scene.clientWidth || 1, sh = scene.clientHeight || 1;
+        const target = Math.min(sw, sh) * 0.32;
+        const u = Math.max(0.05, target / Wmm);
+        const inner = Wmm - 2 * (MOLD[st.f] + MAT[st.m]);
+        const fw = Wmm * u, fh = (inner * ratio + 2 * (MOLD[st.f] + MAT[st.m])) * u;
+        frame.style.setProperty("--u", u.toFixed(4));
+        art.style.width = (inner * u).toFixed(2) + "px"; art.style.height = (inner * ratio * u).toFixed(2) + "px";
+        frame.style.width = fw.toFixed(2) + "px";
+        frame.style.setProperty("--mold", (MOLD[st.f] * u).toFixed(2) + "px"); frame.style.setProperty("--matw", (MAT[st.m] * u).toFixed(2) + "px");
+        const minX = (fw / 2) / sw, maxX = 1 - minX, minY = (fh / 2) / sh, maxY = 1 - minY;
+        pos.x = Math.min(maxX, Math.max(minX, pos.x)); pos.y = Math.min(maxY, Math.max(minY, pos.y));
+        frame.style.left = (pos.x * 100).toFixed(3) + "%"; frame.style.top = (pos.y * 100).toFixed(3) + "%";
+        frame.style.transform = "translate(-50%, -50%)";
+        frame.style.setProperty("--grade", "brightness(.98) contrast(.95) saturate(.92)");
+        frame.style.setProperty("--luz", "linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.05))");
+        frame.style.setProperty("--shx", "0"); frame.style.setProperty("--shy", "1");
+        frame.style.setProperty("--sdx", "0px"); frame.style.setProperty("--sdy", (4 * u).toFixed(2) + "px");
+        scene.classList.add("is-custom"); frame.classList.add("fr-draggable");
+        return;
+      }
+      scene.classList.remove("is-custom"); frame.classList.remove("fr-draggable");
+      frame.style.left = "0"; frame.style.top = "0";
+      const e = SC[typeof st.s === "number" ? st.s : curScene] || SC[curScene];
+      const W = Math.round((ratio > 1 ? e.pw : e.w) * 1000);
       const k = scene.clientWidth / 1600, H = e.H;
-      const T = [[0.001, 0, -Wmm / 2000], [0, 0.001, 0], [0, 0, 1]];
+      const T = [[0.001, 0, -W / 2000], [0, 0.001, 0], [0, 0, 1]];
       let M = mul(mul([[k, 0, 0], [0, k, 0], [0, 0, 1]], H), T); const z = M[2][2]; M = M.map(r => r.map(v => v / z));
       const u = Math.max(0.05, Math.hypot(M[0][0], M[1][0]));
       M = M.map(r => [r[0] / u, r[1] / u, r[2]]);
-      const inner = Wmm - 2 * (MOLD[st.f] + MAT[st.m]);
+      const inner = W - 2 * (MOLD[st.f] + MAT[st.m]);
       frame.style.setProperty("--u", u.toFixed(4));
       art.style.width = (inner * u).toFixed(2) + "px"; art.style.height = (inner * ratio * u).toFixed(2) + "px";
-      frame.style.width = (Wmm * u).toFixed(2) + "px";
+      frame.style.width = (W * u).toFixed(2) + "px";
       frame.style.setProperty("--mold", (MOLD[st.f] * u).toFixed(2) + "px"); frame.style.setProperty("--matw", (MAT[st.m] * u).toFixed(2) + "px");
-      const flat = (Math.abs(M[2][0]) + Math.abs(M[2][1])) * Wmm * u < 0.005;
+      const flat = (Math.abs(M[2][0]) + Math.abs(M[2][1])) * W * u < 0.005;
       frame.style.transform = flat ? `matrix(${M[0][0]},${M[1][0]},${M[0][1]},${M[1][1]},${M[0][2]},${M[1][2]})`
         : `matrix3d(${M[0][0]},${M[1][0]},0,${M[2][0]},${M[0][1]},${M[1][1]},0,${M[2][1]},0,0,1,0,${M[0][2]},${M[1][2]},0,${M[2][2]})`;
       frame.style.setProperty("--grade", e.ajuste); frame.style.setProperty("--luz", e.luz);
@@ -308,8 +336,20 @@ window.startApp = function () {
     };
     let placeQ = 0; const placeSoon = () => { if (!placeQ) placeQ = requestAnimationFrame(() => { placeQ = 0; place(); }); };
     const setScene = () => {
+      if (isCustom()) {
+        credit.innerHTML = "";
+        hint.textContent = "Arrastrá el cuadro para ubicarlo en tu pared.";
+        const next = photos[1 - shown];
+        if (photos[shown].src === customSpace && curScene === "custom") { scene.classList.remove("fr-moving"); return; }
+        scene.classList.add("fr-moving");
+        const swap = () => { photos[shown].classList.remove("on"); next.classList.add("on"); shown = 1 - shown; curScene = "custom"; place(); setTimeout(() => scene.classList.remove("fr-moving"), 60); };
+        next.onload = null; next.src = customSpace;
+        (next.decode ? next.decode() : Promise.reject()).then(swap, () => { if (next.complete) swap(); else next.onload = swap; });
+        return;
+      }
       const e = SC[st.s];
       credit.innerHTML = `<span>Foto</span>: <a href="${e.url}" target="_blank" rel="noopener">${esc(e.autor)} / ${e.sitio}</a>`;
+      hint.textContent = "Vista de muestra. También podés cargar tu obra o tu espacio.";
       if (curScene === st.s) { scene.classList.remove("fr-moving"); return; }
       const next = photos[1 - shown], target = st.s;
       scene.classList.add("fr-moving");
@@ -317,29 +357,48 @@ window.startApp = function () {
       next.onload = null; next.src = e.img;
       (next.decode ? next.decode() : Promise.reject()).then(swap, () => { if (next.complete) swap(); else next.onload = swap; });
     };
-    const currentArt = () => st.a === "custom" && customUrl
-      ? { img: customUrl, titulo: "Tu foto", artista: "" }
+    const currentArt = () => st.a === "custom" && customArt
+      ? { img: customArt, titulo: "Tu foto", artista: "" }
       : pick[st.a];
-    const syncCustomThumb = () => {
-      if (customThumb) { customThumb.remove(); customThumb = null; }
-      if (!customUrl) return;
+    const syncArtThumb = () => {
+      if (customArtThumb) { customArtThumb.remove(); customArtThumb = null; }
+      if (!customArt) return;
       const b = document.createElement("button");
       b.type = "button"; b.className = "fr-thumb fr-custom"; b.dataset.k = "a"; b.dataset.v = "custom";
       b.setAttribute("aria-label", "Tu foto"); b.setAttribute("aria-pressed", "false");
-      b.innerHTML = `<img src="${customUrl}" alt=""><span class="fr-clear" data-clear title="Quitar foto" aria-label="Quitar foto">×</span>`;
-      thumbs.insertBefore(b, thumbs.querySelector("[data-upload]"));
-      customThumb = b;
+      b.innerHTML = `<img src="${customArt}" alt=""><span class="fr-clear" data-clear-art title="Quitar foto" aria-label="Quitar foto">×</span>`;
+      thumbs.insertBefore(b, thumbs.querySelector("[data-art-upload]"));
+      customArtThumb = b;
     };
-    const clearCustom = () => {
-      if (customUrl) { try { URL.revokeObjectURL(customUrl); } catch (_) {} }
-      customUrl = ""; syncCustomThumb();
-      if (st.a === "custom") st.a = 0;
-      fileIn.value = ""; render();
+    const syncSpaceBtn = () => {
+      if (customSpaceBtn) { customSpaceBtn.remove(); customSpaceBtn = null; }
+      if (!customSpace) return;
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "fr-scn fr-scn-custom"; b.dataset.k = "s"; b.dataset.v = "custom";
+      b.setAttribute("aria-pressed", "false");
+      b.innerHTML = `<img src="${customSpace}" alt=""><span>Tu espacio</span><span class="fr-clear fr-clear-scn" data-clear-space title="Quitar espacio" aria-label="Quitar espacio">×</span>`;
+      scenes.insertBefore(b, scenes.querySelector("[data-space-upload]"));
+      customSpaceBtn = b;
+    };
+    const clearArt = () => {
+      if (customArt) { try { URL.revokeObjectURL(customArt); } catch (_) {} }
+      customArt = ""; syncArtThumb(); if (st.a === "custom") st.a = 0; artFile.value = ""; render();
+    };
+    const clearSpace = () => {
+      if (customSpace) { try { URL.revokeObjectURL(customSpace); } catch (_) {} }
+      customSpace = ""; syncSpaceBtn();
+      if (st.s === "custom") st.s = 0;
+      spaceFile.value = ""; render();
+    };
+    const readImage = (file, onOk) => {
+      if (!file || !/^image\//.test(file.type)) return;
+      if (file.size > 8 * 1024 * 1024) { alert("Esa imagen es demasiado pesada (máx. 8 MB)."); return; }
+      onOk(URL.createObjectURL(file));
     };
     const render = () => {
       const c = currentArt();
       if (!c) return;
-      frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}`;
+      frame.className = `fr-frame fr-${st.f} fr-mat-${st.m}` + (isCustom() ? " fr-draggable" : "");
       const src = c.img;
       if (img.getAttribute("src") !== src) {
         img.classList.add("fr-swap");
@@ -349,26 +408,54 @@ window.startApp = function () {
         }, 220);
       }
       img.onload = () => { ratio = img.naturalHeight / img.naturalWidth || 0.8; place(); img.classList.remove("fr-swap"); };
-      if (img.complete && img.naturalWidth) { ratio = img.naturalHeight / img.naturalWidth || 0.8; }
+      if (img.complete && img.naturalWidth) ratio = img.naturalHeight / img.naturalWidth || 0.8;
       setScene(); place();
       box.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", String(String(st[b.dataset.k]) === String(b.dataset.v))));
     };
     if (window.ResizeObserver) new ResizeObserver(placeSoon).observe(scene);
     box.addEventListener("click", e => {
-      if (e.target.closest("[data-clear]")) { e.preventDefault(); e.stopPropagation(); clearCustom(); return; }
-      if (e.target.closest("[data-upload]")) { fileIn.click(); return; }
+      if (e.target.closest("[data-clear-art]")) { e.preventDefault(); e.stopPropagation(); clearArt(); return; }
+      if (e.target.closest("[data-clear-space]")) { e.preventDefault(); e.stopPropagation(); clearSpace(); return; }
+      if (e.target.closest("[data-art-upload]")) { artFile.click(); return; }
+      if (e.target.closest("[data-space-upload]")) { spaceFile.click(); return; }
       const b = e.target.closest("[data-k]"); if (!b) return;
       const k = b.dataset.k, v = b.dataset.v;
-      st[k] = (k === "s" || (k === "a" && v !== "custom")) ? +v : v;
+      if (k === "s") st.s = v === "custom" ? "custom" : +v;
+      else if (k === "a") st.a = v === "custom" ? "custom" : +v;
+      else st[k] = v;
       render();
     });
-    fileIn.addEventListener("change", () => {
-      const f = fileIn.files && fileIn.files[0]; if (!f) return;
-      if (!/^image\//.test(f.type)) return;
-      if (f.size > 8 * 1024 * 1024) { alert("Esa imagen es demasiado pesada (máx. 8 MB)."); fileIn.value = ""; return; }
-      if (customUrl) { try { URL.revokeObjectURL(customUrl); } catch (_) {} }
-      customUrl = URL.createObjectURL(f);
-      st.a = "custom"; syncCustomThumb(); render();
+    artFile.addEventListener("change", () => {
+      const f = artFile.files && artFile.files[0]; if (!f) return;
+      readImage(f, url => { if (customArt) try { URL.revokeObjectURL(customArt); } catch (_) {} customArt = url; st.a = "custom"; syncArtThumb(); render(); });
+    });
+    spaceFile.addEventListener("change", () => {
+      const f = spaceFile.files && spaceFile.files[0]; if (!f) return;
+      readImage(f, url => {
+        if (customSpace) try { URL.revokeObjectURL(customSpace); } catch (_) {}
+        customSpace = url; st.s = "custom"; pos = { x: 0.5, y: 0.42 }; syncSpaceBtn(); render();
+      });
+    });
+    const onMove = e => {
+      if (!drag || !isCustom()) return;
+      const r = scene.getBoundingClientRect();
+      pos.x = (e.clientX - r.left - drag.ox) / r.width;
+      pos.y = (e.clientY - r.top - drag.oy) / r.height;
+      place();
+    };
+    const endDrag = () => {
+      if (!drag) return;
+      drag = null; frame.classList.remove("is-dragging"); frame.setAttribute("aria-grabbed", "false");
+      window.removeEventListener("pointermove", onMove); window.removeEventListener("pointerup", endDrag); window.removeEventListener("pointercancel", endDrag);
+    };
+    frame.addEventListener("pointerdown", e => {
+      if (!isCustom() || e.button) return;
+      e.preventDefault();
+      const r = scene.getBoundingClientRect();
+      drag = { ox: e.clientX - r.left - pos.x * r.width, oy: e.clientY - r.top - pos.y * r.height };
+      frame.classList.add("is-dragging"); frame.setAttribute("aria-grabbed", "true");
+      try { frame.setPointerCapture(e.pointerId); } catch (_) {}
+      window.addEventListener("pointermove", onMove); window.addEventListener("pointerup", endDrag); window.addEventListener("pointercancel", endDrag);
     });
     render();
   });

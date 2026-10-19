@@ -137,6 +137,9 @@ const I18N_EN = {
   "Quitar foto": "Remove photo", "Elegí una imagen (JPG o PNG, hasta 8 MB).": "Choose an image (JPG or PNG, up to 8 MB).",
   "Esa imagen es demasiado pesada (máx. 8 MB).": "That image is too large (max 8 MB).",
   "Vista de muestra. También podés cargar tu propia foto.": "Sample view. You can also upload your own photo.",
+  "Vista de muestra. También podés cargar tu obra o tu espacio.": "Sample view. You can also upload your artwork or your space.",
+  "Arrastrá el cuadro para ubicarlo en tu pared.": "Drag the frame to place it on your wall.",
+  "Tu espacio": "Your space", "Cargar tu espacio": "Upload your space", "Quitar espacio": "Remove space",
   // Contacto
   "Hablemos": "Let's talk", "Respondemos consultas sobre obras, enmarcado, envíos y formas de pago.": "We answer questions about works, framing, shipping and payment.",
   "Escribinos": "Write to us", "Completá el formulario y se abre WhatsApp con tu mensaje listo para enviar.": "Fill in the form and WhatsApp opens with your message ready to send.",
