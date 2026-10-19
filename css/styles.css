@@ -378,10 +378,10 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .fr-controls{display:grid;gap:12px}
 .framer .fr-title{margin:0 0 4px!important}
 .fr-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
-.fr-row:has(.fr-scenes){align-items:flex-start;flex-wrap:nowrap}
-.fr-row:has(.fr-scenes) .fr-lab{padding-top:14px}
-.fr-row:has(.fr-scenes) .fr-scenes{flex:1 1 auto}
-.fr-scn-upload{flex:0 0 auto;margin-left:4px;padding-top:3px}
+.fr-amb{display:flex;align-items:flex-start;gap:12px;width:100%;min-width:0}
+.fr-amb .fr-scenes{flex:1 1 auto;min-width:0;max-width:none}
+.fr-scn-upload{flex:0 0 auto;align-self:flex-start;padding-top:3px}
+.fr-scn-upload .fr-scn-plus{width:64px;height:43px;box-sizing:border-box}
 .fr-lab{width:108px;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .fr-opts{display:flex;gap:8px;flex-wrap:wrap}
 .fr-opt{display:inline-flex;align-items:center;gap:8px}
@@ -397,8 +397,8 @@ header.site{backdrop-filter:none!important;-webkit-backdrop-filter:none!importan
 .framer>*,.fr-controls>*{min-width:0}
 .fr-scenes{gap:8px;flex:1 1 0;min-width:0;max-width:100%;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding:3px 2px 2px}
 .fr-scenes::-webkit-scrollbar{display:none}
-@media (max-width:600px){.fr-scenes{-webkit-mask-image:linear-gradient(90deg,#000 85%,transparent);mask-image:linear-gradient(90deg,#000 85%,transparent);padding-right:28px}}
-.fr-scn{display:grid;gap:5px;justify-items:center;flex:0 0 auto;min-width:76px;scroll-snap-align:start;padding:0;border:0;background:none;color:var(--muted);font:400 .62rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
+@media (max-width:600px){.fr-amb .fr-scenes{-webkit-mask-image:linear-gradient(90deg,#000 78%,transparent);mask-image:linear-gradient(90deg,#000 78%,transparent)}}
+.fr-scn{display:grid;gap:5px;justify-items:center;flex:0 0 76px;width:76px;min-width:76px;scroll-snap-align:start;padding:0;border:0;background:none;color:var(--muted);font:400 .62rem Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;white-space:nowrap}
 .fr-scn img{width:64px!important;height:43px;object-fit:cover;aspect-ratio:auto!important;outline:1px solid var(--line);outline-offset:2px;transition:outline-color .2s;transform:none!important}
 .fr-scn[aria-pressed="true"]{color:var(--fg)}
 .fr-scn[aria-pressed="true"] img{outline-color:var(--fg)}
