@@ -67,14 +67,15 @@ window.initHome = function () {
   const nav = $("#nav");
   const syncHeader = () => {
     if (!header) return;
-    const fade = parseFloat(getComputedStyle(hero).paddingBottom) || 0;
-    const over = hero.getBoundingClientRect().bottom - fade * 0.8 > header.offsetHeight + 1 && !(nav && nav.classList.contains("open"));
+    /* transparente solo mientras el texto de la portada no llega al header;
+       si no, el header pasa a sólido y el texto nunca queda debajo de los botones */
+    const top = hero.querySelector(".pr-kicker").getBoundingClientRect().top;
+    const over = top > header.offsetHeight + 16 && !(nav && nav.classList.contains("open"));
     header.classList.toggle("is-over", over);
   };
   const mb = $("#menuBtn"); if (mb) mb.addEventListener("click", syncHeader);
 
   /* Parallax suave del contenido al hacer scroll */
-  const inner = hero.querySelector(".pr-inner");
   let ticking = false;
   const onScroll = () => {
     if (ticking) return; ticking = true;
@@ -84,8 +85,6 @@ window.initHome = function () {
       const y = Math.max(0, scrollY), h = hero.offsetHeight;
       if (y > h) return;
       media.style.transform = `translate3d(0,${(y * 0.35).toFixed(1)}px,0)`;
-      inner.style.transform = `translate3d(0,${(y * 0.12).toFixed(1)}px,0)`;
-      inner.style.opacity = Math.max(0, 1 - y / (h * 0.75)).toFixed(3);
     });
   };
   addEventListener("scroll", onScroll, { passive: true });
