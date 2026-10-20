@@ -89,11 +89,10 @@ body.pr .classics-sec{border-top:1px solid var(--line)}
 .pr-frame{border-top:1px solid var(--line)}
 .pr-frame-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:72px;align-items:center}
 .pr-frame-vis{position:relative;display:block;aspect-ratio:4/3;overflow:hidden;background:var(--card)}
-.pr-frame-vis>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 40%;transform:scale(1.55);transform-origin:46% 42%;transition:transform 2.4s var(--pr-ease)}
-.pr-mini{position:absolute;left:50%;top:22%;width:21%;aspect-ratio:4/5;transform:translateX(-50%);background:#141414;padding:2.2%;box-shadow:0 14px 26px -10px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.25);transition:transform 2.4s var(--pr-ease)}
+.pr-frame-vis>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:46% 40%;transform:scale(1.55);transform-origin:46% 42%}
+.pr-mini{position:absolute;left:50%;top:22%;width:21%;aspect-ratio:4/5;transform:translateX(-50%);background:#141414;padding:2.2%;box-shadow:0 14px 26px -10px rgba(0,0,0,.45),0 2px 4px rgba(0,0,0,.25)}
 .pr-mini-mat{display:block;width:100%;height:100%;background:#f6f4ee;padding:14%}
 .pr-mini-mat img{width:100%;height:100%;object-fit:cover;box-shadow:inset 0 0 0 1px rgba(0,0,0,.1)}
-.pr-frame-vis:hover>img{transform:scale(1.6)}
 .pr-frame-txt h2{margin:10px 0 18px}
 .pr-frame-txt>p{max-width:46ch}
 .pr-frame-sub{margin-top:14px;font-size:.92rem}
@@ -136,9 +135,71 @@ body.pr .classics-sec{border-top:1px solid var(--line)}
  .pr-in{opacity:1;transform:none} .pr-scroll.pr-in{transform:translateX(-50%)}
  .pr-mark .pr-logo .l{transform:none;opacity:1}
  .pr-media{opacity:1}
- .pr-frame-vis>img,.pr-frame-vis:hover>img{transition:none}
 }
 /* Mientras el header está sobre la portada, el logo chico cede lugar al grande */
 body.pr header.site .logo{transition:opacity .5s ease,visibility .5s}
 body.pr header.site.is-over .logo{opacity:0;visibility:hidden}
 @media (max-width:760px){.pr-cap-n{letter-spacing:.14em}}
+
+/* ---------- Fundido inferior de la portada hacia el fondo de la página ----------
+   La portada se extiende --pr-fade por debajo del primer pantallazo y ahí la imagen
+   se funde con var(--bg) (el mismo color de fondo de la página), sin corte visible.
+   Texto, botones, epígrafe y barras quedan en el primer pantallazo, por encima del fundido. */
+body.pr{--pr-fade:30vh;--pr-fade:30svh}
+.pr-hero{height:auto;min-height:0;padding:0 0 var(--pr-fade);background:var(--bg)}
+.pr-media{background:#0a0a0a}
+.pr-hero::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--pr-fade) + 14vh);height:calc(var(--pr-fade) + 14svh);z-index:1;pointer-events:none;
+  background:linear-gradient(to bottom,
+    color-mix(in srgb,var(--bg) 0%,transparent) 0%,
+    color-mix(in srgb,var(--bg) 3%,transparent) 12%,
+    color-mix(in srgb,var(--bg) 9%,transparent) 24%,
+    color-mix(in srgb,var(--bg) 19%,transparent) 36%,
+    color-mix(in srgb,var(--bg) 33%,transparent) 48%,
+    color-mix(in srgb,var(--bg) 50%,transparent) 60%,
+    color-mix(in srgb,var(--bg) 67%,transparent) 71%,
+    color-mix(in srgb,var(--bg) 81%,transparent) 81%,
+    color-mix(in srgb,var(--bg) 92%,transparent) 90%,
+    color-mix(in srgb,var(--bg) 98%,transparent) 96%,
+    var(--bg) 100%)}
+.pr-scroll{bottom:calc(var(--pr-fade) + 22px)}
+.pr-intro{padding-top:clamp(8px,2.5vw,40px)}
+
+/* ---------- Bloque de texto centrado; epígrafe y barras abajo ---------- */
+.pr-inner{height:100vh;height:100svh;min-height:600px;justify-content:flex-start;padding-top:72px;padding-bottom:clamp(36px,6vh,72px)}
+.pr-block{position:relative;margin:auto 0;padding:clamp(16px,3vh,40px) 0 clamp(40px,8vh,96px)}
+.pr-block .pr-ctas{margin-top:clamp(26px,4.5vh,44px)}
+.pr-side{position:relative;align-self:flex-end;flex:0 0 auto}
+
+/* ---------- Legibilidad en todas las obras ---------- */
+/* velo suave detrás del bloque de texto y del epígrafe (sin bordes, se funde con la imagen) */
+.pr-block::before{content:"";position:absolute;z-index:-1;left:-12%;right:-12%;top:-30%;bottom:-10%;pointer-events:none;
+  background:radial-gradient(60% 55% at 38% 50%,rgba(0,0,0,.42) 0%,rgba(0,0,0,.26) 45%,rgba(0,0,0,0) 100%)}
+.pr-side::before{content:"";position:absolute;z-index:-1;inset:-60% -30% -40% -30%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(0,0,0,.45),rgba(0,0,0,0))}
+.pr-veil{background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.2) 18%,rgba(0,0,0,.24) 50%,rgba(0,0,0,.5) 66%,rgba(0,0,0,.62) 80%,rgba(0,0,0,.62) 100%)}
+.pr-kicker{color:#fff;font-weight:500;font-size:.72rem;text-shadow:0 1px 2px rgba(0,0,0,.65),0 0 14px rgba(0,0,0,.5)}
+.pr-dot{opacity:1;height:1px;box-shadow:0 1px 2px rgba(0,0,0,.5)}
+.pr-line{text-shadow:0 1px 2px rgba(0,0,0,.45),0 2px 24px rgba(0,0,0,.4)}
+.pr-mark .pr-logo{filter:drop-shadow(0 2px 3px rgba(0,0,0,.25)) drop-shadow(0 10px 40px rgba(0,0,0,.3))}
+.pr-cap{text-shadow:0 1px 2px rgba(0,0,0,.7),0 0 12px rgba(0,0,0,.45)}
+.pr-count{color:rgba(255,255,255,.85)} .pr-cap-t{font-weight:500}
+.pr-cap-m{color:rgba(255,255,255,.92)}
+.pr-cap-n{color:rgba(255,255,255,.85);font-weight:500}
+.pr-seg::before{background:rgba(255,255,255,.4);box-shadow:0 1px 3px rgba(0,0,0,.45)}
+.pr-scroll{color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.pr-btn.ghost{border-color:rgba(255,255,255,.75);background:rgba(0,0,0,.18)}
+.pr-btn.ghost:hover{background:#fff}
+
+@media (max-width:760px){
+ body.pr{--pr-fade:24vh;--pr-fade:24svh}
+ .pr-inner{min-height:560px;padding-top:72px;padding-bottom:24px}
+ .pr-block{padding:8px 0 36px}
+ .pr-block .pr-ctas{margin-top:26px}
+ .pr-side{align-self:stretch}
+ .pr-block::before{left:-24px;right:-24px;top:-20%;bottom:-6%;background:radial-gradient(90% 60% at 40% 50%,rgba(0,0,0,.42),rgba(0,0,0,.22) 55%,rgba(0,0,0,0))}
+ .pr-side::before{inset:-40% -24px -30% -24px}
+ .pr-veil{background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,rgba(0,0,0,.18) 16%,rgba(0,0,0,.28) 40%,rgba(0,0,0,.55) 62%,rgba(0,0,0,.66) 78%,rgba(0,0,0,.66) 100%)}
+ .pr-kicker{font-size:.6rem;letter-spacing:.2em;gap:10px;white-space:nowrap}
+ .pr-dot{width:16px}
+ .pr-cap-n{letter-spacing:.1em;font-size:.56rem}
+}
