@@ -200,3 +200,13 @@ body.pr{--pr-fade:30vh;--pr-fade:30svh}
 /* Alto fijo para el epígrafe: así el bloque de texto no salta cuando el título de la obra ocupa dos líneas */
 .pr-side{min-height:164px;display:flex;flex-direction:column;justify-content:flex-end}
 @media (max-width:760px){.pr-side{min-height:146px}}
+
+/* ---------- Ajuste 3: modo claro sin fundido ----------
+   En claro la foto termina con un borde recto y limpio al final del primer pantallazo
+   (sin extensión ni degradé), seguida del espaciado normal de la página.
+   En oscuro se mantiene el fundido a negro. */
+:root:not([data-theme="dark"]) body.pr{--pr-fade:0px}
+:root:not([data-theme="dark"]) .pr-hero{padding-bottom:0;background:#0a0a0a}
+:root:not([data-theme="dark"]) .pr-hero::after{content:none;display:none}
+:root:not([data-theme="dark"]) .pr-scroll{bottom:22px}
+:root:not([data-theme="dark"]) .pr-intro{padding-top:clamp(72px,10vw,136px)}
