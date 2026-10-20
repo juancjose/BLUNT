@@ -219,3 +219,5 @@ body.pr{--pr-fade:30vh;--pr-fade:30svh}
 .pr-mark .pr-logo{filter:none;transition:filter .9s ease}
 .pr-hero.is-settled .pr-mark .pr-logo{filter:drop-shadow(0 2px 3px rgba(0,0,0,.25)) drop-shadow(0 10px 40px rgba(0,0,0,.3))}
 @media (prefers-reduced-motion:reduce){.pr-slide.on img,.pr-slide.off img{animation:none!important}}
+/* reserva el alto del logotipo grande antes de que se inserte (evita salto de diseño al cargar) */
+.pr-mark{width:100%;aspect-ratio:1776/228}
