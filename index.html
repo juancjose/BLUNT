@@ -6,6 +6,9 @@
 <script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="img/clasicos/vermeer-joven-de-la-perla.svg" media="(orientation: portrait)" fetchpriority="high">
+<link rel="preload" as="image" href="img/clasicos/van-gogh-noche-estrellada.svg" media="(orientation: landscape)" fetchpriority="high">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/home.css">
 </head>
@@ -27,7 +30,6 @@
 </section>
 
 <section class="pr-intro" id="prIntro"><div class="wrap">
-<div class="pr-intro-grid"><p class="eyebrow">Galería</p><p class="pr-statement">Una selección curada de obras de artistas argentinos, con enmarcado a medida y envío cuidado hasta tu casa.</p></div>
 <ol class="pr-points">
 <li><span class="pr-n">01</span><h3>Enmarcado a medida</h3><p>Passepartout y marcos pensados para cada obra.</p></li>
 <li><span class="pr-n">02</span><h3>Envíos seguros</h3><p>Embalaje profesional y seguro a todo el país.</p></li>
@@ -58,7 +60,6 @@
 <script src="js/app.js"></script>
 <script src="js/home.js"></script>
 <script src="js/supabase-config.js"></script>
-<script src="js/vendor/supabase.min.js"></script>
 <script type="module" src="js/home-boot.js"></script>
 </body>
 </html>
