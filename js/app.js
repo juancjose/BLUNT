@@ -482,4 +482,14 @@ window.startApp = function () {
     items.forEach(el => io.observe(el));
   })();
   if (typeof initI18n === "function") initI18n();
+
+  /* Re-render de lo que depende de los datos de Supabase. Lo usa el inicio, que arranca
+     sin esperar la carga (así la portada aparece enseguida) y completa cuando llegan los datos. */
+  window.refreshPublic = () => {
+    if (el("featured")) { el("featured").innerHTML = OBRAS.slice(0, 4).map(card).join("") || soon("Próximamente nuevas obras"); if (el("classicsHome")) el("featured").closest("section").hidden = !OBRAS.length; }
+    if (el("artistsStrip")) { el("artistsStrip").innerHTML = (ARTISTAS.map(a => `<a class="artist" href="obras.html?artista=${a.id}"><img src="${a.img}" alt="" loading="lazy"><h3>${esc(a.nombre)}</h3><p>${esc(a.disciplina)}</p></a>`).join("") || soon("Próximamente nuevos artistas")); if (el("classicsHome")) el("artistsStrip").closest("section").hidden = !ARTISTAS.length; }
+    renderCart();
+    if (typeof buildDataDict === "function") buildDataDict();
+    if (typeof applyLang === "function") applyLang();
+  };
 };

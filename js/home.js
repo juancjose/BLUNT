@@ -15,32 +15,38 @@ window.initHome = function () {
      que a este tamaño se veían como palitos/muescas en los bordes de las letras) */
   $("#prMark").innerHTML = PR_LOGO.replace('aria-label="BLUNT"', `aria-label="${esc(CONFIG.nombre)}"`);
 
-  /* Diapositivas: obras reales si hay; si no, clásicos de dominio público (muestra) */
-  const ART = typeof ARTISTAS !== "undefined" ? ARTISTAS : [], OB = typeof OBRAS !== "undefined" ? OBRAS : [];
-  const artName = id => (ART.find(a => a.id === id) || {}).nombre || "";
+  /* Diapositivas: obras reales si hay; si no, clásicos de dominio público (muestra).
+     El inicio arranca sin esperar a Supabase: se arma con clásicos y, si después llegan
+     obras reales, se vuelve a armar con ellas (homeRefresh). */
   const FOCO = { "van-gogh": "55% 45%", hokusai: "35% 50%", klimt: "50% 28%", vermeer: "50% 28%", monet: "50% 55%", turner: "38% 55%", seurat: "50% 55%", botticelli: "50% 35%" };
   const portrait = innerHeight > innerWidth;
   const ORDEN = portrait ? ["vermeer", "klimt", "van-gogh", "botticelli", "hokusai", "monet", "turner", "seurat"]
                          : ["van-gogh", "hokusai", "monet", "klimt", "turner", "seurat", "botticelli", "vermeer"];
-  const real = OB.filter(o => o.img).slice(0, 8).map(o => ({ img: o.img, alt: `${o.titulo}, de ${artName(o.artista)}`, t: o.titulo, a: artName(o.artista), y: o.anio, href: `obra.html?id=${o.id}`, real: true }));
-  const CL = (typeof CLASICOS !== "undefined" ? CLASICOS.slice() : []).sort((a, b) => ORDEN.indexOf(a.id) - ORDEN.indexOf(b.id));
-  const slides = real.length ? real : CL.map(c => ({ img: c.img, alt: `${c.titulo}, de ${c.artista}`, t: c.titulo, a: c.artista, y: c.anio, pos: FOCO[c.id], href: "clasicos.html" }));
-  if (!slides.length) slides.push({ img: "img/escenas/galeria.svg", alt: "", t: "", a: "" });
-
-  media.innerHTML = slides.map((s, k) => `<div class="pr-slide${k ? "" : " on"}" style="--kb:${k % 3}"><img ${k ? `data-src="${s.img}"` : `src="${s.img}" fetchpriority="high"`} alt="" style="object-position:${s.pos || "50% 50%"}"></div>`).join("");
-  const els = [...media.children], imgs = els.map(e => e.querySelector("img"));
+  const DUR = 7000, pad = x => String(x).padStart(2, "0");
+  prog.style.setProperty("--dur", DUR + "ms");
+  let slides = [], els = [], imgs = [], segs = [], n = 0, cur = 0, timer = null;
   const load = k => { const im = imgs[k]; if (im && im.dataset.src) { im.src = im.dataset.src; delete im.dataset.src; } };
-  const n = slides.length, pad = x => String(x).padStart(2, "0");
-  const capHTML = k => { const s = slides[k]; if (!s.t) return "";
+  const capHTML = k => { const s = slides[k]; if (!s || !s.t) return "";
     return `<p class="pr-count"><span>${pad(k + 1)}</span> / ${pad(n)}</p><p class="pr-cap-t"><a href="${s.href}">${esc(s.t)}</a></p><p class="pr-cap-m">${esc(s.a)}${s.y ? `, ${esc(s.y)}` : ""}</p>` +
       `<p class="pr-cap-n">${s.real ? "Obra original" : "Muestra · Dominio público · No a la venta"}</p>`; };
-  cap.innerHTML = capHTML(0);
-  const DUR = 7000;
-  prog.style.setProperty("--dur", DUR + "ms");
-  prog.innerHTML = n > 1 ? slides.map((s, k) => `<button type="button" class="pr-seg${k ? "" : " on"}" data-k="${k}" aria-label="${k + 1} / ${n}"><i></i></button>`).join("") : "";
-  const segs = [...prog.children];
+  const build = () => {
+    const ART = typeof ARTISTAS !== "undefined" ? ARTISTAS : [], OB = typeof OBRAS !== "undefined" ? OBRAS : [];
+    const artName = id => (ART.find(a => a.id === id) || {}).nombre || "";
+    const real = OB.filter(o => o.img).slice(0, 8).map(o => ({ img: o.img, alt: `${o.titulo}, de ${artName(o.artista)}`, t: o.titulo, a: artName(o.artista), y: o.anio, href: `obra.html?id=${o.id}`, real: true }));
+    const CL = (typeof CLASICOS !== "undefined" ? CLASICOS.slice() : []).sort((a, b) => ORDEN.indexOf(a.id) - ORDEN.indexOf(b.id));
+    slides = real.length ? real : CL.map(c => ({ img: c.img, alt: `${c.titulo}, de ${c.artista}`, t: c.titulo, a: c.artista, y: c.anio, pos: FOCO[c.id], href: "clasicos.html" }));
+    if (!slides.length) slides.push({ img: "img/escenas/galeria.svg", alt: "", t: "", a: "" });
+    media.innerHTML = slides.map((s, k) => `<div class="pr-slide${k ? "" : " on"}"><img ${k ? `data-src="${s.img}"` : `src="${s.img}" fetchpriority="high"`} alt="" decoding="async" style="object-position:${s.pos || "50% 50%"}"></div>`).join("");
+    els = [...media.children]; imgs = els.map(e => e.querySelector("img")); n = slides.length; cur = 0;
+    cap.innerHTML = capHTML(0);
+    prog.innerHTML = n > 1 ? slides.map((s, k) => `<button type="button" class="pr-seg${k ? "" : " on"}" data-k="${k}" aria-label="${k + 1} / ${n}"><i></i></button>`).join("") : "";
+    segs = [...prog.children];
+    /* el resto de las imágenes se carga de a una, recién cuando la primera ya se mostró */
+    if (n > 1) { if (imgs[0].complete) load(1); else imgs[0].addEventListener("load", () => load(1), { once: true }); }
+    return real.length > 0;
+  };
+  let hasReal = build();
 
-  let cur = 0, timer = null;
   const go = k => {
     k = (k + n) % n; if (k === cur) return; load(k);
     els[cur].classList.remove("on"); els[cur].classList.add("off");
@@ -56,11 +62,15 @@ window.initHome = function () {
   const restartBar = () => { const s = segs[cur]; if (s) { s.classList.remove("on"); void s.offsetWidth; s.classList.add("on"); } };
   prog.addEventListener("click", e => { const b = e.target.closest(".pr-seg"); if (!b) return; go(+b.dataset.k); restartBar(); start(); });
   document.addEventListener("visibilitychange", () => { start(); restartBar(); });
-  if (n > 1) { if (imgs[0].complete) load(1); else imgs[0].addEventListener("load", () => load(1), { once: true }); }
+  window.homeRefresh = () => {
+    const OB = typeof OBRAS !== "undefined" ? OBRAS : [];
+    if (hasReal || !OB.some(o => o.img)) return;
+    stop(); hasReal = build(); restartBar(); start();
+  };
 
   /* Entrada: espera la primera imagen (máx. 1.2 s) para que el fundido sea limpio */
   let started = false;
-  const begin = () => { if (started) return; started = true; requestAnimationFrame(() => { hero.classList.add("is-ready"); restartBar(); start(); }); };
+  const begin = () => { if (started) return; started = true; requestAnimationFrame(() => { hero.classList.add("is-ready"); restartBar(); start(); setTimeout(() => hero.classList.add("is-settled"), reduce ? 0 : 2300); }); };
   if (imgs[0].complete) begin(); else { imgs[0].addEventListener("load", begin, { once: true }); imgs[0].addEventListener("error", begin, { once: true }); setTimeout(begin, 1200); }
 
   /* Header transparente sobre la portada */
@@ -93,7 +103,7 @@ window.initHome = function () {
 
   /* Revelado al scroll para los bloques nuevos (mismo efecto que el resto del sitio) */
   if ("IntersectionObserver" in window && !reduce) {
-    const items = [...document.querySelectorAll(".pr-intro-grid > *, .pr-points li, .pr-frame-grid > *")];
+    const items = [...document.querySelectorAll(".pr-points li, .pr-frame-grid > *")];
     items.forEach(el => { const sib = [...el.parentElement.children]; el.style.setProperty("--d", `${Math.min(sib.indexOf(el), 5) * 90}ms`); el.classList.add("reveal"); });
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     items.forEach(el => io.observe(el));

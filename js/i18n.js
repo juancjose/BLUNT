@@ -87,7 +87,6 @@ const I18N_EN = {
   // Home
   "Galería de arte online": "Online art gallery",
   "Arte original para habitar tus espacios": "Original art to live with",
-  "Una selección curada de obras de artistas argentinos, con enmarcado a medida y envío cuidado hasta tu casa.": "A curated selection of works by Argentine artists, with custom framing and careful delivery to your door.",
   "Ver obras": "View works", "Enmarcado a medida": "Custom framing",
   "Passepartout y marcos pensados para cada obra.": "Mats and frames designed for each piece.",
   "Envíos seguros": "Secure shipping", "Embalaje profesional y seguro a todo el país.": "Professional, insured packaging nationwide.",
