@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{nombre} — Arte original y enmarcado a medida</title><meta name="description" content="Galería online de arte original argentino con enmarcado a medida.">
+<script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/prueba.css">
+</head>
+<body data-page="inicio" class="pr">
+<main id="main">
+
+<section class="pr-hero" id="prHero" aria-label="Portada">
+<div class="pr-media" id="prMedia" aria-hidden="true"></div>
+<div class="pr-veil" aria-hidden="true"></div>
+<div class="wrap pr-inner">
+<p class="pr-kicker pr-in" style="--k:0"><span>Galería de arte online</span><span class="pr-dot" aria-hidden="true"></span><span>Buenos Aires</span></p>
+<h1 class="pr-title"><span class="pr-mark" id="prMark"></span><span class="pr-line pr-in" style="--k:2">Arte original para habitar tus espacios</span></h1>
+<div class="pr-foot">
+<div class="pr-ctas pr-in" style="--k:3"><a class="pr-btn" href="obras.html">Ver obras</a><a class="pr-btn ghost" href="clasicos.html">Clásicos</a></div>
+<div class="pr-side pr-in" style="--k:4"><div class="pr-cap" id="prCap" aria-live="polite"></div><div class="pr-prog" id="prProg" role="group" aria-label="Diapositivas"></div></div>
+</div>
+</div>
+<a class="pr-scroll pr-in" style="--k:5" href="#prIntro"><span>Descubrí</span><i aria-hidden="true"></i></a>
+</section>
+
+<section class="pr-intro" id="prIntro"><div class="wrap">
+<div class="pr-intro-grid"><p class="eyebrow">Galería</p><p class="pr-statement">Una selección curada de obras de artistas argentinos, con enmarcado a medida y envío cuidado hasta tu casa.</p></div>
+<ol class="pr-points">
+<li><span class="pr-n">01</span><h3>Enmarcado a medida</h3><p>Passepartout y marcos pensados para cada obra.</p></li>
+<li><span class="pr-n">02</span><h3>Envíos seguros</h3><p>Embalaje profesional y seguro a todo el país.</p></li>
+<li><span class="pr-n">03</span><h3>Pago seguro</h3><p>Transferencia, tarjeta o Mercado Pago.</p></li>
+<li><span class="pr-n">04</span><h3>Asistencia</h3><p>Te ayudamos a elegir la obra ideal para tu espacio.</p></li>
+</ol></div></section>
+
+<section><div class="wrap"><div class="sec-head"><div><p class="eyebrow">Selección</p><h2>Obras destacadas</h2></div><a class="link" href="obras.html">Ver todas</a></div><div class="grid" id="featured"></div></div></section>
+<section class="classics-sec"><div class="wrap"><div class="sec-head"><div><p class="eyebrow">Artistas clásicos</p><h2>Clásicos del arte</h2><p class="muted sec-sub">Grandes obras de la historia del arte, para inspirarte mientras sumamos artistas a la galería.</p></div><a class="link" href="clasicos.html">Ver todos</a></div><div class="grid" id="classicsHome"></div>
+<p class="classic-note">Muestra de obras clásicas de dominio público. No están a la venta.</p></div></section>
+<section class="pr-sep"><div class="wrap"><div class="sec-head"><div><h2>Artistas</h2></div><a class="link" href="artistas.html">Conocelos</a></div><div class="artists" id="artistsStrip"></div></div></section>
+
+<section class="pr-frame"><div class="wrap pr-frame-grid">
+<a class="pr-frame-vis" href="enmarcado.html" tabindex="-1" aria-hidden="true"><img src="img/escenas/living.svg" alt="" loading="lazy"><span class="pr-mini"><span class="pr-mini-mat"><img src="img/clasicos/vermeer-joven-de-la-perla.svg" alt="" loading="lazy"></span></span></a>
+<div class="pr-frame-txt"><p class="eyebrow">Taller</p><h2>Enmarcado y passepartout a medida</h2><p>Elegimos con vos el marco, el color del passepartout y el vidrio adecuado para que cada obra se luzca y se conserve por años. También enmarcamos piezas que ya tenés.</p>
+<p class="muted pr-frame-sub">Probá marcos y passepartout en distintos ambientes, o con una foto de tu propia pared.</p>
+<div class="pr-frame-ctas"><a class="btn" href="enmarcado.html">Probar el enmarcador</a></div></div>
+</div></section>
+
+<section class="pr-sep"><div class="wrap split" style="align-items:start"><div><p class="eyebrow">Contacto</p><h2>¿Buscás algo en particular?</h2><p>Contanos el espacio, las medidas o el estilo que te gusta y te armamos una propuesta.</p></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;align-self:center"><a class="btn" data-wa="Hola! Quiero hacer una consulta." target="_blank" rel="noopener" href="#">Escribinos por WhatsApp</a><a class="btn ghost" href="contacto.html">Otros medios</a></div></div></section>
+</main>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/prueba-i18n.js"></script>
+<script src="js/clasicos.js"></script>
+<script src="js/escenas.js"></script>
+<script src="js/app.js"></script>
+<script src="js/prueba.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/vendor/supabase.min.js"></script>
+<script type="module" src="js/prueba-boot.js"></script>
+</body>
+</html>
