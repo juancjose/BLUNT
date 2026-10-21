@@ -1,4 +1,4 @@
-/* Páginas de prueba: el encabezado ya está armado (pages-prueba.js).
+/* Páginas con encabezado editorial: el encabezado ya está armado (pages.js).
    data-boot="now": la app arranca enseguida y los datos completan después.
    data-boot="data": la app espera los datos (catálogo / artistas), como en las páginas en vivo. */
 const now = document.body.dataset.boot === "now";

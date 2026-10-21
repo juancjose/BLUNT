@@ -1,6 +1,6 @@
 /* =========================================================
    PRUEBA — encabezados editoriales para las páginas internas
-   (solo *-prueba.html; las páginas en vivo no cargan este archivo)
+   Lo usan obras.html y las páginas de prueba (*-prueba.html, con data-test en el body).
    ========================================================= */
 (function () {
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -10,6 +10,7 @@
   const en = () => lang() === "en";
   const pad = n => String(n).padStart(2, "0");
   const page = document.body.dataset.page;
+  const TEST = document.body.hasAttribute("data-test");
   const head = $(".pg-head");
   const thumb = p => "img/prueba/" + p.split("/").pop().replace(/\.svg$/, ".jpg");
   const feat = p => "img/prueba/feat-" + p.split("/").pop().replace(/\.svg$/, ".jpg");
@@ -114,7 +115,7 @@
     if (real) items = OB.map(o => ({ img: o.img, href: `obra.html?id=${o.id}`, t: o.titulo, a: (ART.find(a => a.id === o.artista) || {}).nombre || "" }));
     else {
       /* muestra: los 8 clásicos y las obras de los maestros argentinos, intercaladas */
-      const cl = CL.map(c => ({ img: thumb(c.img), href: "clasicos-prueba.html", t: T(c, "titulo"), a: c.artista }));
+      const cl = CL.map(c => ({ img: thumb(c.img), href: TEST ? "clasicos-prueba.html" : "clasicos.html", t: T(c, "titulo"), a: c.artista }));
       const ma = []; const maxO = Math.max(0, ...MA.map(m => m.obras.length));
       for (let j = 0; j < maxO; j++) MA.forEach(m => { const o = m.obras[j]; if (o) ma.push({ img: thumb(o.img), href: `artista.html?id=${m.id}`, t: T(o, "titulo"), a: m.nombre }); });
       items = []; let i = 0, k = 0;
@@ -203,7 +204,7 @@
   /* Lo que depende de la app común (header, i18n) y de los datos */
   window.pgAfterApp = () => {
     /* en la prueba, la navegación lleva a las otras páginas de prueba */
-    const map = { "obras.html": "obras-prueba.html", "clasicos.html": "clasicos-prueba.html", "artistas.html": "artistas-prueba.html", "enmarcado.html": "enmarcado-prueba.html", "contacto.html": "contacto-prueba.html" };
+    const map = TEST ? { "clasicos.html": "clasicos-prueba.html", "artistas.html": "artistas-prueba.html", "enmarcado.html": "enmarcado-prueba.html", "contacto.html": "contacto-prueba.html" } : {};
     $$("header.site nav a, footer.site a").forEach(a => { const h = a.getAttribute("href"); if (map[h]) a.setAttribute("href", map[h]); });
     if (typeof setLang === "function" && !window.setLang._pg) { const orig = window.setLang; window.setLang = l => { orig(l); relang(); }; window.setLang._pg = true; }
     syncHeader(); relang(); reveal();
