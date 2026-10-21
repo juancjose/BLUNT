@@ -148,6 +148,7 @@ a.pg-block-v:hover i{transform:translateX(4px)}
  .pg-kicker{font-size:.6rem;letter-spacing:.22em;gap:10px;white-space:nowrap}
  .pg-dot{width:18px}
  .pg-row{flex-direction:column;align-items:flex-start;gap:18px}
+ .pg-row>.pg-title{align-self:stretch;width:100%}
  .pg-count{text-align:left;padding:0}
  .pg-row-sub{gap:22px}
  .pg-strip{--h:132px;margin-top:32px}

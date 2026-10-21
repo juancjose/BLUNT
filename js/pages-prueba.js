@@ -55,7 +55,9 @@
   const TW = {"Obras":4.425,"Works":4.715,"Clásicos":6.32,"Classics":6.15,"Artistas":6.13,"Artists":5.255,"Enmarcado":6.285,"Framing":4.405,"Hablemos|de arte.":5.52,"Let’s talk|art.":2.555};
   const fit = () => titles.forEach(h => {
     h.style.fontSize = "";
-    const base = parseFloat(getComputedStyle(h).fontSize), box = h.clientWidth, r = TW[h.dataset.cur];
+    const par = h.parentElement, ps = getComputedStyle(par);
+    const base = parseFloat(getComputedStyle(h).fontSize), r = TW[h.dataset.cur];
+    const box = Math.min(h.clientWidth || 1e9, par.clientWidth - parseFloat(ps.paddingLeft) - parseFloat(ps.paddingRight));
     if (r) { const fs = Math.min(base, box / r * 0.985); if (fs < base) h.style.fontSize = fs.toFixed(2) + "px"; return; }
     const w = Math.max(0, ...$$(".pg-w", h).map(x => x.getBoundingClientRect().width));
     if (w > box + 1) h.style.fontSize = (base * box / w * 0.985).toFixed(2) + "px";
