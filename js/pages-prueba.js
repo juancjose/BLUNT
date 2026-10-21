@@ -75,22 +75,29 @@
      Velocidad constante en px/s, sin pausa ni zoom al pasar el mouse; bordes con fundido suave. */
   let stripItems = [], stripKey = "";
   const STRIP_SPEED = 32; /* px por segundo */
-  const cardHTML = s => `<a class="pg-strip-it" href="${s.href}" tabindex="-1"><span class="pg-strip-ph"><img src="${s.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="pg-strip-t">${esc(s.t)}</span><span class="pg-strip-a">${esc(s.a)}</span></a>`;
+  const cardHTML = (s, plus) => `<a class="pg-strip-it${plus ? " pg-plus" : ""}" href="${s.href}" tabindex="-1"><span class="pg-strip-ph"><img src="${s.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="pg-strip-t">${esc(s.t)}</span><span class="pg-strip-a">${esc(s.a)}</span></a>`;
   const layoutStrip = () => {
     if (!strip || !stripItems.length) return;
     const vw = strip.clientWidth || innerWidth, small = vw < 761;
     const gap = small ? 12 : 18, target = small ? 104 : 148;   /* tarjetas chicas: ~90–110 px en celular, ~130 px en escritorio */
     const n = Math.max(2, Math.round(vw / target));
+    /* Todo en píxeles físicos enteros: tarjetas idénticas y, para que n tarjetas ocupen exactamente
+       el ancho, el resto (menos de n px) se reparte agregando 1 px físico a algunos espacios.
+       Así cada posición es entera y el cuadro del final de la vuelta es idéntico al del comienzo. */
     const dpr = Math.max(1, Math.round(devicePixelRatio || 1));
-    const pitch = Math.floor(vw / n * dpr) / dpr;                /* múltiplo de un píxel físico: la vuelta cae exacta */
-    const cw = pitch - gap;
-    strip.style.setProperty("--cw", cw + "px"); strip.style.setProperty("--gap", gap + "px"); strip.style.setProperty("--h", (cw * 1.25).toFixed(3) + "px");
+    const unit = 1 / dpr, W = Math.round(vw * dpr);
+    const base = Math.floor(W / n), extra = W - base * n;      /* en píxeles físicos */
+    const cw = base * unit - gap;
+    const pitch = vw / n;
+    strip.style.setProperty("--cw", cw + "px"); strip.style.setProperty("--gap", gap + "px"); strip.style.setProperty("--plus", unit + "px");
+    strip.style.setProperty("--h", (cw * 1.25).toFixed(3) + "px");
     const L = stripItems.length;
     const m = reduce ? L : Math.ceil(Math.max(L, n + 1) / n) * n;
-    const key = n + "|" + m + "|" + L + "|" + strip.dataset.sig;
+    const key = vw + "|" + n + "|" + m + "|" + L + "|" + dpr + "|" + strip.dataset.sig;
     if (key !== stripKey || !strip.firstChild) {
       stripKey = key;
-      const tramo = Array.from({ length: m }, (_, i) => cardHTML(stripItems[i % L])).join("");
+      const plus = j => Math.floor((j + 1) * extra / n) > Math.floor(j * extra / n);
+      const tramo = Array.from({ length: m }, (_, i) => cardHTML(stripItems[i % L], !reduce && plus(i % n))).join("");
       strip.innerHTML = `<div class="pg-strip-track">${tramo}${reduce ? "" : tramo}</div>`;
     }
     strip.firstChild.style.setProperty("--dur", (m * pitch / STRIP_SPEED).toFixed(2) + "s");

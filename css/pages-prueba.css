@@ -49,6 +49,7 @@ body.pg .work:hover img,body.pg .work a:focus-visible img,body.pg .work.classic:
 .pg-strip-track{display:flex;width:max-content;animation:pgMarquee var(--dur,90s) linear infinite;will-change:transform;backface-visibility:hidden}
 /* Todas las tarjetas iguales: marco 4:5 con la misma altura que antes (chicas), mismo espacio, epígrafe en dos líneas fijas */
 .pg-strip-it{flex:0 0 auto;display:block;width:var(--cw,calc(var(--h) * .8));margin-right:var(--gap,18px);color:inherit}
+.pg-strip-it.pg-plus{margin-right:calc(var(--gap,18px) + var(--plus,1px))}
 .pg-strip-ph{display:block;width:100%;height:var(--h);overflow:hidden;background:color-mix(in srgb,var(--fg) 6%,transparent)}
 .pg-strip-it img{display:block;width:100%;height:100%;object-fit:cover;max-width:none;opacity:0;transition:opacity .8s ease}
 .pg-strip-it img.ok{opacity:1}
