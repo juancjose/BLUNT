@@ -46,12 +46,16 @@ body.pg .work:hover img,body.pg .work a:focus-visible img,body.pg .work.classic:
 .pg-row-sub{margin-top:clamp(24px,4vh,40px)}
 .pg-strip{--h:clamp(128px,18vh,186px);margin-top:clamp(36px,6vh,60px);overflow:hidden;
   -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 5%,#000 95%,transparent 100%)}
-.pg-strip-track{display:flex;width:max-content;animation:pgMarquee 90s linear infinite;will-change:transform}
-.pg-strip-it{flex:0 0 auto;display:block;width:calc(var(--h) * var(--r,.8));margin-right:18px;color:inherit}
-.pg-strip-it img{display:block;width:100%;height:var(--h);object-fit:cover;background:color-mix(in srgb,var(--fg) 6%,transparent);opacity:0;transition:opacity .8s ease}
+.pg-strip-track{display:flex;width:max-content;animation:pgMarquee var(--dur,90s) linear infinite;will-change:transform;backface-visibility:hidden}
+/* Todas las tarjetas iguales: marco 4:5 con la misma altura que antes (chicas), mismo espacio, epígrafe en dos líneas fijas */
+.pg-strip-it{flex:0 0 auto;display:block;width:var(--cw,calc(var(--h) * .8));margin-right:18px;color:inherit}
+.pg-strip-ph{display:block;width:100%;height:var(--h);overflow:hidden;background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.pg-strip-it img{display:block;width:100%;height:100%;object-fit:cover;max-width:none;opacity:0;transition:opacity .8s ease}
 .pg-strip-it img.ok{opacity:1}
-.pg-strip-it span{display:block;margin-top:10px;font-size:.74rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pg-strip-it em{display:block;font-style:normal;color:var(--muted);font-size:.7rem}
+.pg-strip-t,.pg-strip-a{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.pg-strip-t{margin-top:10px;font-size:.74rem}
+.pg-strip-a{font-size:.7rem;color:var(--muted)}
+.pg-strip-it:hover img{transform:none}
 @keyframes pgMarquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 .pg-strip-note{margin-top:18px;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .pg-obras{padding-bottom:clamp(36px,5vh,56px)}

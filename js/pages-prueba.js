@@ -66,6 +66,32 @@
 
   /* ---------- Obras: franja de obras en movimiento ---------- */
   const strip = $("#pgStrip");
+  /* Carrusel infinito: el track = un "tramo" (lo bastante largo para cubrir la pantalla) repetido 2 veces.
+     Se anima de 0 a -50% (exactamente un tramo), así el final coincide píxel a píxel con el inicio: sin salto.
+     Velocidad constante en px/s, sin pausa al pasar el mouse. */
+  let stripSet = "", stripN = 0, stripCopies = 0;
+  const STRIP_SPEED = 32; /* px por segundo */
+  const layoutStrip = () => {
+    if (!strip || !stripN) return;
+    if (!strip.firstChild) { strip.innerHTML = `<div class="pg-strip-track">${stripSet}</div>`; stripCopies = -1; }
+    /* ancho entero en px (4:5 de la altura): cada vuelta se desplaza un número exacto de píxeles,
+       así el cuadro del final es idéntico al del comienzo (sin saltos de medio píxel) */
+    const ph = strip.querySelector(".pg-strip-ph");
+    const cw = Math.round(ph.getBoundingClientRect().height * .8);
+    if (strip.style.getPropertyValue("--cw") !== cw + "px") { strip.style.setProperty("--cw", cw + "px"); stripCopies = -1; }
+    const probe = strip.querySelector(".pg-strip-it");
+    const itemW = probe.getBoundingClientRect().width + parseFloat(getComputedStyle(probe).marginRight);
+    const setW = itemW * stripN;
+    const copies = reduce ? 1 : Math.max(1, Math.ceil((strip.clientWidth || innerWidth) / setW));
+    if (copies !== stripCopies) {
+      stripCopies = copies;
+      const tramo = stripSet.repeat(copies);
+      strip.innerHTML = `<div class="pg-strip-track">${tramo}${reduce ? "" : tramo}</div>`;
+    }
+    const track = strip.firstChild;
+    const dist = track.scrollWidth / (reduce ? 1 : 2);
+    track.style.setProperty("--dur", (dist / STRIP_SPEED).toFixed(2) + "s");
+  };
   const buildStrip = () => {
     if (!strip) return;
     const OB = (typeof OBRAS !== "undefined" ? OBRAS : []).filter(o => o.img);
@@ -78,8 +104,8 @@
       ? OB.slice(0, 12).map(o => ({ img: o.img, href: `obra.html?id=${o.id}`, t: o.titulo, a: (ART.find(a => a.id === o.artista) || {}).nombre || "" }))
       : CL.filter(c => !["klimt", "botticelli"].includes(c.id)).map(c => ({ img: thumb(c.img), href: "clasicos-prueba.html", t: T(c, "titulo"), a: c.artista }))
         .flatMap((c, k) => { const m = MA[k]; return m ? [c, { img: thumb(m.obras[0].img), href: `artista.html?id=${m.id}`, t: T(m.obras[0], "titulo"), a: m.nombre }] : [c]; });
-    const one = items.map(s => `<a class="pg-strip-it" href="${s.href}" tabindex="-1" style="--r:${RATIO[s.img.split("/").pop()] || .8}"><img src="${s.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"><span>${esc(s.t)}<em>${esc(s.a)}</em></span></a>`).join("");
-    strip.innerHTML = `<div class="pg-strip-track">${one}${reduce ? "" : one}</div>`;
+    const one = items.map(s => `<a class="pg-strip-it" href="${s.href}" tabindex="-1"><span class="pg-strip-ph"><img src="${s.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="pg-strip-t">${esc(s.t)}</span><span class="pg-strip-a">${esc(s.a)}</span></a>`).join("");
+    stripSet = one; stripN = items.length; stripCopies = 0; strip.innerHTML = ""; layoutStrip();
     const note = $("#pgStripNote"); if (note) note.hidden = real;
   };
   const setCount = () => {
@@ -150,7 +176,7 @@
   applyText(); buildStrip(); setCount(); buildFeature(); buildIndex(); fit();
   const ready = () => requestAnimationFrame(() => { fit(); head && head.classList.add("is-ready"); });
   if (document.fonts && document.fonts.ready) { Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))]).then(ready); } else ready();
-  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(fit); });
+  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { fit(); layoutStrip(); }); });
   reveal();
 
   /* Header: sin línea arriba de todo, con línea al bajar */
