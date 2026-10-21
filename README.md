@@ -1,85 +1,142 @@
-# BLUNT — sitio web de galería de arte
+# BLUNT
 
-Sitio estático (HTML, CSS y JavaScript puro, sin instalación ni compilación). Incluye modo claro/oscuro, catálogo con filtros, ficha de cada obra, artistas, enmarcado a medida, contacto y un carrito que envía el pedido por WhatsApp o mail.
+**Arte original para habitar tus espacios.**
 
+Galería de arte online con obra de artistas argentinos, muestra de clásicos de dominio público y un probador de enmarcado a medida.
 
-## Estructura
+🔗 **Sitio en vivo:** https://blunt-gallery.vercel.app
+
+---
+
+## Descripción
+
+BLUNT es un sitio web de galería de arte hecho con HTML, CSS y JavaScript puro, sin frameworks ni paso de compilación. Las obras y los perfiles de artistas se gestionan desde un panel propio sobre Supabase (autenticación, base de datos y almacenamiento de imágenes). El sitio se publica en Vercel desde la rama `main`.
+
+## Funcionalidades
+
+**Inicio**
+- Portada a pantalla completa con obras que se alternan con fundido y un zoom lento continuo (Ken Burns), logotipo grande con entrada letra por letra, epígrafe de cada obra y barras de progreso para navegar entre diapositivas.
+- Si todavía no hay obras publicadas, la portada muestra clásicos de dominio público rotulados como *Muestra · Dominio público · No a la venta*.
+- Carga sin esperar a la base de datos: la portada aparece enseguida y las obras/artistas se completan cuando llegan.
+
+**Catálogo y artistas**
+- Catálogo de obras con filtro por artista y orden por precio (`obras.html`), y ficha de cada obra con técnica, medidas, año y estado vendida/disponible (`obra.html`).
+- Página de artistas con los perfiles aprobados (`artistas.html`).
+- **Clásicos del arte** (`clasicos.html`): 8 obras de dominio público con visor ampliado. No están a la venta (sin precio ni carrito).
+- **Maestros argentinos**: seis pintores de los siglos XIX y XX en dominio público, cada uno con página propia (`artista.html`), biografía y obras. También son solo muestra.
+
+**Probador de enmarcado** (`enmarcado.html`)
+- Vista de la obra enmarcada sobre fotos reales de ambientes (living, dormitorio, galería, sala cálida), con el marco proyectado en perspectiva sobre la pared, sombras y ajuste de color por escena.
+- Opciones de marco (negro, madera, blanco) y passepartout (sin, fino, medio, ancho).
+- Elección de obra entre los clásicos o carga de una foto propia.
+- **Tu espacio**: subir una foto de la propia pared desde la cámara o la galería del celular, y arrastrar el cuadro para ubicarlo.
+- Pasos de trabajo, precios orientativos y pedido de presupuesto por WhatsApp.
+
+**Compra y contacto**
+- Carrito ("Tu selección") que arma el pedido y lo envía por WhatsApp o por mail.
+- Página de contacto con formulario que arma el mensaje y abre WhatsApp, más mail directo. WhatsApp, mail e Instagram también están en el pie de todas las páginas.
+
+**Panel de artistas** (`login.html`, `panel.html`)
+- Registro e ingreso de artistas. Cada artista gestiona su perfil (bio en español e inglés, foto) y sus obras (alta, edición, ocultar/publicar, marcar vendida).
+- Las imágenes se reducen en el navegador antes de subirse.
+- Las cuentas nuevas quedan pendientes hasta que un administrador las aprueba; el administrador puede editar cualquier perfil u obra.
+
+**General**
+- Modo claro y oscuro (respeta la preferencia del sistema y recuerda la elección).
+- Español / inglés con un botón; los textos de obras y artistas usan sus campos en inglés cuando existen.
+- Diseño responsive para celular y escritorio, y respeto de `prefers-reduced-motion`.
+
+## Stack
+
+| Capa | Tecnología |
+|---|---|
+| Frontend | HTML, CSS y JavaScript (vanilla, sin dependencias de build) |
+| Tipografías | Archivo e Inter (Google Fonts) |
+| Datos, auth y archivos | [Supabase](https://supabase.com) (Postgres con RLS, Auth, Storage) mediante `supabase-js` incluido en `js/vendor/` |
+| Hosting | [Vercel](https://vercel.com), despliegue automático desde `main` |
+
+## Estructura del proyecto
+
 ```
-index.html        Inicio
-obras.html        Catálogo (filtro por artista y orden por precio)
-obra.html?id=o1   Detalle de una obra
-artistas.html     Artistas (reales + Maestros argentinos de dominio público)
-artista.html?id=  Página de un maestro argentino (retrato, bio y obras)
-enmarcado.html    Enmarcado y passepartout
-contacto.html     Contacto
-css/styles.css    Estilos (colores en las variables de :root y [data-theme="dark"])
-js/data.js        ← CONFIGURACIÓN (nombre, WhatsApp, mail)
-js/db.js          Conexión a Supabase y carga de datos
-js/login.js       Ingreso / registro de artistas
-js/panel.js       Panel de artistas y administración
-login.html        Acceso de artistas
-panel.html        Panel de artistas
-js/app.js         Lógica (tema, carrito, páginas)
-js/maestros.js    Maestros argentinos (dominio público, datos estáticos)
-img/              Imágenes
+├── index.html          Inicio (portada inmersiva)
+├── obras.html          Catálogo de obras
+├── obra.html           Ficha de una obra (?id=)
+├── artistas.html       Artistas + Maestros argentinos
+├── artista.html        Página de un maestro argentino (?id=)
+├── clasicos.html       Clásicos del arte (muestra)
+├── enmarcado.html      Probador de enmarcado y precios
+├── contacto.html       Contacto
+├── login.html          Ingreso / registro de artistas
+├── panel.html          Panel de artistas y administración
+├── css/
+│   ├── styles.css      Estilos generales y temas claro/oscuro
+│   └── home.css        Estilos de la portada
+├── js/
+│   ├── data.js         Configuración (nombre, WhatsApp, mail, idioma)
+│   ├── app.js          Lógica común: header/footer, tema, carrito, páginas, probador
+│   ├── home.js         Portada (diapositivas, entrada, header transparente)
+│   ├── home-boot.js    Arranque del inicio
+│   ├── i18n.js         Diccionario y motor de traducción ES → EN
+│   ├── clasicos.js     Datos de los clásicos (dominio público)
+│   ├── maestros.js     Datos de los maestros argentinos (dominio público)
+│   ├── escenas.js      Ambientes del probador (homografías, luz, créditos)
+│   ├── db.js           Cliente Supabase y carga de datos públicos
+│   ├── login.js        Ingreso / registro
+│   ├── panel.js        Panel de artistas y administración
+│   ├── supabase-config.js  URL y clave pública de Supabase
+│   └── vendor/         supabase-js
+├── img/                Logo, favicon, clásicos, maestros y escenas
+└── supabase/migrations/  Esquema, políticas RLS y buckets
 ```
 
-## Cambiar el nombre, WhatsApp y mail
-Abrí `js/data.js` y editá el bloque `CONFIG`:
-```js
-nombre: "BLUNT",
-whatsapp: "5491100000000",   // código de país + área + número, sin +, espacios ni guiones
-email: "hola@blunt.com",
+> Quedan en el repo archivos de una versión de prueba anterior (`prueba.html`, que hoy redirige al inicio, y `css/prueba.css`, `js/prueba*.js`), que ya no se usan.
+
+## Cómo correrlo localmente
+
+No requiere instalación. Desde la carpeta del proyecto:
+
+```bash
+python3 -m http.server 8000
 ```
-El nombre se actualiza solo en el encabezado, el pie y los títulos.
 
-## Obras y artistas (Supabase)
-Las obras y los artistas ya **no** se editan en archivos: se cargan desde una base de datos Supabase (proyecto `blunt-gallery`).
-- Cada artista crea su cuenta en `login.html` (link “Artistas: ingresar” en el pie) y gestiona su perfil, bio (ES/EN), foto y obras en `panel.html`.
-- Las cuentas nuevas quedan **pendientes**: no se ven en el sitio hasta que un administrador las aprueba desde el panel.
-- El email del administrador (`juanjosecaceres95@hotmail.com`) se convierte en admin automáticamente al registrarse. El admin puede aprobar artistas y editar cualquier perfil u obra.
-- Si no hay datos publicados, el sitio muestra “Próximamente nuevas obras”.
-- Conexión: `js/supabase-config.js` (URL y clave pública *publishable*, segura en el navegador). **Nunca** subas la `service_role` key.
-- Esquema y políticas de seguridad (RLS): `supabase/migrations/`.
-- Las imágenes se reducen en el navegador y se guardan en los buckets `artworks` y `avatars`.
+y abrí http://localhost:8000. Hace falta servirlo por HTTP (no con doble clic sobre el archivo) porque usa módulos de JavaScript.
 
-## Colores y tipografías
-En `css/styles.css`, las variables `--bg`, `--fg`, etc. definen el modo claro y `[data-theme="dark"]` el oscuro. Las tipografías (Archivo expandida + Inter) se cargan desde Google Fonts en la primera línea.
+Para personalizar nombre, WhatsApp, mail e idioma por defecto, editá el bloque `CONFIG` de `js/data.js`.
 
-## Ver el sitio en tu compu
-Abrí `index.html` con doble clic, o mejor, desde la carpeta: `python3 -m http.server` y entrá a http://localhost:8000
+## Configuración de Supabase
 
-## Publicar gratis
-**Netlify:** entrá a https://app.netlify.com/drop y arrastrá la carpeta `galeria`. En segundos tenés un link; desde la configuración podés cambiar el nombre o conectar tu dominio.
+- **Tablas:** `artists` (perfiles, con aprobación), `works` (obras: título, precio en USD, medidas, técnica, año, imagen, publicada, vendida, descripción, con campos en inglés) y `admins`.
+- **Storage:** buckets `artworks` y `avatars`; cada usuario solo puede escribir en su propia carpeta.
+- **Seguridad:** políticas RLS. El público solo lee artistas aprobados y obras publicadas, cada artista edita lo suyo y los administradores, todo.
+- El esquema completo está en `supabase/migrations/`.
+- La conexión se configura en `js/supabase-config.js` con la URL del proyecto y la clave pública (*publishable/anon*), que es segura en el navegador porque el acceso lo controla RLS. **Nunca** se debe poner la clave `service_role` en el frontend.
 
-**GitHub Pages:** creá un repositorio, subí todos los archivos (con `index.html` en la raíz), y en *Settings → Pages* elegí la rama `main` y la carpeta `/ (root)`. El sitio queda en `https://tu-usuario.github.io/nombre-del-repo/`.
+## Deploy
 
-## Próximos pasos posibles
-Integrar Mercado Pago, conectar un formulario (Netlify Forms / Formspree) o migrar el catálogo a Tiendanube/WooCommerce.
+El sitio se despliega en Vercel automáticamente con cada push a `main` (sitio estático, sin build). Al no tener paso de compilación, también puede publicarse en cualquier hosting estático.
 
-## Logo
-El logo está en `img/logo.svg` (vectorizado, fondo transparente) y además embebido en `js/app.js` (constante `LOGO`) para que tome el color del tema: negro en modo claro, blanco en modo oscuro. Para cambiarlo, reemplazá el `<path>` de esa constante. El favicon es `img/favicon.svg` (la “B”). También hay una versión `img/logo.png` transparente.
+## Créditos de imágenes
 
-## Idiomas (español / inglés)
-El botón **EN/ES** del encabezado cambia el idioma y la elección queda guardada. El idioma por defecto se define en `CONFIG.idioma` (`"es"` o `"en"`) en `js/data.js`.
-- Los textos de la interfaz se traducen en `js/i18n.js` (diccionario `"Texto en español": "English text"`). Si agregás o cambiás un texto en español, sumá su traducción ahí.
-- Para obras y artistas, los textos en inglés se cargan desde el panel (campos “EN”). Si están vacíos, se muestra el texto en español.
+Todas las obras de muestra son de **dominio público** (Wikimedia Commons) y se exhiben sin fines de venta. Las fotos de ambientes del probador tienen licencia libre (Pexels License / Unsplash License) y se acreditan también en el sitio.
 
-## Clásicos (dominio público)
+<details>
+<summary><strong>Clásicos del arte</strong></summary>
 
-`clasicos.html` y la sección "Clásicos del arte" de la home muestran 8 obras de dominio público
-(Wikimedia Commons) como muestra. **No están a la venta**: no tienen precio ni botón de carrito.
-Los datos están en `js/clasicos.js` y las imágenes en `img/clasicos/` (JPEG optimizado embebido en
-un `.svg` para poder subirlo como texto). En la home, cuando todavía no hay obras/artistas cargados
-en Supabase, se ocultan esas secciones vacías y se muestra la de clásicos.
+| Obra | Artista | Año | Museo | Fuente |
+|---|---|---|---|---|
+| *La noche estrellada* | Vincent van Gogh | 1889 | Museum of Modern Art (MoMA), Nueva York | [Commons](https://commons.wikimedia.org/wiki/File:Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg) |
+| *La gran ola de Kanagawa* | Katsushika Hokusai | c. 1830–1832 | The Metropolitan Museum of Art, Nueva York | [Commons](https://commons.wikimedia.org/wiki/File:Tsunami_by_hokusai_19th_century.jpg) |
+| *El beso* | Gustav Klimt | 1907–1908 | Österreichische Galerie Belvedere, Viena | [Commons](https://commons.wikimedia.org/wiki/File:The_Kiss_-_Gustav_Klimt_-_Google_Cultural_Institute.jpg) |
+| *La joven de la perla* | Johannes Vermeer | c. 1665 | Mauritshuis, La Haya | [Commons](https://commons.wikimedia.org/wiki/File:1665_Girl_with_a_Pearl_Earring.jpg) |
+| *Impresión, sol naciente* | Claude Monet | 1872 | Musée Marmottan Monet, París | [Commons](https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg) |
+| *El Temerario remolcado a su último atracadero* | J. M. W. Turner | 1839 | National Gallery, Londres | [Commons](https://commons.wikimedia.org/wiki/File:The_Fighting_Temeraire,_JMW_Turner,_National_Gallery.jpg) |
+| *Tarde de domingo en la isla de la Grande Jatte* | Georges Seurat | 1884–1886 | Art Institute of Chicago, Chicago | [Commons](https://commons.wikimedia.org/wiki/File:A_Sunday_on_La_Grande_Jatte,_Georges_Seurat,_1884.jpg) |
+| *El nacimiento de Venus* | Sandro Botticelli | c. 1485 | Galleria degli Uffizi, Florencia | [Commons](https://commons.wikimedia.org/wiki/File:Sandro_Botticelli_-_La_nascita_di_Venere_-_Google_Art_Project_-_edited.jpg) |
 
-## Maestros argentinos (dominio público)
+</details>
 
-`artistas.html` muestra, debajo de los artistas reales (Supabase), una sección **Maestros argentinos** con seis pintores fallecidos hace más de 70 años, cuya obra es de dominio público en la Argentina: Cándido López, Prilidiano Pueyrredón, Eduardo Sívori, Martín Malharro, Fernando Fader y Ernesto de la Cárcova. Cada uno tiene su página en `artista.html?id=...` con retrato, biografía (ES/EN) y obras que se amplían en un visor.
-
-- Son **datos estáticos** en `js/maestros.js` (imágenes en `img/maestros/`): no se guardan en Supabase, no aparecen en el catálogo de obras a la venta, no tienen precio ni botones de compra y se marcan como *Muestra · Dominio público · No a la venta*.
-- Los artistas que se registran desde el panel siguen funcionando igual; si `artista.html` recibe el id de un artista real, redirige a sus obras.
-- Imágenes de Wikimedia Commons, todas marcadas como dominio público (PD-Art / PD-old / PD-AR-Photo), redimensionadas a ≤1400 px y comprimidas.
+<details>
+<summary><strong>Maestros argentinos</strong></summary>
 
 | Artista | Obra | Museo | Fuente |
 |---|---|---|---|
@@ -108,16 +165,38 @@ en Supabase, se ocultan esas secciones vacías y se muestra la de clásicos.
 | Ernesto de la Cárcova | *Retrato de la esposa del autor*, 1914 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Ernesto_DE_LA_Carcova_-_Retrato_de_la_esposa_del_autor_-_Google_Art_Project.jpg) |
 | Ernesto de la Cárcova | *Naturaleza en silencio*, 1926 | Museo Nacional de Bellas Artes, Buenos Aires | [Commons](https://commons.wikimedia.org/wiki/File:Ernesto_de_la_C%C3%81Rcova_-_Naturaleza_en_silencio_-_Google_Art_Project.jpg) |
 
-## Probador de enmarcado: fotos de ambientes
+</details>
 
-Las escenas del probador (`js/escenas.js`, imágenes en `img/escenas/`) son fotos reales con licencia libre
-(Pexels License / Unsplash License: uso comercial permitido, sin atribución obligatoria; igual se acreditan en el sitio).
-Para cada foto se midió el plano de la pared (líneas de piso/techo, esquinas, puntos de fuga o escala con objetos conocidos) y se guardó una homografía `H` (metros de pared → píxeles de la foto); el marco se dibuja en milímetros y se proyecta con `matrix3d`, con sombra de contacto, sombra suave según la luz y ajuste de color por escena.
+<details>
+<summary><strong>Ambientes del probador de enmarcado</strong></summary>
 
 | Escena | Autor | Fuente |
 |---|---|---|
 | Living | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/gray-couch-beside-white-wall-7195873/) |
 | Dormitorio | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/interior-with-bed-and-closet-at-home-6980703/) |
-| Galería | Julia Taubitz (Kunsthalle Düsseldorf) | [Unsplash](https://unsplash.com/photos/empty-white-wall-with-concrete-and-glass-above-ZCDWq4ffnng) |
-| Sala gris | Max Vakhtbovych | [Pexels](https://www.pexels.com/photo/comfortable-couch-in-light-room-6958125/) |
+| Galería | Julia Taubitz | [Unsplash](https://unsplash.com/photos/empty-white-wall-with-concrete-and-glass-above-ZCDWq4ffnng) |
 | Sala cálida | Josh Sorenson | [Pexels](https://www.pexels.com/photo/cozy-living-room-with-sofa-and-lamp-36363112/) |
+
+</details>
+
+## Autor
+
+**Juan José Cáceres**. Diseño y desarrollo.
+
+## Licencia
+
+[MIT](LICENSE)
+
+---
+
+### English summary
+
+**BLUNT** is an online art gallery for original work by Argentine artists, live at https://blunt-gallery.vercel.app. It is a static site built with plain HTML, CSS and vanilla JavaScript, with Supabase (Postgres + RLS, Auth, Storage) for artist profiles and artworks, and is deployed on Vercel from `main`.
+
+Features:
+- Immersive full-screen home with slowly zooming artworks.
+- Catalog and artwork pages, plus artist profiles managed from a built-in artist/admin panel.
+- Public-domain classics and Argentine masters, shown as a showcase only (not for sale).
+- Framing preview over real rooms or the visitor's own wall photo (camera or gallery, draggable).
+- A WhatsApp/email order cart.
+- Light/dark mode, Spanish/English, and a responsive layout.
