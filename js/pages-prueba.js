@@ -49,10 +49,16 @@
     h.innerHTML = txt.split(/(\s*\|\s*|\s+)/).map(w => /\|/.test(w) ? "<br>" : /^\s+$/.test(w) ? " " :
       `<span class="pg-w" aria-hidden="true">${[...w].map(c => `<span class="pg-ch" style="--i:${i++}">${esc(c)}</span>`).join("")}</span>`).join("");
   };
+  /* Ancho de la palabra más larga de cada título, en "em" de Archivo (medido con la fuente cargada).
+     Con esto el tamaño se calcula solo con el ancho disponible: no depende de que la fuente ya
+     haya llegado, así el título no cambia de tamaño (ni empuja el resto) cuando termina de cargar. */
+  const TW = {"Obras":4.425,"Works":4.715,"Clásicos":6.32,"Classics":6.15,"Artistas":6.13,"Artists":5.255,"Enmarcado":6.285,"Framing":4.405,"Hablemos|de arte.":5.52,"Let’s talk|art.":2.555};
   const fit = () => titles.forEach(h => {
     h.style.fontSize = "";
-    const box = h.parentElement.clientWidth, w = h.scrollWidth;
-    if (w > box + 1) h.style.fontSize = (parseFloat(getComputedStyle(h).fontSize) * box / w * 0.985).toFixed(2) + "px";
+    const base = parseFloat(getComputedStyle(h).fontSize), box = h.clientWidth, r = TW[h.dataset.cur];
+    if (r) { const fs = Math.min(base, box / r * 0.985); if (fs < base) h.style.fontSize = fs.toFixed(2) + "px"; return; }
+    const w = Math.max(0, ...$$(".pg-w", h).map(x => x.getBoundingClientRect().width));
+    if (w > box + 1) h.style.fontSize = (base * box / w * 0.985).toFixed(2) + "px";
   });
   titles.forEach(h => { h.setAttribute("data-no-i18n", ""); if (!h.dataset.es) h.dataset.es = h.textContent.trim(); split(h); });
 
@@ -139,10 +145,9 @@
   };
 
   /* ---------- Arranque del encabezado (sin esperar a Supabase) ---------- */
-  applyText(); buildStrip(); setCount(); buildFeature(); buildIndex();
+  applyText(); buildStrip(); setCount(); buildFeature(); buildIndex(); fit();
   const ready = () => requestAnimationFrame(() => { fit(); head && head.classList.add("is-ready"); });
   if (document.fonts && document.fonts.ready) { Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))]).then(ready); } else ready();
-  if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", () => requestAnimationFrame(fit));
   let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(fit); });
   reveal();
 

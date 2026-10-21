@@ -177,3 +177,8 @@ a.pg-block-v:hover i{transform:translateX(4px)}
 .pg-ix-group{opacity:0;transition:opacity .8s ease .5s}
 .pg-head.is-ready .pg-ix-group{opacity:1}
 @media (prefers-reduced-motion:reduce){.pg-ix-group{opacity:1;transition:none}}
+/* Lugar reservado para lo que arma el JS (franja, índice, cantidad): sin saltos al cargar */
+.pg-strip{min-height:calc(var(--h) + 41px)}
+.pg-count{min-height:34px}
+.pg-index{min-height:468px}
+@media (max-width:760px){.pg-count{min-height:26px}.pg-index{min-height:455px}}
