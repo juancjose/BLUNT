@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Contacto — {nombre}</title><meta name="description" content="Contacto.">
+<script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/pages-prueba.css">
+</head>
+<body data-page="contacto" class="pg" data-boot="now">
+<main id="main">
+
+<section class="pg-head pg-contacto" aria-labelledby="pgT">
+<div class="wrap">
+<p class="pg-kicker pg-in" style="--k:0"><span data-en="Let’s talk">Hablemos</span><i class="pg-dot" aria-hidden="true"></i><span data-en="Buenos Aires">Buenos Aires</span></p>
+<h1 class="pg-title" id="pgT" data-es="Hablemos|de arte." data-en="Let’s talk|art.">Hablemos<br>de arte.</h1>
+<p class="pg-sub pg-in" style="--k:2" data-en="We answer questions about works, framing, shipping and payment. Reach us however you prefer.">Respondemos consultas sobre obras, enmarcado, envíos y formas de pago. Escribinos por el canal que prefieras.</p>
+<ul class="pg-blocks">
+<li class="pg-block pg-in" style="--k:3"><span class="pg-block-k">WhatsApp</span><a class="pg-block-v" data-wa="Hola! Quería hacer una consulta." target="_blank" rel="noopener" href="#"><span data-en="Send a message">Enviar mensaje</span> <i aria-hidden="true">→</i></a><span class="pg-block-s" data-en="The quickest way to reach us">La forma más rápida de hablarnos</span></li>
+<li class="pg-block pg-in" style="--k:4"><span class="pg-block-k">Mail</span><a class="pg-block-v" data-mail href="#"></a><span class="pg-block-s" data-en="For longer enquiries">Para consultas más largas</span></li>
+<li class="pg-block pg-in" style="--k:5"><span class="pg-block-k">Instagram</span><a class="pg-block-v" id="pgIg" href="#" target="_blank" rel="noopener"><span data-en="Follow us">Seguinos</span> <i aria-hidden="true">→</i></a><span class="pg-block-s" data-en="New works and behind the scenes">Obras nuevas y detrás de escena</span></li>
+<li class="pg-block pg-in" style="--k:6"><span class="pg-block-k" data-en="Studio">Taller</span><span class="pg-block-v" id="pgCity"></span><span class="pg-block-s" data-en="Insured shipping nationwide">Envíos asegurados a todo el país</span></li>
+</ul>
+</div>
+</section>
+<section id="escribinos" class="pg-form-sec"><div class="wrap split" style="align-items:start">
+<div><p class="eyebrow">Formulario</p><h2 style="margin-top:10px">Escribinos</h2><p>Completá el formulario y se abre WhatsApp con tu mensaje listo para enviar.</p></div>
+<form class="contact" id="contactForm"><label>Nombre<input name="nombre" required autocomplete="name"></label><label>Email<input name="email" type="email" required autocomplete="email"></label><label>Mensaje<textarea name="mensaje" rows="5" required></textarea></label><button class="btn" type="submit">Enviar por WhatsApp</button></form>
+</div></section></main>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/pages-prueba.js"></script>
+<script type="module" src="js/pages-prueba-boot.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clásicos — {nombre}</title><meta name="description" content="Muestra de obras clásicas de dominio público. No están a la venta.">
+<script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="img/prueba/feat-van-gogh-noche-estrellada.jpg" fetchpriority="high">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/pages-prueba.css">
+</head>
+<body data-page="clasicos" class="pg" data-boot="now">
+<main id="main">
+
+<section class="pg-head pg-clasicos" aria-labelledby="pgT">
+<div class="wrap pg-split">
+<div class="pg-txt">
+<p class="pg-kicker pg-in" style="--k:0"><span data-en="On display">Colección en exhibición</span><i class="pg-dot" aria-hidden="true"></i><span data-en="Public domain">Dominio público</span></p>
+<h1 class="pg-title" id="pgT" data-en="Classics">Clásicos</h1>
+<p class="pg-sub pg-in" style="--k:2" data-en="Great masters of art history, on display. A showcase to look at closely: these works are not for sale.">Grandes maestros de la historia del arte, en exhibición. Una muestra para mirar de cerca: estas obras no están a la venta.</p>
+</div>
+<figure class="pg-feat pg-in" style="--k:2"><button type="button" class="pg-feat-frame" id="pgFeatBtn" data-cl="0"><span class="pg-feat-mat"><span class="pg-feat-media" id="pgFeature"></span></span></button></figure>
+<div class="pg-feat-cap pg-in" style="--k:3" id="pgFeatCap" aria-live="polite" data-no-i18n></div>
+</div>
+</section>
+<section id="coleccion" class="pg-sec-first"><div class="wrap">
+<p class="classic-note classic-note-top">Muestra de obras clásicas de dominio público. No están a la venta.</p>
+<div class="grid" id="classicsGrid"></div></div></section></main>
+<script src="js/data.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/clasicos.js"></script>
+<script src="js/app.js"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/pages-prueba.js"></script>
+<script type="module" src="js/pages-prueba-boot.js"></script>
+</body>
+</html>
