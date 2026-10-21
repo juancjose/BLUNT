@@ -6,6 +6,8 @@ Galería de arte online con obra de artistas argentinos, muestra de clásicos de
 
 🔗 **Sitio en vivo:** https://blunt-gallery.vercel.app
 
+![Portada de BLUNT en escritorio y celular, modo oscuro: logo grande sobre La noche estrellada de Van Gogh y La joven de la perla de Vermeer](docs/screenshot.jpg)
+
 ---
 
 ## Descripción
@@ -85,11 +87,10 @@ BLUNT es un sitio web de galería de arte hecho con HTML, CSS y JavaScript puro,
 │   ├── panel.js        Panel de artistas y administración
 │   ├── supabase-config.js  URL y clave pública de Supabase
 │   └── vendor/         supabase-js
+├── docs/               Captura para este README
 ├── img/                Logo, favicon, clásicos, maestros y escenas
 └── supabase/migrations/  Esquema, políticas RLS y buckets
 ```
-
-> Quedan en el repo archivos de una versión de prueba anterior (`prueba.html`, que hoy redirige al inicio, y `css/prueba.css`, `js/prueba*.js`), que ya no se usan.
 
 ## Cómo correrlo localmente
 
