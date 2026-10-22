@@ -8,7 +8,7 @@
 (function () {
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const hero = $("#arHero"); if (!hero) return;
-  const rail = $("#arRail"), stage = $("#arStage"), info = $("#arInfo"), bg = $("#arBg"), countEl = $("#arCount");
+  const rail = $("#arRail"), stage = $("#arStage"), info = $("#arInfo"), countEl = $("#arCount");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const en = () => (localStorage.getItem("idioma") || (typeof CONFIG !== "undefined" && CONFIG.idioma) || "es") === "en";
@@ -65,59 +65,25 @@
       <dl class="ar-meta">${meta.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
       <a class="ar-link" href="${a.href}">${en() ? "Full profile & bio" : "Ver perfil completo"} <i aria-hidden="true">→</i></a>${a.pd ? `<p class="ar-pd">${en() ? "Showcase · Public domain · Not for sale" : "Muestra · Dominio público · No a la venta"}</p>` : ""}`;
   };
-  /* Obras del artista de fondo: franja infinita de tarjetas grandes 4:5 a lo ancho del encabezado,
-     atenuada de forma pareja (opacidad uniforme: tiñe de negro en oscuro y de blanco en claro).
-     Mismo método que obras.html: tramo = obras repetidas hasta cubrir el ancho (múltiplo de las obras),
-     track = tramo × 2, de 0 a -50%. Lenta, sin pausa, también con "reducir movimiento".
-     Al cambiar de artista, la capa nueva aparece con un fundido sobre la anterior. */
-  const BG_SPEED = 14; /* px por segundo */
-  let bgCur = null, bgKey = "";
-  const bgCard = w => `<a class="ar-bgc" href="${w.href}" tabindex="-1" title="${esc(w.t)}${w.y ? ", " + esc(w.y) : ""}"><img src="${w.bg || w.img}" alt="" decoding="async" onload="this.classList.add('ok')"></a>`;
-  const layoutBg = (fresh) => {
-    const a = bgCur; if (!bg || !a) return;
-    const W = bg.clientWidth || innerWidth, H = bg.clientHeight || innerHeight, small = W < 761;
-    const flow = W < 981, ch = Math.round(small ? Math.min(innerHeight * .32, 290) : flow ? Math.min(innerHeight * .4, 440) : Math.min(H * .64, 620)), cw = Math.round(ch * .8), gap = Math.round(ch * .3), pitch = cw + gap;
-    if (!(pitch >= 40) || !(W > 0)) return;
-    const Lw = a.works.length;
-    const m = Lw ? Lw * Math.ceil((Math.ceil(W / pitch) + 1) / Lw) : 0;
-    const top = flow ? Math.max(0, Math.round(stage.offsetTop + (stage.offsetHeight - ch) / 2)) : -1;
-    const key = a.key + "|" + W + "|" + ch + "|" + m + "|" + top;
-    if (key === bgKey && !fresh) return; bgKey = key;
-    const old = $$(".ar-bg-l", bg);
-    if (!m) { old.forEach(o => { o.classList.remove("on"); setTimeout(() => o.remove(), 1200); }); return; }
-    const tramo = Array.from({ length: m }, (_, i) => bgCard(a.works[i % Lw])).join("");
-    const l = document.createElement("div"); l.className = "ar-bg-l";
-    l.style.cssText = `--cw:${cw}px;--ch:${ch}px;--gap:${gap}px;--dur:${(m * pitch / BG_SPEED).toFixed(2)}s` + (top >= 0 ? `;align-items:flex-start;padding-top:${top}px` : "");
-    l.innerHTML = `<div class="ar-bg-track">${tramo}${tramo}</div>`;
-    bg.appendChild(l);
-    if (!fresh) { old.forEach(o => o.remove()); l.classList.add("on", "now"); return; }
-    void l.offsetWidth; l.classList.add("on");
-    old.forEach(o => { o.classList.remove("on"); setTimeout(() => o.remove(), 1200); });
-  };
-
-  /* Fila clara (solo modo claro): misma franja infinita, nítida, debajo del destacado */
-  const row = $("#arRow"), ROW_SPEED = 26;
-  let rowKey = "";
-  const rowCard = w => `<a class="ar-rwc" href="${w.href}" tabindex="-1"><span class="ar-rwc-im"><img src="${w.bg || w.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="ar-rwc-t">${esc(w.t)}</span>${w.y ? `<span class="ar-rwc-y">${esc(w.y)}</span>` : ""}</a>`;
-  const layoutRow = (fresh) => {
-    const a = bgCur; if (!row || !a) return;
-    const W = row.clientWidth || innerWidth, small = W < 761;
-    const ch = small ? 190 : W < 981 ? 230 : 280, cw = Math.round(ch * .8), gap = small ? 12 : 20, pitch = cw + gap;
-    const Lw = a.works.length, m = Lw ? Lw * Math.ceil((Math.ceil(W / pitch) + 1) / Lw) : 0;
-    const key = a.key + "|" + W + "|" + ch + "|" + m;
-    if (key === rowKey && !fresh) return; rowKey = key;
-    row.parentNode.setAttribute("aria-label", en() ? "Works by " + a.name : "Obras de " + a.name);
-    const old = $$(".ar-rw-l", row);
-    row.classList.toggle("empty", !m);
-    if (!m) { old.forEach(o => o.remove()); return; }
-    const tramo = Array.from({ length: m }, (_, i) => rowCard(a.works[i % Lw])).join("");
-    const l = document.createElement("div"); l.className = "ar-rw-l";
-    l.style.cssText = `--cw:${cw}px;--ch:${ch}px;--gap:${gap}px;--dur:${(m * pitch / ROW_SPEED).toFixed(2)}s`;
-    l.innerHTML = `<div class="ar-rw-track">${tramo}${tramo}</div>`;
-    row.appendChild(l);
-    if (!fresh) { old.forEach(o => o.remove()); l.classList.add("on", "now"); return; }
-    void l.offsetWidth; l.classList.add("on");
-    old.forEach(o => { o.classList.remove("on"); setTimeout(() => o.remove(), 700); });
+  /* Obras del artista debajo del destacado: cada obra una sola vez, en una grilla estática.
+     Al cambiar de artista, fundido corto (sale la grilla anterior y entra la nueva). */
+  const row = $("#arRow"), rowH = $("#arRowH");
+  let rowKey = "", rowT = 0;
+  const rowCard = w => `<a class="ar-wc" href="${w.href}"><span class="ar-wc-im"><img src="${w.bg || w.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="ar-wc-t">${esc(w.t)}</span>${w.y ? `<span class="ar-wc-y">${esc(w.y)}</span>` : ""}</a>`;
+  const renderRow = (a, anim) => {
+    if (!row || !a) return;
+    const key = a.key + "|" + (en() ? "en" : "es"); if (key === rowKey) return; rowKey = key;
+    const n = a.works.length, sec = row.closest(".ar-row");
+    const fill = () => {
+      if (sec) { sec.hidden = !n; sec.setAttribute("aria-label", en() ? "Works by " + a.name : "Obras de " + a.name); }
+      if (rowH) rowH.innerHTML = `<span>${en() ? "Works by" : "Obras de"}</span> ${esc(a.name)}<i aria-hidden="true"></i><span class="ar-row-n">${pad(n)}</span>`;
+      row.className = "ar-row-g n" + Math.min(n, 4);
+      row.innerHTML = a.works.map(rowCard).join("");
+      requestAnimationFrame(() => sec && sec.classList.remove("swap"));
+    };
+    clearTimeout(rowT);
+    if (!anim || reduce || !row.children.length) fill();
+    else { sec && sec.classList.add("swap"); rowT = setTimeout(fill, 260); }
   };
   const build = () => {
     L = list();
@@ -130,7 +96,7 @@
     rail.innerHTML = L.map((a, i) => `<button type="button" class="ar-th" role="tab" id="arTab${i}" aria-controls="arInfo" aria-selected="false" tabindex="-1" data-i="${i}" aria-label="${esc(a.name)}">
       <span class="ar-th-im"><img src="${a.thumb}" alt="" loading="${i < 8 ? "eager" : "lazy"}" decoding="async"></span><span class="ar-th-n">${esc(a.name)}</span></button>`).join("");
     /* los retratos se crean una vez por artista y se cargan cuando hacen falta */
-    /* retrato completo en un marco de museo: marco fino + paspartú + epígrafe */
+    /* retrato completo, limpio, con epígrafe tipo museo */
     stage.innerHTML = `<figure class="ar-fr"><a class="ar-fr-frame" id="arFrame" href="#" tabindex="-1"><span class="ar-fr-mat"><span class="ar-fr-media">${L.map((a, i) => a.por
       ? `<img class="ar-por" data-key="${a.key}" ${i === start ? `src="${a.por}" fetchpriority="high"` : `data-src="${a.por}"`} alt="" decoding="async" style="object-position:${a.pos}">`
       : `<span class="ar-por ar-mono" data-key="${a.key}">${esc(a.name.trim().charAt(0))}</span>`).join("")}</span></span></a><figcaption class="ar-fr-cap" id="arCap"></figcaption></figure>`;
@@ -151,7 +117,7 @@
     const swapImg = () => { P.forEach((p, k) => p.classList.toggle("on", k === i)); load((i + 1) % L.length); };
     const im = P[i];
     if (!anim || reduce || !im || im.tagName !== "IMG" || im.complete) swapImg(); else { im.addEventListener("load", swapImg, { once: true }); setTimeout(swapImg, 700); }
-    bgCur = a; layoutBg(true); layoutRow(true);
+    renderRow(a, anim && prev >= 0);
     const fr = $("#arFrame"); if (fr) { fr.href = a.href; fr.setAttribute("aria-label", (en() ? "Profile of " : "Perfil de ") + a.name); }
     const fill = () => { info.innerHTML = infoHTML(a, i); const cp = $("#arCap"); if (cp) cp.innerHTML = `<strong>${esc(a.name)}</strong>${(a.cap || []).filter(Boolean).map(c => `<span>${esc(c)}</span>`).join("")}`; fitName(); hero.classList.remove("swap"); };
     clearTimeout(swapT);
@@ -172,11 +138,11 @@
   const ready = () => requestAnimationFrame(() => { fitName(); hero.classList.add("is-ready"); });
   const first = imgs()[cur];
   Promise.race([Promise.all([document.fonts ? document.fonts.ready : 0, first && first.tagName === "IMG" && !first.complete ? new Promise(r => first.addEventListener("load", r, { once: true })) : 0]), new Promise(r => setTimeout(r, 1200))]).then(ready);
-  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { fitName(); layoutBg(false); layoutRow(false); }); });
+  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { fitName(); }); });
 
   /* datos de Supabase e idioma: se enganchan a los de pages.js */
   const oData = window.pgData; window.pgData = () => { oData && oData(); build(); };
-  const relang = () => { sig = ""; touched = true; build(); };
+  const relang = () => { sig = ""; rowKey = ""; touched = true; build(); };
   const oAfter = window.pgAfterApp;
   window.pgAfterApp = () => {
     oAfter && oAfter();

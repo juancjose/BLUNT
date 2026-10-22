@@ -15,9 +15,8 @@
 <body data-page="artistas" class="pg ar-page" data-test data-boot="data">
 <main id="main">
 
-<!-- Artista destacado: retrato grande fundido con el fondo, nombre, datos y obras -->
+<!-- Artista destacado: miniaturas, nombre, datos y retrato; debajo, sus obras -->
 <section class="ar-hero" id="arHero" aria-labelledby="arH">
- <div class="ar-bg" id="arBg" aria-hidden="true"></div>
  <div class="ar-in">
   <h1 class="ar-h" id="arH"><span data-en="Artists">Artistas</span><i aria-hidden="true"></i><span class="ar-count" id="arCount" data-no-i18n></span></h1>
   <div class="ar-rail" id="arRail" role="tablist" aria-orientation="vertical" data-en-label="Choose an artist" aria-label="Elegí un artista" data-no-i18n></div>
@@ -25,7 +24,7 @@
   <div class="ar-info" id="arInfo" role="tabpanel" aria-live="polite" data-no-i18n></div>
  </div>
 </section>
-<section class="ar-row" aria-label="Obras del artista"><div class="ar-row-m" id="arRow"></div></section>
+<section class="ar-row" aria-label="Obras del artista"><h2 class="ar-row-h" id="arRowH" data-no-i18n></h2><div class="ar-row-g" id="arRow" data-no-i18n></div></section>
 
 <section id="galeria-artistas" class="ar-all"><div class="wrap"><div class="sec-head"><div><p class="eyebrow" data-en="All artists">Todos los artistas</p><h2 data-en="Gallery artists">Artistas de la galería</h2></div></div><div class="artist-list" id="artistList"></div></div></section>
 <section class="alt maestros-sec"><div class="wrap"><div class="sec-head"><div><p class="pd-tag">Muestra · Dominio público · No a la venta</p><h2>Maestros argentinos</h2><p class="muted maestros-intro">Seis grandes de la pintura argentina de los siglos XIX y XX, cuya obra ya es de dominio público.</p></div></div>
