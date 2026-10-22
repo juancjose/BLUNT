@@ -18,21 +18,19 @@
   const thumb = p => "img/prueba/" + base(p).replace(/\.svg$/, ".jpg");
   const isReal = u => u && !/^data:/.test(u);
   const MA = typeof MAESTROS !== "undefined" ? MAESTROS : [];
-  /* encuadre del retrato grande (cara arriba del centro) */
-  const FOCO = { lopez: "50% 22%", pueyrredon: "62% 22%", sivori: "50% 26%", malharro: "50% 30%", fader: "50% 18%", carcova: "50% 22%" };
 
   const list = () => {
     const ART = window.ARTISTAS || [], OB = window.OBRAS || [];
     const real = ART.map(a => {
       const ws = OB.filter(o => o.artista === a.id);
       const por = isReal(a.img) ? a.img : ((ws.find(w => isReal(w.img)) || {}).img || "");
-      return { key: "a-" + a.id, name: a.nombre, thumb: a.img, por, pos: "50% 25%", city: a.ciudad, disc: T(a, "disciplina"), n: ws.length,
+      return { key: "a-" + a.id, name: a.nombre, thumb: por || a.img, por, cut: false, pos: "50% 25%", city: a.ciudad, disc: T(a, "disciplina"), n: ws.length,
         bio: T(a, "bio"), href: `obras.html?artista=${a.id}`, pd: false,
         works: ws.slice(0, 10).map(w => ({ t: T(w, "titulo"), y: w.anio, img: w.img, href: `obra.html?id=${w.id}` })) };
     });
     const ma = MA.map(m => {
       const k = base(m.retrato.img).split("-retrato")[0];
-      return { key: "m-" + m.id, name: m.nombre, thumb: thumb(m.retrato.img), por: `img/prueba/port-${k}.jpg`, pos: FOCO[k] || "50% 25%",
+      return { key: "m-" + m.id, name: m.nombre, thumb: thumb(m.retrato.img), por: `img/prueba/cut-${k}.webp`, cut: true, pos: "50% 100%",
         city: (T(m, "lugar").split(/,\s*\d/)[0] || "").trim(), disc: T(m, "movimiento").split(" · ")[0], n: m.obras.length,
         bio: T(m, "resumen"), href: `artista.html?id=${m.id}`, pd: true,
         works: m.obras.map(o => ({ t: T(o, "titulo"), y: o.anio, img: thumb(o.img), href: `artista.html?id=${m.id}` })) };
@@ -66,8 +64,25 @@
       <dl class="ar-meta">${meta.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("")}</dl>
       <a class="ar-link" href="${a.href}">${en() ? "Full profile & bio" : "Ver perfil completo"} <i aria-hidden="true">→</i></a>${a.pd ? `<p class="ar-pd">${en() ? "Showcase · Public domain · Not for sale" : "Muestra · Dominio público · No a la venta"}</p>` : ""}`;
   };
+  /* Obras: franja infinita como la de obras.html. Tramo = obras del artista repetidas hasta cubrir
+     el ancho (cantidad múltiplo de las obras, así el orden sigue igual en la unión); track = tramo × 2,
+     animado de 0 a -50%: el final coincide con el inicio. Sin pausa al pasar el mouse. */
+  const WK_SPEED = 26; /* px por segundo */
+  const wkCard = (w, dup) => `<a class="ar-wk" href="${w.href}"${dup ? ' tabindex="-1" aria-hidden="true"' : ""}><span class="ar-wk-ph"><img src="${w.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="ar-wk-t">${esc(w.t)}</span>${w.y ? `<span class="ar-wk-y">${esc(w.y)}</span>` : ""}</a>`;
+  let wkCur = null, wkKey = "";
+  const layoutWorks = () => {
+    const a = wkCur, row = $(".ar-wk-row", worksEl); if (!a || !row || !a.works.length) return;
+    const W = row.clientWidth || 300, cw = W < 340 ? 100 : 118, gap = 14, pitch = cw + gap, Lw = a.works.length;
+    row.style.setProperty("--cw", cw + "px"); row.style.setProperty("--gap", gap + "px");
+    const m = reduce ? Lw : Lw * Math.ceil((Math.ceil(W / pitch) + 1) / Lw);
+    const key = a.key + "|" + W + "|" + m + "|" + (en() ? 1 : 0);
+    if (key === wkKey && row.firstChild) return; wkKey = key;
+    const tramo = dup => Array.from({ length: m }, (_, i) => wkCard(a.works[i % Lw], dup || i >= Lw)).join("");
+    row.innerHTML = `<div class="ar-wk-track">${tramo(false)}${reduce ? "" : tramo(true)}</div>`;
+    row.firstChild.style.setProperty("--dur", (m * pitch / WK_SPEED).toFixed(2) + "s");
+  };
   const worksHTML = a => a.works.length
-    ? `<p class="ar-wk-h">${en() ? "Works" : "Obras"}</p><div class="ar-wk-row">${a.works.map(w => `<a class="ar-wk" href="${w.href}"><span class="ar-wk-ph"><img src="${w.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="ar-wk-t">${esc(w.t)}</span>${w.y ? `<span class="ar-wk-y">${esc(w.y)}</span>` : ""}</a>`).join("")}</div>`
+    ? `<p class="ar-wk-h">${en() ? "Works" : "Obras"}</p><div class="ar-wk-row"></div>`
     : `<p class="ar-wk-h">${en() ? "Works coming soon" : "Obras muy pronto"}</p>`;
 
   const build = () => {
@@ -82,7 +97,7 @@
       <span class="ar-th-im"><img src="${a.thumb}" alt="" loading="${i < 8 ? "eager" : "lazy"}" decoding="async"></span><span class="ar-th-n">${esc(a.name)}</span></button>`).join("");
     /* los retratos se crean una vez por artista y se cargan cuando hacen falta */
     stage.innerHTML = L.map((a, i) => a.por
-      ? `<img class="ar-por" data-key="${a.key}" ${i === start ? `src="${a.por}" fetchpriority="high"` : `data-src="${a.por}"`} alt="" decoding="async" style="object-position:${a.pos}">`
+      ? `<img class="ar-por ${a.cut ? "ar-cut" : "ar-frame"}" data-key="${a.key}" ${i === start ? `src="${a.por}" fetchpriority="high"` : `data-src="${a.por}"`} alt="" decoding="async" style="object-position:${a.pos}">`
       : `<span class="ar-por ar-mono" data-key="${a.key}">${esc(a.name.trim().charAt(0))}</span>`).join("");
     cur = -1; show(start, false);
     if (countEl) countEl.textContent = pad(L.length);
@@ -101,7 +116,7 @@
     const swapImg = () => { P.forEach((p, k) => p.classList.toggle("on", k === i)); load((i + 1) % L.length); };
     const im = P[i];
     if (!anim || reduce || !im || im.tagName !== "IMG" || im.complete) swapImg(); else { im.addEventListener("load", swapImg, { once: true }); setTimeout(swapImg, 700); }
-    const fill = () => { info.innerHTML = infoHTML(a, i); worksEl.innerHTML = worksHTML(a); fitName(); hero.classList.remove("swap"); };
+    const fill = () => { info.innerHTML = infoHTML(a, i); worksEl.innerHTML = worksHTML(a); wkCur = a; wkKey = ""; layoutWorks(); fitName(); hero.classList.remove("swap"); };
     clearTimeout(swapT);
     if (!anim || reduce || prev < 0) fill();
     else { hero.classList.add("swap"); swapT = setTimeout(fill, 320); }
@@ -120,7 +135,7 @@
   const ready = () => requestAnimationFrame(() => { fitName(); hero.classList.add("is-ready"); });
   const first = imgs()[cur];
   Promise.race([Promise.all([document.fonts ? document.fonts.ready : 0, first && first.tagName === "IMG" && !first.complete ? new Promise(r => first.addEventListener("load", r, { once: true })) : 0]), new Promise(r => setTimeout(r, 1200))]).then(ready);
-  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(fitName); });
+  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { fitName(); layoutWorks(); }); });
 
   /* datos de Supabase e idioma: se enganchan a los de pages.js */
   const oData = window.pgData; window.pgData = () => { oData && oData(); build(); };
