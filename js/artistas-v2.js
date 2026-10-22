@@ -24,13 +24,14 @@
     const real = ART.map(a => {
       const ws = OB.filter(o => o.artista === a.id);
       const por = isReal(a.img) ? a.img : ((ws.find(w => isReal(w.img)) || {}).img || "");
-      return { key: "a-" + a.id, name: a.nombre, thumb: por || a.img, por, cut: false, pos: "50% 25%", city: a.ciudad, disc: T(a, "disciplina"), n: ws.length,
+      return { key: "a-" + a.id, name: a.nombre, thumb: por || a.img, por, pos: "50% 25%", cap: [[a.ciudad, T(a, "disciplina")].filter(Boolean).join(" · ")], city: a.ciudad, disc: T(a, "disciplina"), n: ws.length,
         bio: T(a, "bio"), href: `obras.html?artista=${a.id}`, pd: false,
         works: ws.slice(0, 10).map(w => ({ t: T(w, "titulo"), y: w.anio, img: w.img, href: `obra.html?id=${w.id}` })) };
     });
     const ma = MA.map(m => {
       const k = base(m.retrato.img).split("-retrato")[0];
-      return { key: "m-" + m.id, name: m.nombre, thumb: thumb(m.retrato.img), por: `img/prueba/cut-${k}.webp`, cut: true, pos: "50% 100%",
+      return { key: "m-" + m.id, name: m.nombre, thumb: thumb(m.retrato.img), por: `img/prueba/port-${k}.jpg`, pos: "50% 40%",
+        cap: [T(m, "lugar"), [T(m.retrato, "tipo"), m.retrato.anio].filter(Boolean).join(", ")],
         city: (T(m, "lugar").split(/,\s*\d/)[0] || "").trim(), disc: T(m, "movimiento").split(" · ")[0], n: m.obras.length,
         bio: T(m, "resumen"), href: `artista.html?id=${m.id}`, pd: true,
         works: m.obras.map(o => ({ t: T(o, "titulo"), y: o.anio, img: thumb(o.img), bg: "img/prueba/bg-" + base(o.img).replace(/\.svg$/, ".jpg"), href: `artista.html?id=${m.id}` })) };
@@ -46,7 +47,7 @@
     const h = $(".ar-name", info); if (!h) return;
     h.style.fontSize = "";
     const max = h.clientWidth; if (!max) return;
-    const w = Math.max(0, ...$$(".ar-nw", h).map(x => x.getBoundingClientRect().width));
+    const w = Math.max(0, ...$$(".ar-nl", h).map(x => x.getBoundingClientRect().width));
     if (w > max) h.style.fontSize = (parseFloat(getComputedStyle(h).fontSize) * max / w * 0.98).toFixed(2) + "px";
   };
 
@@ -56,7 +57,7 @@
     let cut = words.length > 1 ? Math.ceil(words.length / 2) : 1;
     if (words.length === 4) cut = 1;
     const l1 = words.slice(0, cut).join(" "), l2 = words.slice(cut).join(" ");
-    const wspan = s => s.split(" ").map(w => `<span class="ar-nw">${esc(w)}</span>`).join(" ");
+    const wspan = s => `<span class="ar-nl">${esc(s)}</span>`;
     const lab = en() ? ["From", "Discipline", "Works"] : ["Origen", "Disciplina", "Obras"];
     const meta = [[lab[0], a.city], [lab[1], a.disc], [lab[2], a.n ? pad(a.n) : "—"]].filter(x => x[1]);
     return `<p class="ar-num"><span>${pad(i + 1)}</span> / ${pad(L.length)}</p>
@@ -105,9 +106,10 @@
     rail.innerHTML = L.map((a, i) => `<button type="button" class="ar-th" role="tab" id="arTab${i}" aria-controls="arInfo" aria-selected="false" tabindex="-1" data-i="${i}" aria-label="${esc(a.name)}">
       <span class="ar-th-im"><img src="${a.thumb}" alt="" loading="${i < 8 ? "eager" : "lazy"}" decoding="async"></span><span class="ar-th-n">${esc(a.name)}</span></button>`).join("");
     /* los retratos se crean una vez por artista y se cargan cuando hacen falta */
-    stage.innerHTML = L.map((a, i) => a.por
-      ? `<img class="ar-por ${a.cut ? "ar-cut" : "ar-frame"}" data-key="${a.key}" ${i === start ? `src="${a.por}" fetchpriority="high"` : `data-src="${a.por}"`} alt="" decoding="async" style="object-position:${a.pos}">`
-      : `<span class="ar-por ar-mono" data-key="${a.key}">${esc(a.name.trim().charAt(0))}</span>`).join("");
+    /* retrato completo en un marco de museo: marco fino + paspartú + epígrafe */
+    stage.innerHTML = `<figure class="ar-fr"><a class="ar-fr-frame" id="arFrame" href="#" tabindex="-1"><span class="ar-fr-mat"><span class="ar-fr-media">${L.map((a, i) => a.por
+      ? `<img class="ar-por" data-key="${a.key}" ${i === start ? `src="${a.por}" fetchpriority="high"` : `data-src="${a.por}"`} alt="" decoding="async" style="object-position:${a.pos}">`
+      : `<span class="ar-por ar-mono" data-key="${a.key}">${esc(a.name.trim().charAt(0))}</span>`).join("")}</span></span></a><figcaption class="ar-fr-cap" id="arCap"></figcaption></figure>`;
     cur = -1; show(start, false);
     if (countEl) countEl.textContent = pad(L.length);
   };
@@ -126,7 +128,8 @@
     const im = P[i];
     if (!anim || reduce || !im || im.tagName !== "IMG" || im.complete) swapImg(); else { im.addEventListener("load", swapImg, { once: true }); setTimeout(swapImg, 700); }
     bgCur = a; layoutBg(true);
-    const fill = () => { info.innerHTML = infoHTML(a, i); fitName(); hero.classList.remove("swap"); };
+    const fr = $("#arFrame"); if (fr) { fr.href = a.href; fr.setAttribute("aria-label", (en() ? "Profile of " : "Perfil de ") + a.name); }
+    const fill = () => { info.innerHTML = infoHTML(a, i); const cp = $("#arCap"); if (cp) cp.innerHTML = `<strong>${esc(a.name)}</strong>${(a.cap || []).filter(Boolean).map(c => `<span>${esc(c)}</span>`).join("")}`; fitName(); hero.classList.remove("swap"); };
     clearTimeout(swapT);
     if (!anim || reduce || prev < 0) fill();
     else { hero.classList.add("swap"); swapT = setTimeout(fill, 320); }
