@@ -235,7 +235,7 @@ window.startApp = function () {
     el("maestrosList").innerHTML = MA.map(m => `<article class="artist-card maestro-card"><a class="maestro-link" href="artista.html?id=${m.id}">
       <img src="${m.retrato.img}" alt="Retrato de ${esc(m.nombre)}" loading="lazy" decoding="async" width="${m.retrato.w}" height="${m.retrato.h}"></a>
       <p class="eyebrow">${esc(m.vida)} · <span>${esc(m.movimiento)}</span></p><h3 style="margin-top:6px"><a href="artista.html?id=${m.id}">${esc(m.nombre)}</a></h3>
-      <p>${esc(m.resumen)}</p><a class="link" href="artista.html?id=${m.id}">Obras</a></article>`).join("");
+      <p>${esc(m.resumen)}</p></article>`).join("");
   }
   if (el("maestro")) {
     const id = new URLSearchParams(location.search).get("id"), m = MA.find(x => x.id === id);
