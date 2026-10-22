@@ -76,7 +76,7 @@
   const layoutBg = (fresh) => {
     const a = bgCur; if (!bg || !a) return;
     const W = bg.clientWidth || innerWidth, H = bg.clientHeight || innerHeight, small = W < 761;
-    const flow = W < 981, ch = Math.round(small ? Math.min(innerHeight * .32, 290) : flow ? Math.min(innerHeight * .4, 440) : Math.min(H * .64, 620)), cw = Math.round(ch * .8), gap = Math.round(ch * .07), pitch = cw + gap;
+    const flow = W < 981, ch = Math.round(small ? Math.min(innerHeight * .32, 290) : flow ? Math.min(innerHeight * .4, 440) : Math.min(H * .64, 620)), cw = Math.round(ch * .8), gap = Math.round(ch * .3), pitch = cw + gap;
     if (!(pitch >= 40) || !(W > 0)) return;
     const Lw = a.works.length;
     const m = Lw ? Lw * Math.ceil((Math.ceil(W / pitch) + 1) / Lw) : 0;
@@ -95,6 +95,30 @@
     old.forEach(o => { o.classList.remove("on"); setTimeout(() => o.remove(), 1200); });
   };
 
+  /* Fila clara (solo modo claro): misma franja infinita, nítida, debajo del destacado */
+  const row = $("#arRow"), ROW_SPEED = 26;
+  let rowKey = "";
+  const rowCard = w => `<a class="ar-rwc" href="${w.href}" tabindex="-1"><span class="ar-rwc-im"><img src="${w.bg || w.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="ar-rwc-t">${esc(w.t)}</span>${w.y ? `<span class="ar-rwc-y">${esc(w.y)}</span>` : ""}</a>`;
+  const layoutRow = (fresh) => {
+    const a = bgCur; if (!row || !a) return;
+    const W = row.clientWidth || innerWidth, small = W < 761;
+    const ch = small ? 190 : W < 981 ? 230 : 280, cw = Math.round(ch * .8), gap = small ? 12 : 20, pitch = cw + gap;
+    const Lw = a.works.length, m = Lw ? Lw * Math.ceil((Math.ceil(W / pitch) + 1) / Lw) : 0;
+    const key = a.key + "|" + W + "|" + ch + "|" + m;
+    if (key === rowKey && !fresh) return; rowKey = key;
+    row.parentNode.setAttribute("aria-label", en() ? "Works by " + a.name : "Obras de " + a.name);
+    const old = $$(".ar-rw-l", row);
+    row.classList.toggle("empty", !m);
+    if (!m) { old.forEach(o => o.remove()); return; }
+    const tramo = Array.from({ length: m }, (_, i) => rowCard(a.works[i % Lw])).join("");
+    const l = document.createElement("div"); l.className = "ar-rw-l";
+    l.style.cssText = `--cw:${cw}px;--ch:${ch}px;--gap:${gap}px;--dur:${(m * pitch / ROW_SPEED).toFixed(2)}s`;
+    l.innerHTML = `<div class="ar-rw-track">${tramo}${tramo}</div>`;
+    row.appendChild(l);
+    if (!fresh) { old.forEach(o => o.remove()); l.classList.add("on", "now"); return; }
+    void l.offsetWidth; l.classList.add("on");
+    old.forEach(o => { o.classList.remove("on"); setTimeout(() => o.remove(), 700); });
+  };
   const build = () => {
     L = list();
     const s = (en() ? "en" : "es") + "|" + L.map(a => a.key).join(",");
@@ -127,7 +151,7 @@
     const swapImg = () => { P.forEach((p, k) => p.classList.toggle("on", k === i)); load((i + 1) % L.length); };
     const im = P[i];
     if (!anim || reduce || !im || im.tagName !== "IMG" || im.complete) swapImg(); else { im.addEventListener("load", swapImg, { once: true }); setTimeout(swapImg, 700); }
-    bgCur = a; layoutBg(true);
+    bgCur = a; layoutBg(true); layoutRow(true);
     const fr = $("#arFrame"); if (fr) { fr.href = a.href; fr.setAttribute("aria-label", (en() ? "Profile of " : "Perfil de ") + a.name); }
     const fill = () => { info.innerHTML = infoHTML(a, i); const cp = $("#arCap"); if (cp) cp.innerHTML = `<strong>${esc(a.name)}</strong>${(a.cap || []).filter(Boolean).map(c => `<span>${esc(c)}</span>`).join("")}`; fitName(); hero.classList.remove("swap"); };
     clearTimeout(swapT);
@@ -148,7 +172,7 @@
   const ready = () => requestAnimationFrame(() => { fitName(); hero.classList.add("is-ready"); });
   const first = imgs()[cur];
   Promise.race([Promise.all([document.fonts ? document.fonts.ready : 0, first && first.tagName === "IMG" && !first.complete ? new Promise(r => first.addEventListener("load", r, { once: true })) : 0]), new Promise(r => setTimeout(r, 1200))]).then(ready);
-  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { fitName(); layoutBg(false); }); });
+  let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { fitName(); layoutBg(false); layoutRow(false); }); });
 
   /* datos de Supabase e idioma: se enganchan a los de pages.js */
   const oData = window.pgData; window.pgData = () => { oData && oData(); build(); };
