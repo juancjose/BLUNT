@@ -197,3 +197,4 @@ a.pg-block-v:hover i{transform:translateX(4px)}
 .pg-count{min-height:34px}
 .pg-index{min-height:468px}
 @media (max-width:760px){.pg-count{min-height:26px}.pg-index{min-height:455px}}
+:root:not([data-theme="dark"]) .pg-strip{-webkit-mask-image:none;mask-image:none}
