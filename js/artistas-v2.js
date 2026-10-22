@@ -1,9 +1,10 @@
 /* =========================================================
-   PRUEBA — Artistas: artista destacado (artistas-prueba.html)
-   Retrato grande fundido con el fondo, nombre grande, datos (origen · disciplina · obras),
-   columna de miniaturas para cambiar de artista y fila de obras.
-   Arranca con los maestros (datos locales) sin esperar a Supabase; cuando llegan
-   los artistas de la galería se suman adelante.
+   PRUEBA — Artista destacado (artistas-prueba.html y clasicos-prueba.html)
+   Columna de miniaturas, nombre grande, datos (origen · disciplina · obras),
+   retrato limpio con epígrafe y, debajo, las obras del artista (una vez cada una).
+   data-src en #arHero:
+     "galeria"  → solo artistas de BLUNT (Supabase); sin artistas, muestra #arEmpty.
+     "maestros" → maestros argentinos (datos locales, dominio público).
    ========================================================= */
 (function () {
   const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -18,17 +19,18 @@
   const thumb = p => "img/prueba/" + base(p).replace(/\.svg$/, ".jpg");
   const isReal = u => u && !/^data:/.test(u);
   const MA = typeof MAESTROS !== "undefined" ? MAESTROS : [];
+  const SRC = hero.dataset.src || "galeria";
 
   const list = () => {
     const ART = window.ARTISTAS || [], OB = window.OBRAS || [];
-    const real = ART.map(a => {
+    const real = SRC === "maestros" ? [] : ART.map(a => {
       const ws = OB.filter(o => o.artista === a.id);
       const por = isReal(a.img) ? a.img : ((ws.find(w => isReal(w.img)) || {}).img || "");
       return { key: "a-" + a.id, name: a.nombre, thumb: por || a.img, por, pos: "50% 25%", cap: [[a.ciudad, T(a, "disciplina")].filter(Boolean).join(" · ")], city: a.ciudad, disc: T(a, "disciplina"), n: ws.length,
         bio: T(a, "bio"), href: `obras.html?artista=${a.id}`, pd: false,
         works: ws.slice(0, 10).map(w => ({ t: T(w, "titulo"), y: w.anio, img: w.img, href: `obra.html?id=${w.id}` })) };
     });
-    const ma = MA.map(m => {
+    const ma = SRC !== "maestros" ? [] : MA.map(m => {
       const k = base(m.retrato.img).split("-retrato")[0];
       return { key: "m-" + m.id, name: m.nombre, thumb: thumb(m.retrato.img), por: `img/prueba/port-${k}.jpg`, pos: "50% 40%",
         cap: [T(m, "lugar"), [T(m.retrato, "tipo"), m.retrato.anio].filter(Boolean).join(", ")],
@@ -72,10 +74,11 @@
   const rowCard = w => `<a class="ar-wc" href="${w.href}"><span class="ar-wc-im"><img src="${w.bg || w.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="ar-wc-t">${esc(w.t)}</span>${w.y ? `<span class="ar-wc-y">${esc(w.y)}</span>` : ""}</a>`;
   const renderRow = (a, anim) => {
     if (!row || !a) return;
+    if (row.closest(".ar-row")) row.closest(".ar-row").hidden = !a.works.length;
     const key = a.key + "|" + (en() ? "en" : "es"); if (key === rowKey) return; rowKey = key;
     const n = a.works.length, sec = row.closest(".ar-row");
     const fill = () => {
-      if (sec) { sec.hidden = !n; sec.setAttribute("aria-label", en() ? "Works by " + a.name : "Obras de " + a.name); }
+      if (sec) { sec.setAttribute("aria-label", en() ? "Works by " + a.name : "Obras de " + a.name); }
       if (rowH) rowH.innerHTML = `<span>${en() ? "Works by" : "Obras de"}</span> ${esc(a.name)}<i aria-hidden="true"></i><span class="ar-row-n">${pad(n)}</span>`;
       row.className = "ar-row-g n" + Math.min(n, 4);
       row.innerHTML = a.works.map(rowCard).join("");
@@ -85,8 +88,21 @@
     if (!anim || reduce || !row.children.length) fill();
     else { sec && sec.classList.add("swap"); rowT = setTimeout(fill, 260); }
   };
+  /* Sin artistas de la galería: estado vacío (invitación a sumarse). Se decide recién
+     cuando llegan los datos de Supabase, para no mostrarlo de más mientras cargan. */
+  const emptyEl = $("#arEmpty"), allSec = $("#galeria-artistas");
+  let dataReady = SRC !== "galeria";
+  const setEmpty = () => {
+    if (SRC !== "galeria") return;
+    const has = L.length > 0;
+    hero.hidden = !has;
+    if (row && row.closest(".ar-row")) row.closest(".ar-row").hidden = !has || !(L[Math.max(cur, 0)] || L[0]).works.length;
+    if (allSec) allSec.hidden = !has;
+    if (emptyEl) emptyEl.hidden = has || !dataReady;
+    document.body.classList.toggle("ar-wait", !has && !dataReady);
+  };
   const build = () => {
-    L = list();
+    L = list(); setEmpty();
     const s = (en() ? "en" : "es") + "|" + L.map(a => a.key).join(",");
     if (s === sig) return; 
     const prevKey = curKey;
@@ -141,7 +157,8 @@
   let rz = 0; addEventListener("resize", () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(() => { fitName(); }); });
 
   /* datos de Supabase e idioma: se enganchan a los de pages.js */
-  const oData = window.pgData; window.pgData = () => { oData && oData(); build(); };
+  const oData = window.pgData; window.pgData = () => { oData && oData(); dataReady = true; build(); setEmpty(); };
+  setTimeout(() => { if (!dataReady) { dataReady = true; setEmpty(); } }, 8000);
   const relang = () => { sig = ""; rowKey = ""; touched = true; build(); };
   const oAfter = window.pgAfterApp;
   window.pgAfterApp = () => {

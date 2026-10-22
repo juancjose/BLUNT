@@ -1,7 +1,7 @@
 /* =========================================================
-   PRUEBA — Artistas: artista destacado (solo artistas-prueba.html, body.ar-page)
-   Retrato grande fundido con el fondo (sin borde visible), nombre grande en la
-   tipografía del sitio (Archivo), datos, miniaturas para cambiar y fila de obras.
+   PRUEBA — Artista destacado (artistas-prueba.html y clasicos-prueba.html, body.ar-page)
+   Miniaturas para cambiar, nombre grande (Archivo), datos, retrato limpio con
+   epígrafe y, debajo, las obras del artista. Estado vacío de Artistas (#arEmpty).
    ========================================================= */
 .ar-page{--ar-ease:cubic-bezier(.16,1,.3,1);--ar-pad:clamp(20px,3.2vw,52px)}
 .ar-hero{position:relative;overflow:hidden;padding:0;border-bottom:1px solid var(--line);
@@ -32,7 +32,7 @@
 .ar-th:focus-visible{outline:none}
 .ar-th:focus-visible .ar-th-im{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--fg),0 0 0 8px var(--bg)}
 
-/* ---------- retrato completo en marco de museo (marco fino + paspartú + epígrafe) ---------- */
+/* ---------- retrato completo, limpio, con epígrafe ---------- */
 .ar-stage{position:absolute;z-index:1;top:0;bottom:0;left:46%;width:40%;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .ar-fr{margin:0;display:flex;flex-direction:column;align-items:flex-start;padding-top:24px}
 /* v5: retrato limpio, sin marco ni paspartú; solo una sombra sutil */
@@ -170,3 +170,45 @@
  .ar-wc-t{font-size:.88rem;margin-top:11px}
 }
 @media (prefers-reduced-motion:reduce){.ar-row,.ar-wc-im img{transition:none!important}}
+
+/* ---------- Artistas sin artistas aprobados: invitación a sumarse ---------- */
+body.ar-wait main{min-height:calc(100svh - 72px)}
+.ar-empty{position:relative;padding:0;border-bottom:1px solid var(--line);height:calc(100svh - 72px);min-height:640px;max-height:960px}
+.ar-empty[hidden]{display:none}
+.ar-em-in{position:relative;height:100%;max-width:1520px;margin:0 auto;padding:0 var(--ar-pad);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:clamp(32px,6vw,110px)}
+.ar-em-txt{padding-left:clamp(0px,9vw,184px);max-width:760px}
+.ar-em-k{position:absolute;top:clamp(26px,4.4vh,44px);left:var(--ar-pad);margin:0;display:flex;align-items:center;gap:14px;font:400 .68rem/1 Inter,sans-serif;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.ar-em-k i{display:block;width:28px;height:1px;background:currentColor;opacity:.7}
+.ar-em-h{margin:0;font-family:Archivo,system-ui,sans-serif;font-stretch:112%;font-weight:500;letter-spacing:-.045em;line-height:.92;font-size:clamp(3rem,5.3vw,5.8rem);color:var(--fg)}
+.ar-em-p{margin:clamp(20px,3.4vh,30px) 0 0;max-width:46ch;font-size:clamp(.92rem,1.05vw,1.02rem);line-height:1.6;color:var(--muted)}
+.ar-em-steps{list-style:none;display:flex;flex-wrap:wrap;gap:clamp(18px,2.6vw,40px);margin:clamp(24px,4vh,36px) 0 0;padding:0}
+.ar-em-steps li{position:relative;display:flex;flex-direction:column;gap:7px}
+.ar-em-steps li+li::before{content:"";position:absolute;left:calc(clamp(18px,2.6vw,40px) / -2);top:3px;bottom:3px;width:1px;background:var(--line)}
+.ar-em-steps span{font-size:.6rem;letter-spacing:.24em;color:var(--muted);font-variant-numeric:tabular-nums}
+.ar-em-steps b{font-family:Archivo,sans-serif;font-stretch:112%;font-weight:500;font-size:clamp(1rem,1.4vw,1.24rem);letter-spacing:-.01em}
+.ar-em-cta{display:flex;flex-wrap:wrap;align-items:center;gap:18px 28px;margin-top:clamp(26px,4.4vh,40px)}
+.ar-em-btn{display:inline-flex;align-items:center;gap:14px;padding:17px 26px;background:var(--fg);color:var(--bg);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;border-radius:999px;transition:opacity .3s ease}
+.ar-em-btn i{font-style:normal;display:inline-block;transition:transform .45s var(--ar-ease)}
+.ar-em-btn:hover i,.ar-em-btn:focus-visible i{transform:translateX(5px)}
+.ar-em-btn:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
+.ar-em-alt{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--fg);padding-bottom:7px;border-bottom:1px solid var(--line);text-decoration:none}
+.ar-em-alt:hover{border-color:var(--fg)}
+.ar-em-fig{margin:0 clamp(0px,6vw,120px) 0 0;display:flex;flex-direction:column}
+.ar-em-ph{position:relative;display:block;height:min(59svh,596px);aspect-ratio:4/5;border:1px solid var(--line)}
+.ar-em-plus{position:absolute;left:50%;top:50%;width:44px;height:44px;transform:translate(-50%,-50%)}
+.ar-em-plus::before,.ar-em-plus::after{content:"";position:absolute;background:var(--muted);opacity:.6}
+.ar-em-plus::before{left:0;right:0;top:50%;height:1px}
+.ar-em-plus::after{top:0;bottom:0;left:50%;width:1px}
+.ar-em-fig .ar-fr-cap strong{color:var(--muted)}
+@media (max-width:1180px){.ar-em-ph{height:min(48svh,460px)}.ar-em-txt{padding-left:0}}
+@media (max-width:860px){.ar-em-fig{display:none}.ar-em-in{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:760px){
+ .ar-empty{height:auto;min-height:calc(100svh - 72px);max-height:none}
+ .ar-em-in{display:block;padding:96px 20px 64px}
+ .ar-em-k{left:20px;top:28px}
+ .ar-em-h{font-size:clamp(2.3rem,11.4vw,3.4rem)}
+ .ar-em-steps{flex-direction:column;gap:16px}
+ .ar-em-steps li{flex-direction:row;align-items:baseline;gap:14px;padding-top:16px;border-top:1px solid var(--line)}
+ .ar-em-steps li+li::before{display:none}
+ .ar-em-cta{flex-direction:column;align-items:flex-start}
+}

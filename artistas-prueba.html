@@ -6,17 +6,40 @@
 <script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-<link rel="preload" as="image" href="img/prueba/port-lopez.jpg" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/pages.css">
 <link rel="stylesheet" href="css/artistas-v2.css">
 </head>
-<body data-page="artistas" class="pg ar-page" data-test data-boot="data">
+<body data-page="artistas" class="pg ar-page ar-wait" data-test data-boot="data">
 <main id="main">
 
+<!-- Sin artistas aprobados todavía: invitación a sumarse (la arma artistas-v2.js según los datos) -->
+<section class="ar-empty" id="arEmpty" aria-labelledby="arEmH" hidden>
+ <div class="ar-em-in">
+  <div class="ar-em-txt">
+   <p class="ar-em-k"><span data-en="Artists">Artistas</span><i aria-hidden="true"></i><span data-en="Open call">Convocatoria abierta</span></p>
+   <h1 class="ar-em-h" id="arEmH"><span class="ar-nl" data-en="Your work">Tu obra puede</span><br><span class="ar-nl" data-en="belongs here.">estar acá.</span></h1>
+   <p class="ar-em-p" data-en="BLUNT is putting together its first selection of artists. Create your account, upload your works and, once the gallery approves your profile, it appears on this page.">BLUNT está armando su primera selección de artistas. Creá tu cuenta, subí tus obras y, cuando la galería apruebe tu perfil, aparece en esta página.</p>
+   <ol class="ar-em-steps">
+    <li><span>01</span><b data-en="Create your account">Creá tu cuenta</b></li>
+    <li><span>02</span><b data-en="Upload your works">Subí tus obras</b></li>
+    <li><span>03</span><b data-en="We publish you">Te publicamos</b></li>
+   </ol>
+   <div class="ar-em-cta">
+    <a class="ar-em-btn" href="login.html"><span data-en="Join as an artist">Sumate como artista</span> <i aria-hidden="true">→</i></a>
+    <a class="ar-em-alt" href="contacto.html" data-en="Questions? Write to us">¿Dudas? Escribinos</a>
+   </div>
+  </div>
+  <figure class="ar-em-fig" aria-hidden="true">
+   <span class="ar-em-ph"><span class="ar-em-plus"></span></span>
+   <figcaption class="ar-fr-cap"><strong data-en="Your name">Tu nombre</strong><span data-en="City · Discipline">Ciudad · Disciplina</span></figcaption>
+  </figure>
+ </div>
+</section>
+
 <!-- Artista destacado: miniaturas, nombre, datos y retrato; debajo, sus obras -->
-<section class="ar-hero" id="arHero" aria-labelledby="arH">
+<section class="ar-hero" id="arHero" data-src="galeria" aria-labelledby="arH" hidden>
  <div class="ar-in">
   <h1 class="ar-h" id="arH"><span data-en="Artists">Artistas</span><i aria-hidden="true"></i><span class="ar-count" id="arCount" data-no-i18n></span></h1>
   <div class="ar-rail" id="arRail" role="tablist" aria-orientation="vertical" data-en-label="Choose an artist" aria-label="Elegí un artista" data-no-i18n></div>
@@ -24,11 +47,10 @@
   <div class="ar-info" id="arInfo" role="tabpanel" aria-live="polite" data-no-i18n></div>
  </div>
 </section>
-<section class="ar-row" aria-label="Obras del artista"><h2 class="ar-row-h" id="arRowH" data-no-i18n></h2><div class="ar-row-g" id="arRow" data-no-i18n></div></section>
+<section class="ar-row" aria-label="Obras del artista" hidden><h2 class="ar-row-h" id="arRowH" data-no-i18n></h2><div class="ar-row-g" id="arRow" data-no-i18n></div></section>
 
-<section id="galeria-artistas" class="ar-all"><div class="wrap"><div class="sec-head"><div><p class="eyebrow" data-en="All artists">Todos los artistas</p><h2 data-en="Gallery artists">Artistas de la galería</h2></div></div><div class="artist-list" id="artistList"></div></div></section>
-<section class="alt maestros-sec"><div class="wrap"><div class="sec-head"><div><p class="pd-tag">Muestra · Dominio público · No a la venta</p><h2>Maestros argentinos</h2><p class="muted maestros-intro">Seis grandes de la pintura argentina de los siglos XIX y XX, cuya obra ya es de dominio público.</p></div></div>
-<div class="artist-list" id="maestrosList"></div></div></section></main>
+<section id="galeria-artistas" class="ar-all" hidden><div class="wrap"><div class="sec-head"><div><p class="eyebrow" data-en="All artists">Todos los artistas</p><h2 data-en="Gallery artists">Artistas de la galería</h2></div></div><div class="artist-list" id="artistList"></div></div></section>
+</main>
 <script src="js/data.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/maestros.js"></script>
