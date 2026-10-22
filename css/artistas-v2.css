@@ -143,3 +143,24 @@
 /* en claro, sin superponer el nombre a la figura en pantallas angostas (se lee siempre) */
 @media (max-width:980px){:root:not([data-theme="dark"]) .ar-info{margin-top:18px}}
 @media (max-width:760px){[data-theme="dark"] .ar-info{margin-top:calc(min(50svh,460px) * -.16)}}
+
+/* ---------- obras del artista de fondo: franja grande, lenta, atenuada pareja ---------- */
+.ar-page{--ar-dim:.22}
+[data-theme="dark"] body.ar-page{--ar-dim:.22}
+:root:not([data-theme="dark"]) body.ar-page{--ar-dim:.16}
+.ar-bg{position:absolute;inset:0;z-index:0;overflow:hidden;transition:opacity 1s ease}
+.ar-hero:not(.is-ready) .ar-bg{opacity:0}
+.ar-bg-l{position:absolute;inset:0;display:flex;align-items:center;opacity:0;transition:opacity 1.1s ease-in-out;pointer-events:none}
+.ar-bg-l.on{opacity:var(--ar-dim);pointer-events:auto}
+.ar-bg-l.now{transition:none}
+.ar-bg-track{display:flex;width:max-content;animation:arMarquee var(--dur,90s) linear infinite;will-change:transform;backface-visibility:hidden}
+.ar-bgc{flex:0 0 auto;display:block;width:var(--cw);height:var(--ch);margin-right:var(--gap);overflow:hidden;background:color-mix(in srgb,var(--fg) 8%,transparent)}
+.ar-bgc img{display:block;width:100%;height:100%;object-fit:cover;max-width:none;opacity:0;transition:opacity .6s ease}
+.ar-bgc img.ok{opacity:1}
+/* el contenido va arriba; los clics pasan al fondo salvo en miniaturas y enlaces */
+.ar-in{z-index:1;pointer-events:none}
+.ar-info{pointer-events:none}
+.ar-info a,.ar-th{pointer-events:auto}
+@media (max-width:760px){
+ .ar-rail{pointer-events:auto}
+}
