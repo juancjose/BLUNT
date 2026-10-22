@@ -6,24 +6,27 @@
 <script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="img/prueba/port-lopez.jpg" fetchpriority="high">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/artistas-v2.css">
 </head>
-<body data-page="artistas" class="pg" data-test data-boot="data">
+<body data-page="artistas" class="pg ar-page" data-test data-boot="data">
 <main id="main">
 
-<section class="pg-head pg-artistas" aria-labelledby="pgT">
-<div class="wrap pg-split">
-<div class="pg-txt">
-<p class="pg-kicker pg-in" style="--k:0"><span data-en="Who creates">Quiénes crean</span><i class="pg-dot" aria-hidden="true"></i><span data-en="Gallery & masters">Galería y maestros</span></p>
-<h1 class="pg-title" id="pgT" data-en="Artists">Artistas</h1>
-<p class="pg-sub pg-in" style="--k:2" data-en="We work closely with each artist to bring you their work and process. We also exhibit the great Argentine masters whose work is now in the public domain.">Trabajamos de cerca con cada artista para acercarte su obra y su proceso. Y exhibimos a los grandes maestros argentinos cuya obra ya es de dominio público.</p>
-</div>
-<ol class="pg-index" id="pgIndex" data-no-i18n></ol>
-</div>
+<!-- Artista destacado: retrato grande fundido con el fondo, nombre, datos y obras -->
+<section class="ar-hero" id="arHero" aria-labelledby="arH">
+ <div class="ar-in">
+  <h1 class="ar-h" id="arH"><span data-en="Artists">Artistas</span><i aria-hidden="true"></i><span class="ar-count" id="arCount" data-no-i18n></span></h1>
+  <div class="ar-rail" id="arRail" role="tablist" aria-orientation="vertical" data-en-label="Choose an artist" aria-label="Elegí un artista" data-no-i18n></div>
+  <div class="ar-stage" id="arStage" aria-hidden="true"></div>
+  <div class="ar-info" id="arInfo" role="tabpanel" aria-live="polite" data-no-i18n></div>
+  <div class="ar-works" id="arWorks" data-no-i18n></div>
+ </div>
 </section>
-<section id="galeria-artistas"><div class="wrap"><div class="artist-list" id="artistList"></div></div></section>
+
+<section id="galeria-artistas" class="ar-all"><div class="wrap"><div class="sec-head"><div><p class="eyebrow" data-en="All artists">Todos los artistas</p><h2 data-en="Gallery artists">Artistas de la galería</h2></div></div><div class="artist-list" id="artistList"></div></div></section>
 <section class="alt maestros-sec"><div class="wrap"><div class="sec-head"><div><p class="pd-tag">Muestra · Dominio público · No a la venta</p><h2>Maestros argentinos</h2><p class="muted maestros-intro">Seis grandes de la pintura argentina de los siglos XIX y XX, cuya obra ya es de dominio público.</p></div></div>
 <div class="artist-list" id="maestrosList"></div></div></section></main>
 <script src="js/data.js"></script>
@@ -32,6 +35,7 @@
 <script src="js/app.js"></script>
 <script src="js/supabase-config.js"></script>
 <script src="js/pages.js"></script>
+<script src="js/artistas-v2.js"></script>
 <script type="module" src="js/pages-boot.js"></script>
 </body>
 </html>

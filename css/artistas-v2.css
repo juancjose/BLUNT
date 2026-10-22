@@ -1,0 +1,145 @@
+/* =========================================================
+   PRUEBA — Artistas: artista destacado (solo artistas-prueba.html, body.ar-page)
+   Retrato grande fundido con el fondo (sin borde visible), nombre grande en la
+   tipografía del sitio (Archivo), datos, miniaturas para cambiar y fila de obras.
+   ========================================================= */
+.ar-page{--ar-ease:cubic-bezier(.16,1,.3,1);--ar-pad:clamp(20px,3.2vw,52px)}
+.ar-hero{position:relative;overflow:hidden;padding:0;border-bottom:1px solid var(--line);
+  height:calc(100svh - 72px);min-height:640px;max-height:960px}
+.ar-in{position:relative;height:100%;max-width:1520px;margin:0 auto;padding:0 var(--ar-pad)}
+
+/* título de la página, chico, arriba a la izquierda */
+.ar-h{position:absolute;z-index:4;top:clamp(26px,4.4vh,44px);left:var(--ar-pad);margin:0;display:flex;align-items:center;gap:14px;
+  font:400 .68rem/1 Inter,sans-serif;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.ar-h i{display:block;width:28px;height:1px;background:currentColor;opacity:.7}
+.ar-count{font-variant-numeric:tabular-nums}
+
+/* ---------- columna de miniaturas ---------- */
+.ar-rail{position:absolute;z-index:4;left:var(--ar-pad);top:clamp(84px,13vh,128px);bottom:clamp(28px,5vh,56px);
+  display:flex;flex-direction:column;gap:clamp(10px,1.6vh,16px);overflow-y:auto;overflow-x:visible;scrollbar-width:none;padding:2px 160px 2px 2px;margin:-2px;pointer-events:none}
+.ar-rail::-webkit-scrollbar{display:none}
+.ar-th{pointer-events:auto;position:relative;display:flex;align-items:center;gap:14px;flex:0 0 auto;padding:0;border:0;background:none;color:var(--fg);cursor:pointer;text-align:left;width:max-content}
+.ar-th-im{display:block;width:46px;height:46px;border-radius:8px;overflow:hidden;background:color-mix(in srgb,var(--fg) 8%,transparent);
+  opacity:.5;filter:grayscale(1);transition:opacity .45s ease,filter .45s ease,box-shadow .45s ease}
+.ar-th-im img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;max-width:none}
+.ar-th-n{font:500 .74rem/1.25 Archivo,sans-serif;font-stretch:112%;max-width:9.5em;opacity:0;transform:translateX(-6px);transition:opacity .45s ease,transform .6s var(--ar-ease);pointer-events:none}
+.ar-th:hover .ar-th-im{opacity:.85}
+.ar-th.on .ar-th-im{opacity:1;filter:none;box-shadow:0 0 0 1px var(--bg),0 0 0 2px var(--fg)}
+.ar-th.on .ar-th-n{opacity:1;transform:none}
+.ar-th:focus-visible{outline:none}
+.ar-th:focus-visible .ar-th-im{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--fg);opacity:1}
+
+/* ---------- retrato fundido con el fondo ---------- */
+.ar-stage{position:absolute;z-index:1;top:0;bottom:0;left:31%;width:48%;pointer-events:none}
+.ar-por{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;opacity:0;transition:opacity 1.1s ease-in-out;
+  /* elipse suave + caída larga hacia abajo: el retrato se funde con el fondo, sin rectángulo visible */
+  -webkit-mask-image:radial-gradient(ellipse 50% 60% at 50% 40%,#000 0,#000 40%,rgba(0,0,0,.7) 60%,rgba(0,0,0,.24) 80%,transparent 96%),linear-gradient(to bottom,transparent 0,rgba(0,0,0,.55) 9%,#000 20%,#000 50%,rgba(0,0,0,.4) 74%,transparent 95%);
+  -webkit-mask-composite:source-in;
+  mask-image:radial-gradient(ellipse 50% 60% at 50% 40%,#000 0,#000 40%,rgba(0,0,0,.7) 60%,rgba(0,0,0,.24) 80%,transparent 96%),linear-gradient(to bottom,transparent 0,rgba(0,0,0,.55) 9%,#000 20%,#000 50%,rgba(0,0,0,.4) 74%,transparent 95%);
+  mask-composite:intersect}
+.ar-por.on{opacity:1}
+.ar-hero:not(.is-ready) .ar-por.on{opacity:0}
+.ar-mono{display:grid;place-items:center;font:600 clamp(14rem,30vw,28rem)/1 Archivo,sans-serif;font-stretch:125%;color:color-mix(in srgb,var(--fg) 9%,transparent)}
+/* en claro, el retrato se ve un poco más suave para que el texto se lea */
+:root:not([data-theme="dark"]) .ar-por{mix-blend-mode:multiply}
+
+/* ---------- nombre + datos ---------- */
+.ar-info{position:absolute;z-index:3;left:calc(var(--ar-pad) + 15%);bottom:clamp(44px,9vh,92px);width:min(52%,760px)}
+.ar-num{margin:0 0 clamp(14px,2.2vh,22px);display:flex;align-items:center;flex-wrap:wrap;gap:12px;font-size:.64rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-variant-numeric:tabular-nums}
+.ar-num span{color:var(--fg)}
+.ar-num i{display:block;width:22px;height:1px;background:currentColor;opacity:.7}
+.ar-name{margin:0;font-family:Archivo,system-ui,sans-serif;font-stretch:112%;font-weight:500;letter-spacing:-.045em;line-height:.9;
+  font-size:clamp(3.4rem,7.4vw,7.6rem);color:var(--fg);overflow-wrap:normal}
+.ar-nw{display:inline-block;white-space:nowrap}
+.ar-meta{display:flex;flex-wrap:wrap;gap:clamp(18px,2.6vw,40px);margin:clamp(20px,3.2vh,32px) 0 0;padding:0}
+.ar-meta>div{position:relative;min-width:0}
+.ar-meta>div+div::before{content:"";position:absolute;left:calc(clamp(18px,2.6vw,40px) / -2);top:4px;bottom:4px;width:1px;background:var(--line)}
+.ar-meta dt{font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.ar-meta dd{margin:0;font-family:Archivo,sans-serif;font-stretch:112%;font-weight:500;font-size:clamp(1rem,1.5vw,1.34rem);letter-spacing:-.01em;line-height:1.2;font-variant-numeric:tabular-nums}
+.ar-bio{margin:clamp(14px,2.2vh,20px) 0 0;max-width:44ch;font-size:.92rem;line-height:1.6;color:var(--muted)}
+.ar-link{display:inline-flex;align-items:center;gap:12px;margin-top:clamp(18px,2.8vh,28px);font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--fg);padding-bottom:7px;border-bottom:1px solid currentColor}
+.ar-link i{font-style:normal;display:inline-block;transition:transform .45s var(--ar-ease)}
+.ar-pd{display:table;margin:18px 0 0;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:5px 10px;border-radius:999px}
+.ar-link:hover i,.ar-link:focus-visible i{transform:translateX(5px)}
+/* legibilidad sobre el retrato */
+[data-theme="dark"] .ar-name,[data-theme="dark"] .ar-meta dd{text-shadow:0 2px 28px rgba(0,0,0,.55)}
+[data-theme="dark"] .ar-bio,[data-theme="dark"] .ar-num{text-shadow:0 1px 14px rgba(0,0,0,.8)}
+:root:not([data-theme="dark"]) .ar-name,:root:not([data-theme="dark"]) .ar-meta dd{text-shadow:0 1px 26px rgba(243,237,227,.7)}
+:root:not([data-theme="dark"]) .ar-bio,:root:not([data-theme="dark"]) .ar-num{text-shadow:0 0 12px rgba(243,237,227,.9)}
+
+/* ---------- fila de obras ---------- */
+.ar-works{position:absolute;z-index:3;right:0;bottom:clamp(40px,8vh,88px);width:calc(27% + var(--ar-pad));padding-left:8px}
+.ar-wk-h{margin:0 0 12px;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted)}
+.ar-wk-row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-right:var(--ar-pad);
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 82%,transparent 100%);mask-image:linear-gradient(90deg,#000 0,#000 82%,transparent 100%)}
+.ar-wk-row::-webkit-scrollbar{display:none}
+.ar-wk{flex:0 0 auto;width:clamp(112px,9.4vw,140px);scroll-snap-align:start;color:inherit}
+.ar-wk-ph{display:block;aspect-ratio:4/5;border-radius:6px;overflow:hidden;background:color-mix(in srgb,var(--fg) 7%,transparent)}
+.ar-wk-ph img{width:100%;height:100%;object-fit:cover;max-width:none;opacity:0;transition:opacity .6s ease}
+.ar-wk-ph img.ok{opacity:1}
+.ar-wk-t,.ar-wk-y{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.35}
+.ar-wk-t{margin-top:9px;font-size:.74rem}
+.ar-wk-y{font-size:.66rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.ar-wk:focus-visible{outline:none}.ar-wk:focus-visible .ar-wk-ph{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--fg)}
+
+/* ---------- entrada y cambio de artista ---------- */
+.ar-info,.ar-works{transition:opacity .32s ease,transform .5s var(--ar-ease)}
+.ar-hero:not(.is-ready) .ar-info,.ar-hero:not(.is-ready) .ar-works{opacity:0;transform:translate3d(0,14px,0)}
+.ar-hero.is-ready .ar-info,.ar-hero.is-ready .ar-works{transition:opacity .7s ease,transform 1s var(--ar-ease)}
+.ar-hero.is-ready .ar-works{transition-delay:.08s}
+.ar-hero.swap .ar-info,.ar-hero.swap .ar-works{opacity:0;transform:translate3d(0,8px,0);transition:opacity .3s ease,transform .3s ease}
+.ar-rail,.ar-h{transition:opacity .8s ease .15s}
+.ar-hero:not(.is-ready) .ar-rail,.ar-hero:not(.is-ready) .ar-h{opacity:0}
+
+/* debajo: todos los artistas */
+.ar-all{padding-top:clamp(64px,10vh,110px)}
+
+/* ---------- tablet ---------- */
+@media (max-width:1180px) and (min-width:761px){
+ .ar-stage{left:27%;width:48%}
+ .ar-info{left:calc(var(--ar-pad) + 120px);width:56%}
+ .ar-works{width:calc(24% + var(--ar-pad))}
+ .ar-th-n{display:none}
+ .ar-rail{padding-right:4px}
+}
+@media (max-width:980px) and (min-width:761px){
+ .ar-hero{max-height:none;height:auto;min-height:calc(100svh - 72px)}
+ .ar-in{display:grid;grid-template-columns:70px minmax(0,1fr);padding-top:84px;padding-bottom:48px}
+ .ar-rail{position:relative;inset:auto;grid-row:1/4;padding:2px}
+ .ar-stage{position:relative;left:auto;width:auto;height:62svh;margin:0 -10% 0 0}
+ .ar-info{position:relative;left:auto;bottom:auto;width:auto;margin-top:-22svh}
+ .ar-works{position:relative;right:auto;bottom:auto;width:auto;margin:32px calc(var(--ar-pad) * -1) 0 0;padding:0}
+}
+
+/* ---------- celular ---------- */
+@media (max-width:760px){
+ .ar-hero{height:auto;min-height:0;max-height:none}
+ .ar-in{display:flex;flex-direction:column;padding:0 0 40px}
+ .ar-h{position:relative;top:auto;left:auto;padding:24px 20px 14px;font-size:.6rem;letter-spacing:.24em}
+ .ar-rail{position:relative;inset:auto;flex-direction:row;overflow-x:auto;overflow-y:hidden;gap:10px;padding:3px 20px;margin:0;pointer-events:auto;scroll-snap-type:x proximity;
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 20px,#000 calc(100% - 28px),transparent 100%)}
+ .ar-th{scroll-snap-align:center}
+ .ar-th-im{width:48px;height:48px}
+ .ar-th-n{display:none}
+ .ar-stage{position:relative;left:auto;width:100%;height:min(62svh,560px);margin-top:4px}
+ .ar-por{-webkit-mask-image:radial-gradient(ellipse 62% 62% at 50% 40%,#000 0,#000 45%,rgba(0,0,0,.6) 68%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 14%,#000 50%,rgba(0,0,0,.4) 74%,transparent 96%);
+  mask-image:radial-gradient(ellipse 62% 62% at 50% 40%,#000 0,#000 45%,rgba(0,0,0,.6) 68%,transparent 100%),linear-gradient(to bottom,transparent 0,#000 14%,#000 50%,rgba(0,0,0,.4) 74%,transparent 96%)}
+ .ar-info{position:relative;left:auto;bottom:auto;width:auto;margin-top:calc(min(62svh,560px) * -.3);padding:0 20px}
+ .ar-name{font-size:15vw}
+ .ar-meta{gap:16px 24px}
+ .ar-meta>div+div::before{left:-12px}
+ .ar-meta dd{font-size:1rem}
+ .ar-bio{font-size:.88rem}
+ .ar-works{position:relative;right:auto;bottom:auto;width:auto;margin-top:30px;padding:0 0 0 20px}
+ .ar-wk-row{padding-right:20px}
+ .ar-wk{width:108px}
+ .ar-all{padding-top:56px}
+}
+
+/* ---------- movimiento reducido ---------- */
+@media (prefers-reduced-motion:reduce){
+ .ar-por,.ar-info,.ar-works,.ar-rail,.ar-h,.ar-th-im,.ar-th-n,.ar-wk-ph img{transition:none!important}
+ .ar-hero.swap .ar-info,.ar-hero.swap .ar-works,.ar-hero:not(.is-ready) .ar-info,.ar-hero:not(.is-ready) .ar-works{opacity:1;transform:none}
+ .ar-hero:not(.is-ready) .ar-por.on,.ar-hero:not(.is-ready) .ar-rail,.ar-hero:not(.is-ready) .ar-h{opacity:1}
+}
+@media (max-width:760px){.ar-meta dd{text-shadow:none!important}}
