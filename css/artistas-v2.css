@@ -135,8 +135,6 @@
 
 /* ---------- movimiento reducido ---------- */
 @media (prefers-reduced-motion:reduce){
- .ar-wk-track{animation:none}
- .ar-wk-row{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
  .ar-por,.ar-info,.ar-works,.ar-rail,.ar-h,.ar-th-im,.ar-th-n,.ar-wk-ph img{transition:none!important}
  .ar-hero.swap .ar-info,.ar-hero.swap .ar-works,.ar-hero:not(.is-ready) .ar-info,.ar-hero:not(.is-ready) .ar-works{opacity:1;transform:none}
  .ar-hero:not(.is-ready) .ar-por.on,.ar-hero:not(.is-ready) .ar-rail,.ar-hero:not(.is-ready) .ar-h{opacity:1}

@@ -66,7 +66,7 @@
   };
   /* Obras: franja infinita como la de obras.html. Tramo = obras del artista repetidas hasta cubrir
      el ancho (cantidad múltiplo de las obras, así el orden sigue igual en la unión); track = tramo × 2,
-     animado de 0 a -50%: el final coincide con el inicio. Sin pausa al pasar el mouse. */
+     animado de 0 a -50%: el final coincide con el inicio. Sin pausa al pasar el mouse; se mueve también con "reducir movimiento", como en Obras. */
   const WK_SPEED = 26; /* px por segundo */
   const wkCard = (w, dup) => `<a class="ar-wk" href="${w.href}"${dup ? ' tabindex="-1" aria-hidden="true"' : ""}><span class="ar-wk-ph"><img src="${w.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="ar-wk-t">${esc(w.t)}</span>${w.y ? `<span class="ar-wk-y">${esc(w.y)}</span>` : ""}</a>`;
   let wkCur = null, wkKey = "";
@@ -74,11 +74,11 @@
     const a = wkCur, row = $(".ar-wk-row", worksEl); if (!a || !row || !a.works.length) return;
     const W = row.clientWidth || 300, cw = W < 340 ? 100 : 118, gap = 14, pitch = cw + gap, Lw = a.works.length;
     row.style.setProperty("--cw", cw + "px"); row.style.setProperty("--gap", gap + "px");
-    const m = reduce ? Lw : Lw * Math.ceil((Math.ceil(W / pitch) + 1) / Lw);
+    const m = Lw * Math.ceil((Math.ceil(W / pitch) + 1) / Lw);
     const key = a.key + "|" + W + "|" + m + "|" + (en() ? 1 : 0);
     if (key === wkKey && row.firstChild) return; wkKey = key;
     const tramo = dup => Array.from({ length: m }, (_, i) => wkCard(a.works[i % Lw], dup || i >= Lw)).join("");
-    row.innerHTML = `<div class="ar-wk-track">${tramo(false)}${reduce ? "" : tramo(true)}</div>`;
+    row.innerHTML = `<div class="ar-wk-track">${tramo(false)}${tramo(true)}</div>`;
     row.firstChild.style.setProperty("--dur", (m * pitch / WK_SPEED).toFixed(2) + "s");
   };
   const worksHTML = a => a.works.length
