@@ -174,8 +174,6 @@ a.pg-block-v:hover i{transform:translateX(4px)}
 @media (prefers-reduced-motion:reduce){
  .pg-ch,.pg-in,.pg-ix-row,.pg-room-frame{opacity:1!important;transform:none!important;transition:none!important}
  .pg-room-frame{transform:translate3d(-50%,0,0)!important}
- .pg-strip-track{animation:none}
- .pg-strip{overflow-x:auto;-webkit-mask-image:none;mask-image:none}
  .pg-feat-img.on,.pg-feat-img.off{animation:none}
  .pg-feat-img,.pg-feat-cap,.pg-strip-it img{transition:none}
 }

@@ -93,13 +93,13 @@
     strip.style.setProperty("--cw", cw + "px"); strip.style.setProperty("--gap", gap + "px"); strip.style.setProperty("--plus", unit + "px");
     strip.style.setProperty("--h", (cw * 1.25).toFixed(3) + "px");
     const L = stripItems.length;
-    const m = reduce ? L : Math.ceil(Math.max(L, n + 1) / n) * n;
+    const m = Math.ceil(Math.max(L, n + 1) / n) * n;
     const key = vw + "|" + n + "|" + m + "|" + L + "|" + dpr + "|" + strip.dataset.sig;
     if (key !== stripKey || !strip.firstChild) {
       stripKey = key;
       const plus = j => Math.floor((j + 1) * extra / n) > Math.floor(j * extra / n);
-      const tramo = Array.from({ length: m }, (_, i) => cardHTML(stripItems[i % L], !reduce && plus(i % n))).join("");
-      strip.innerHTML = `<div class="pg-strip-track">${tramo}${reduce ? "" : tramo}</div>`;
+      const tramo = Array.from({ length: m }, (_, i) => cardHTML(stripItems[i % L], plus(i % n))).join("");
+      strip.innerHTML = `<div class="pg-strip-track">${tramo}${tramo}</div>`;
     }
     strip.firstChild.style.setProperty("--dur", (m * pitch / STRIP_SPEED).toFixed(2) + "s");
   };
