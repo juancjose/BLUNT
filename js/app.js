@@ -254,7 +254,7 @@ window.startApp = function () {
         <h1 style="font-size:clamp(2.2rem,4vw,3.4rem);margin-top:10px">${esc(m.nombre)}</h1>
         <p class="eyebrow" style="margin-top:12px">${esc(m.lugar)}</p>
         <div class="maestro-bio">${m.bio.map(p => `<p>${esc(p)}</p>`).join("")}</div>
-        <dl><dt>Años</dt><dd>${esc(m.vida)}</dd><dt>Movimiento</dt><dd><span>${esc(m.movimiento)}</span></dd><dt>Obras</dt><dd>${m.obras.length}</dd></dl>
+        <dl><dt>Años</dt><dd>${esc(m.vida)}</dd><dt>Movimiento</dt><dd><span>${esc(m.movimiento)}</span></dd>${m.obrasTotal ? `<dt>Obras</dt><dd><span>${esc(m.obrasTotal)}</span> <span class="muted small">· ${m.obras.length} <span>en la muestra</span></span></dd>` : ""}</dl>
         <p class="muted small">Obra en dominio público, exhibida como muestra. No está a la venta.</p></div>`;
       el("maestroWorks").innerHTML = works.map((o, i) => `<article class="work classic"><button type="button" class="classic-btn" data-mw="${i}" aria-label="${esc(o.titulo)}, ${esc(m.nombre)}">
         <div class="ph"><img src="${o.img}" alt="${esc(o.titulo)}, de ${esc(m.nombre)}" loading="lazy" decoding="async" width="${o.w}" height="${o.h}"></div>

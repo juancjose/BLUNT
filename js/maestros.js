@@ -13,6 +13,9 @@ var MAESTROS = [
   "lugar_en": "Buenos Aires, 1840 – Buenos Aires, 1902",
   "movimiento": "Pintura histórica · Arte naïf",
   "movimiento_en": "History painting · Naïve art",
+  "obrasTotal": "más de 50",
+  "obrasTotal_en": "more than 50",
+  "obrasFuente": "https://www.tiempoar.com.ar/ta_article/candido-lopez-entre-la-pintura-y-la-historia/",
   "resumen": "Pintor y soldado, cronista visual de la Guerra de la Triple Alianza.",
   "resumen_en": "Painter and soldier, the visual chronicler of the War of the Triple Alliance.",
   "bio": [
@@ -78,6 +81,9 @@ var MAESTROS = [
   "lugar_en": "Buenos Aires, 1823 – San Isidro, 1870",
   "movimiento": "Romanticismo",
   "movimiento_en": "Romanticism",
+  "obrasTotal": "más de 200",
+  "obrasTotal_en": "more than 200",
+  "obrasFuente": "https://www.argentina.gob.ar/noticias/prilidiano-pueyrredon-un-pionero-del-arte-argentino-en-el-museo-nacional-de-bellas-artes",
   "resumen": "Pintor y arquitecto, pionero de la pintura argentina del siglo XIX.",
   "resumen_en": "Painter and architect, a pioneer of 19th-century Argentine painting.",
   "bio": [
@@ -143,6 +149,9 @@ var MAESTROS = [
   "lugar_en": "Buenos Aires, 1847 – 1918",
   "movimiento": "Realismo · Naturalismo",
   "movimiento_en": "Realism · Naturalism",
+  "obrasTotal": "más de 180",
+  "obrasTotal_en": "more than 180",
+  "obrasFuente": "https://bellasartes.gob.ar/paginas/sivori/",
   "resumen": "Iniciador del naturalismo en la pintura argentina.",
   "resumen_en": "The painter who brought naturalism to Argentine art.",
   "bio": [
@@ -273,6 +282,9 @@ var MAESTROS = [
   "lugar_en": "Bordeaux, 1882 – Loza Corral, Córdoba, 1935",
   "movimiento": "Impresionismo",
   "movimiento_en": "Impressionism",
+  "obrasTotal": "casi 800",
+  "obrasTotal_en": "nearly 800",
+  "obrasFuente": "https://www.cultura.gob.ar/fernando-fader-pinceladas-de-una-vida-argentina_7166/",
   "resumen": "Maestro de la luz y del paisaje serrano de Córdoba.",
   "resumen_en": "A master of light and of the Córdoba hill country.",
   "bio": [
@@ -338,6 +350,9 @@ var MAESTROS = [
   "lugar_en": "Buenos Aires, 1866 – 1927",
   "movimiento": "Realismo",
   "movimiento_en": "Realism",
+  "obrasTotal": "Producción escasa",
+  "obrasTotal_en": "A small body of work",
+  "obrasFuente": "https://bellasartes.gob.ar/exhibiciones/ernesto-de-la-carcova/",
   "resumen": "Pintor realista y fundador de la escuela de arte que lleva su nombre.",
   "resumen_en": "Realist painter and founder of the art school that bears his name.",
   "bio": [
@@ -397,6 +412,7 @@ var MAESTROS = [
  }
 ];
 if (typeof I18N_EN !== "undefined") Object.assign(I18N_EN, {
+ "en la muestra": "on display",
  "Pintura histórica · Arte naïf": "History painting · Naïve art",
  "Pintor y soldado, cronista visual de la Guerra de la Triple Alianza.": "Painter and soldier, the visual chronicler of the War of the Triple Alliance.",
  "Nació en Buenos Aires en 1840 y comenzó como daguerrotipista y retratista. En 1865 se enroló como teniente en la Guerra de la Triple Alianza (Guerra del Paraguay) y dibujó en el frente campamentos y batallas.": "Born in Buenos Aires in 1840, he started out as a daguerreotypist and portraitist. In 1865 he enlisted as a lieutenant in the War of the Triple Alliance (the Paraguayan War) and sketched camps and battles at the front.",
@@ -445,3 +461,5 @@ if (typeof I18N_EN !== "undefined") Object.assign(I18N_EN, {
  "Retrato de la esposa del autor": "Portrait of the Artist’s Wife",
  "Naturaleza en silencio": "Silent Nature"
 });
+/* Cantidad total de obras (obrasTotal, con fuente en obrasFuente): traducciones */
+if (typeof I18N_EN !== "undefined") MAESTROS.forEach(m => { if (m.obrasTotal && m.obrasTotal_en) I18N_EN[m.obrasTotal] = m.obrasTotal_en; });
