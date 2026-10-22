@@ -61,6 +61,17 @@ body.pg .work:hover img,body.pg .work a:focus-visible img,body.pg .work.classic:
 .pg-strip-note{margin-top:18px;font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 .pg-obras{padding-bottom:clamp(36px,5vh,56px)}
 .pg-obras .pg-title{font-size:clamp(3.2rem,11vw,10.5rem)}
+/* escritorio: encabezado de Obras más contenido (título ~65 %) y espacios más justos */
+@media (min-width:1024px){
+ .pg-head.pg-obras{padding-top:clamp(36px,5.4vh,64px)}
+ .pg-obras .pg-kicker{margin-bottom:clamp(12px,1.8vh,18px)}
+ .pg-obras .pg-title{font-size:clamp(5.6rem,7.2vw,7.4rem)}
+ .pg-obras .pg-count{padding-bottom:.9em}
+ .pg-obras .pg-row-sub{margin-top:clamp(16px,2.4vh,24px);align-items:flex-end}
+ .pg-obras .pg-strip{margin-top:clamp(28px,4.4vh,44px)}
+ .pg-obras .pg-strip-t{margin-top:12px;font-size:.78rem}
+ .pg-obras .pg-strip-a{font-size:.72rem}
+}
 
 /* ---------- Clásicos: pieza destacada enmarcada, como en un museo ---------- */
 .pg-clasicos .pg-split{grid-template-columns:minmax(0,1fr) minmax(0,520px);grid-template-areas:"txt feat" "cap feat";align-items:end;row-gap:0}

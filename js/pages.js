@@ -76,11 +76,15 @@
      Velocidad constante en px/s, sin pausa ni zoom al pasar el mouse; bordes con fundido suave. */
   let stripItems = [], stripKey = "";
   const STRIP_SPEED = 32; /* px por segundo */
-  const cardHTML = (s, plus) => `<a class="pg-strip-it${plus ? " pg-plus" : ""}" href="${s.href}" tabindex="-1"><span class="pg-strip-ph"><img src="${s.img}" alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="pg-strip-t">${esc(s.t)}</span><span class="pg-strip-a">${esc(s.a)}</span></a>`;
+  /* muestra: miniatura 280 px + versión de 600 px para tarjetas grandes / pantallas densas */
+  const hi = p => p.replace(/\.jpg$/, "-600.jpg");
+  const cardHTML = (s, plus, cw) => `<a class="pg-strip-it${plus ? " pg-plus" : ""}" href="${s.href}" tabindex="-1"><span class="pg-strip-ph"><img src="${s.img}"${s.hi ? ` srcset="${s.img} 280w, ${s.hi} 600w" sizes="${Math.ceil(cw)}px"` : ""} alt="" loading="lazy" decoding="async" onload="this.classList.add('ok')"></span><span class="pg-strip-t">${esc(s.t)}</span><span class="pg-strip-a">${esc(s.a)}</span></a>`;
   const layoutStrip = () => {
     if (!strip || !stripItems.length) return;
     const vw = strip.clientWidth || innerWidth, small = vw < 761;
-    const gap = small ? 12 : 18, target = small ? 104 : 148;   /* tarjetas chicas: ~90–110 px en celular, ~130 px en escritorio */
+    const wide = vw >= 1024;
+    /* tarjetas: ~6 por fila en 1440 (≈215 px), 8 en 1920; 3 en celular (≈110–125 px) */
+    const gap = small ? 12 : wide ? 24 : 18, target = small ? 136 : wide ? 230 : 148;
     const n = Math.max(2, Math.round(vw / target));
     /* Todo en píxeles físicos enteros: tarjetas idénticas y, para que n tarjetas ocupen exactamente
        el ancho, el resto (menos de n px) se reparte agregando 1 px físico a algunos espacios.
@@ -98,7 +102,7 @@
     if (key !== stripKey || !strip.firstChild) {
       stripKey = key;
       const plus = j => Math.floor((j + 1) * extra / n) > Math.floor(j * extra / n);
-      const tramo = Array.from({ length: m }, (_, i) => cardHTML(stripItems[i % L], plus(i % n))).join("");
+      const tramo = Array.from({ length: m }, (_, i) => cardHTML(stripItems[i % L], plus(i % n), cw)).join("");
       strip.innerHTML = `<div class="pg-strip-track">${tramo}${tramo}</div>`;
     }
     strip.firstChild.style.setProperty("--dur", (m * pitch / STRIP_SPEED).toFixed(2) + "s");
@@ -115,9 +119,9 @@
     if (real) items = OB.map(o => ({ img: o.img, href: `obra.html?id=${o.id}`, t: o.titulo, a: (ART.find(a => a.id === o.artista) || {}).nombre || "" }));
     else {
       /* muestra: los 8 clásicos y las obras de los maestros argentinos, intercaladas */
-      const cl = CL.map(c => ({ img: thumb(c.img), href: TEST ? "clasicos-prueba.html" : "clasicos.html", t: T(c, "titulo"), a: c.artista }));
+      const cl = CL.map(c => ({ img: thumb(c.img), hi: hi(thumb(c.img)), href: TEST ? "clasicos-prueba.html" : "clasicos.html", t: T(c, "titulo"), a: c.artista }));
       const ma = []; const maxO = Math.max(0, ...MA.map(m => m.obras.length));
-      for (let j = 0; j < maxO; j++) MA.forEach(m => { const o = m.obras[j]; if (o) ma.push({ img: thumb(o.img), href: `artista.html?id=${m.id}`, t: T(o, "titulo"), a: m.nombre }); });
+      for (let j = 0; j < maxO; j++) MA.forEach(m => { const o = m.obras[j]; if (o) ma.push({ img: thumb(o.img), hi: hi(thumb(o.img)), href: `artista.html?id=${m.id}`, t: T(o, "titulo"), a: m.nombre }); });
       items = []; let i = 0, k = 0;
       while (i < cl.length || k < ma.length) { if (i < cl.length) items.push(cl[i++]); if (k < ma.length) items.push(ma[k++]); if (k < ma.length) items.push(ma[k++]); }
     }
