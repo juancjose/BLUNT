@@ -35,12 +35,11 @@
 /* ---------- retrato completo en marco de museo (marco fino + paspartú + epígrafe) ---------- */
 .ar-stage{position:absolute;z-index:1;top:0;bottom:0;left:46%;width:40%;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .ar-fr{margin:0;display:flex;flex-direction:column;align-items:flex-start;padding-top:24px}
-.ar-fr-frame{display:block;pointer-events:auto;padding:clamp(7px,.7vw,10px);background:#151412;
-  box-shadow:0 30px 60px -32px rgba(0,0,0,.5),0 2px 6px rgba(0,0,0,.18),inset 0 0 0 1px rgba(255,255,255,.05)}
-[data-theme="dark"] .ar-fr-frame{background:#1f1d1b;box-shadow:0 34px 70px -30px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.06)}
-.ar-fr-mat{display:block;background:#f6f3ec;padding:clamp(16px,1.9vw,28px)}
-[data-theme="dark"] .ar-fr-mat{background:#e9e5dc}
-.ar-fr-media{position:relative;display:block;height:min(52svh,520px);aspect-ratio:4/5;overflow:hidden;background:#d9d5cc;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+/* v5: retrato limpio, sin marco ni paspartú; solo una sombra sutil */
+.ar-fr-frame{display:block;pointer-events:auto}
+.ar-fr-mat{display:block}
+.ar-fr-media{position:relative;display:block;height:min(59svh,596px);aspect-ratio:4/5;overflow:hidden;background:#d9d5cc;box-shadow:0 24px 50px -30px rgba(0,0,0,.45)}
+[data-theme="dark"] .ar-fr-media{background:#1a1917;box-shadow:0 28px 60px -28px rgba(0,0,0,.9)}
 .ar-por{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover;opacity:0;transition:opacity .9s ease-in-out}
 .ar-por.on{opacity:1}
 .ar-mono{display:grid;place-items:center;font:600 8rem/1 Archivo,sans-serif;font-stretch:125%;color:rgba(0,0,0,.15)}
@@ -104,7 +103,7 @@
 /* ---------- tablet ---------- */
 @media (max-width:1180px) and (min-width:761px){
  .ar-stage{left:44%;width:46%}
- .ar-fr-media{height:min(46svh,440px)}
+ .ar-fr-media{height:min(53svh,500px)}
  .ar-info{left:calc(var(--ar-pad) + 120px);width:calc(44% - var(--ar-pad) - 60px)}
  .ar-works{width:23%}
  .ar-th-n{display:none}
@@ -116,7 +115,7 @@
  .ar-rail{position:relative;inset:auto;grid-row:1/4;padding:2px}
  .ar-stage{position:relative;left:auto;top:auto;width:auto;height:auto;margin:0;justify-content:flex-start}
  .ar-fr{padding-top:0}
- .ar-fr-media{height:auto;width:min(56vw,380px)}
+ .ar-fr-media{height:auto;width:min(64vw,430px)}
  .ar-info{position:relative;left:auto;bottom:auto;width:auto;margin-top:28px}
  .ar-works{position:relative;right:auto;bottom:auto;width:auto;margin:32px 0 0;padding:0}
 }
@@ -133,7 +132,7 @@
  .ar-th-n{display:none}
  .ar-stage{position:relative;left:auto;top:auto;width:100%;height:auto;margin-top:22px;padding:0 20px}
  .ar-fr{padding-top:0;align-items:center}
- .ar-fr-media{height:auto;width:min(56vw,270px)}
+ .ar-fr-media{height:auto;width:min(68vw,316px)}
  .ar-fr-cap{align-items:center;text-align:center;margin-top:12px}
  .ar-info{position:relative;left:auto;bottom:auto;width:auto;margin-top:26px;padding:0 20px}
  .ar-name{font-size:15vw}
