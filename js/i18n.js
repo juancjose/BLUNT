@@ -223,7 +223,7 @@ function applyLang() {
   document.title = tr(docTitleOrig);
   translateNode(document.body);
   const b = document.getElementById("langBtn");
-  if (b) { b.textContent = LANG === "es" ? "EN" : "ES"; b.setAttribute("aria-label", LANG === "es" ? "Switch to English" : "Cambiar a español"); }
+  if (b) { b.textContent = LANG === "es" ? "EN" : "ES"; b.setAttribute("aria-label", LANG === "es" ? "EN – Switch to English" : "ES – Cambiar a español"); }
   applying = false;
 }
 function setLang(l) { LANG = l; localStorage.setItem("idioma", l); applyLang(); }

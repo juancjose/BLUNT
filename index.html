@@ -2,13 +2,13 @@
 <html lang="es-AR">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>{nombre} — Arte original y enmarcado a medida</title><meta name="description" content="Galería online de arte original argentino con enmarcado a medida.">
+<title>BLUNT — Arte original y enmarcado a medida</title><meta name="description" content="Galería online de arte original argentino con enmarcado a medida.">
 <script>(function(){var t=localStorage.getItem("tema");if(!t)t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";document.documentElement.dataset.theme=t;})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
 <link rel="preload" as="image" href="img/clasicos/vermeer-joven-de-la-perla.svg" media="(orientation: portrait)" fetchpriority="high">
 <link rel="preload" as="image" href="img/clasicos/van-gogh-noche-estrellada.svg" media="(orientation: landscape)" fetchpriority="high">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112..125,400..600&family=Inter:wght@300;400;500&display=swap"></noscript>
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/home.css">
   <meta property="og:type" content="website">
@@ -40,6 +40,7 @@
 </section>
 
 <section class="pr-intro" id="prIntro"><div class="wrap">
+<h2 class="sr-only">Por qué elegir BLUNT</h2>
 <ol class="pr-points">
 <li><span class="pr-n">01</span><h3>Enmarcado a medida</h3><p>Passepartout y marcos pensados para cada obra.</p></li>
 <li><span class="pr-n">02</span><h3>Envíos seguros</h3><p>Embalaje profesional y seguro a todo el país.</p></li>
@@ -62,14 +63,14 @@
 <section class="pr-sep"><div class="wrap split" style="align-items:start"><div><p class="eyebrow">Contacto</p><h2>¿Buscás algo en particular?</h2><p>Contanos el espacio, las medidas o el estilo que te gusta y te armamos una propuesta.</p></div>
 <div style="display:flex;gap:12px;flex-wrap:wrap;align-self:center"><a class="btn" data-wa="Hola! Quiero hacer una consulta." target="_blank" rel="noopener" href="#">Escribinos por WhatsApp</a><a class="btn ghost" href="contacto.html">Otros medios</a></div></div></section>
 </main>
-<script src="js/data.js"></script>
-<script src="js/i18n.js"></script>
-<script src="js/home-i18n.js"></script>
-<script src="js/clasicos.js"></script>
-<script src="js/escenas.js"></script>
-<script src="js/app.js"></script>
-<script src="js/home.js"></script>
-<script src="js/supabase-config.js"></script>
+<script defer src="js/data.js"></script>
+<script defer src="js/i18n.js"></script>
+<script defer src="js/home-i18n.js"></script>
+<script defer src="js/clasicos.js"></script>
+<script defer src="js/escenas.js"></script>
+<script defer src="js/app.js"></script>
+<script defer src="js/home.js"></script>
+<script defer src="js/supabase-config.js"></script>
 <script type="module" src="js/home-boot.js"></script>
 </body>
 </html>

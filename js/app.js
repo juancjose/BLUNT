@@ -42,8 +42,8 @@ window.startApp = function () {
   <footer class="site"><div class="wrap">
     <div class="cols">
       <div><div class="logo logo-foot">${LOGO}</div><p class="muted" style="margin-top:10px;max-width:340px">${esc(CONFIG.lema)}. Obra original de artistas argentinos y enmarcado a medida.</p></div>
-      <div><h4>Explorar</h4><ul>${links.slice(1).map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul></div>
-      <div><h4>Contacto</h4><ul><li><a href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:${CONFIG.email}">${CONFIG.email}</a></li><li><a href="${CONFIG.instagram}" target="_blank" rel="noopener">Instagram</a></li><li class="muted">${CONFIG.ciudad}</li></ul></div>
+      <div><h2 class="fh">Explorar</h2><ul>${links.slice(1).map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul></div>
+      <div><h2 class="fh">Contacto</h2><ul><li><a href="https://wa.me/${CONFIG.whatsapp}" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="mailto:${CONFIG.email}">${CONFIG.email}</a></li><li><a href="${CONFIG.instagram}" target="_blank" rel="noopener">Instagram</a></li><li class="muted">${CONFIG.ciudad}</li></ul></div>
     </div>
     <p class="legal"><span>© ${new Date().getFullYear()} ${esc(CONFIG.nombre)}. Todos los derechos reservados.</span> <a class="artist-login" href="login.html">Artistas: ingresar</a></p>
   </div></footer>
