@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /panel.html
+Disallow: /login.html
+Disallow: /*-prueba.html
+
+Sitemap: https://blunt-gallery.vercel.app/sitemap.xml
