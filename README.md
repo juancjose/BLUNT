@@ -1,4 +1,15 @@
-# BLUNT
+<!-- jnce-header -->
+# BLUNT · Galería
+
+> BLUNT · Galería — sitio web
+
+**🌐 Sitio online:** [blunt-gallery.vercel.app](https://blunt-gallery.vercel.app)  
+**🛠️ Tecnologías:** HTML · CSS · JavaScript  
+**👤 Diseño y desarrollo:** [Juan José Cáceres](https://juancjose.github.io/jnce-studio/)
+
+![Vista previa de BLUNT · Galería](docs/preview.jpg)
+
+---
 
 **Arte original para habitar tus espacios.**
 
